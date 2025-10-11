@@ -88,4 +88,254 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-medium text-gray-900 mb-3">Not Combat</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  We don't fight urges. We observe them. Awareness, not r
+                  We don't fight urges. We observe them. Awareness, not resistance, transforms behavior.
+                </p>
+              </div>
+              
+              <div className="text-center p-8">
+                <div className="w-16 h-16 bg-amber-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+                  <span className="text-2xl">🪞</span>
+                </div>
+                <h3 className="text-xl font-medium text-gray-900 mb-3">Daily Mirror</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  See who you were. Remember who you're becoming. The vow is your constant reflection.
+                </p>
+              </div>
+              
+              <div className="text-center p-8">
+                <div className="w-16 h-16 bg-amber-100 rounded-full mx-auto mb-6 flex items-center justify-center">
+                  <span className="text-2xl">✨</span>
+                </div>
+                <h3 className="text-xl font-medium text-gray-900 mb-3">Identity Shift</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Through remembrance, the vow becomes you. Not something you keep, but who you are.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-amber-50 to-white">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-4xl font-light text-gray-900 mb-16 text-center">Your Journey of Becoming</h2>
+            
+            <div className="space-y-12">
+              <div className="flex gap-6 items-start">
+                <div className="flex-shrink-0 w-12 h-12 bg-amber-600 text-white rounded-full flex items-center justify-center font-medium">
+                  1
+                </div>
+                <div>
+                  <h3 className="text-2xl font-medium text-gray-900 mb-2">Create Your Vow</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    "I am the type of person that ___, therefore I will (never/always) ___ again."
+                    Record it in your own voice. Make it sacred.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex gap-6 items-start">
+                <div className="flex-shrink-0 w-12 h-12 bg-amber-600 text-white rounded-full flex items-center justify-center font-medium">
+                  2
+                </div>
+                <div>
+                  <h3 className="text-2xl font-medium text-gray-900 mb-2">Daily Remembrance</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Each day, hear your vow. Reflect on moments of strength and awareness.
+                    Log urges without judgment. Build your identity map.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex gap-6 items-start">
+                <div className="flex-shrink-0 w-12 h-12 bg-amber-600 text-white rounded-full flex items-center justify-center font-medium">
+                  3
+                </div>
+                <div>
+                  <h3 className="text-2xl font-medium text-gray-900 mb-2">Conscious Awareness</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    AI patterns detect when urges arise. Gentle reminders arrive before temptation.
+                    Not to control you, but to remind you who you are.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex gap-6 items-start">
+                <div className="flex-shrink-0 w-12 h-12 bg-amber-600 text-white rounded-full flex items-center justify-center font-medium">
+                  4
+                </div>
+                <div>
+                  <h3 className="text-2xl font-medium text-gray-900 mb-2">Become Your Vow</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Track alignment. Watch your identity shift. The vow stops being effort.
+                    It becomes who you are. Permanent. Natural. You.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Trial Psychology Section */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-4xl font-light text-gray-900 mb-8">The First Two Days of Becoming</h2>
+            <p className="text-xl text-gray-600 mb-12 leading-relaxed">
+              This is not a trial. This is the beginning of your transformation.
+              Most people stop at Day 2 — not because they fail, but because they forget.
+            </p>
+            <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-8 mb-12">
+              <p className="text-lg text-gray-700 leading-relaxed mb-4">
+                "You've completed the first 48 hours of your vow. Most people quit here.
+                Will you cross into Day 3, where remembrance becomes identity?"
+              </p>
+              <p className="text-sm text-amber-700 font-medium">
+                — The moment before continuation
+              </p>
+            </div>
+            <Link href="/signup" className="inline-block bg-amber-600 hover:bg-amber-700 text-white px-8 py-4 rounded-full text-lg font-medium transition-all transform hover:scale-105 shadow-lg">
+              Start Your First Two Days Free
+            </Link>
+          </div>
+        </section>
+
+        {/* Pricing */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-amber-50">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-4xl font-light text-gray-900 mb-4 text-center">Simple, Transparent Pricing</h2>
+            <p className="text-xl text-gray-600 mb-16 text-center">Pricing grows with your commitment</p>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-200">
+                <div className="text-center mb-6">
+                  <p className="text-sm text-gray-600 mb-2">Months 0-3</p>
+                  <p className="text-4xl font-light text-gray-900 mb-2">$4.99</p>
+                  <p className="text-gray-600">per month</p>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start">
+                    <span className="text-amber-600 mr-2">✓</span>
+                    <span className="text-gray-700">Unlimited vows</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-amber-600 mr-2">✓</span>
+                    <span className="text-gray-700">Daily reflections</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-amber-600 mr-2">✓</span>
+                    <span className="text-gray-700">Trigger logging</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-amber-600 mr-2">✓</span>
+                    <span className="text-gray-700">AI awareness guidance</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-amber-600 rounded-2xl shadow-xl p-8 border-2 border-amber-700 transform scale-105">
+                <div className="text-center mb-6">
+                  <p className="text-sm text-amber-100 mb-2">Months 3-6</p>
+                  <p className="text-4xl font-light text-white mb-2">$9.99</p>
+                  <p className="text-amber-100">per month</p>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start">
+                    <span className="text-white mr-2">✓</span>
+                    <span className="text-white">Everything in previous tier</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-white mr-2">✓</span>
+                    <span className="text-white">Advanced pattern analysis</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-white mr-2">✓</span>
+                    <span className="text-white">Identity alignment tracking</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-white mr-2">✓</span>
+                    <span className="text-white">Deeper transformation</span>
+                  </li>
+                </ul>
+              </div>
+              
+              <div className="bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-200">
+                <div className="text-center mb-6">
+                  <p className="text-sm text-gray-600 mb-2">Month 6+</p>
+                  <p className="text-4xl font-light text-gray-900 mb-2">$14.99</p>
+                  <p className="text-gray-600">per month</p>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  <li className="flex items-start">
+                    <span className="text-amber-600 mr-2">✓</span>
+                    <span className="text-gray-700">Everything included</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-amber-600 mr-2">✓</span>
+                    <span className="text-gray-700">Embodiment mastery</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-amber-600 mr-2">✓</span>
+                    <span className="text-gray-700">Lifetime milestones</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-amber-600 mr-2">✓</span>
+                    <span className="text-gray-700">Complete integration</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <p className="text-center text-gray-600 mt-8">
+              All plans include a 2-day free trial. No credit card required to start.
+            </p>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-4 gap-8 mb-8">
+              <div>
+                <h3 className="text-xl font-light mb-4">VOW</h3>
+                <p className="text-gray-400 text-sm">
+                  Remember who you said you'd be.
+                </p>
+              </div>
+              
+              <div>
+                <h4 className="font-medium mb-4">Product</h4>
+                <ul className="space-y-2 text-sm text-gray-400">
+                  <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
+                  <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
+                  <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="font-medium mb-4">Company</h4>
+                <ul className="space-y-2 text-sm text-gray-400">
+                  <li><a href="#" className="hover:text-white transition-colors">About</a></li>
+                  <li><a href="#" className="hover:text-white transition-colors">Theory</a></li>
+                  <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="font-medium mb-4">Legal</h4>
+                <ul className="space-y-2 text-sm text-gray-400">
+                  <li><a href="#" className="hover:text-white transition-colors">Privacy</a></li>
+                  <li><a href="#" className="hover:text-white transition-colors">Terms</a></li>
+                  <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
+              <p>&copy; 2025 VOW. Created by Issiah Deon McLean. All rights reserved.</p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </>
+  );
+}
