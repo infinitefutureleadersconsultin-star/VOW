@@ -64,7 +64,7 @@ export default function Login() {
       localStorage.setItem('vow_refresh_token', refreshToken);
 
       // Show success message
-      showToast('Welcome back! Remember who you said you'd be.', 'success');
+      showToast('Welcome back! Remember who you said you\'d be.', 'success');
 
       // Redirect to dashboard
       setTimeout(() => {
