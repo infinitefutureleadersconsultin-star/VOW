@@ -15,18 +15,22 @@ export default function Home() {
         <title>VOW - Remember Who You Said You'd Be</title>
         <meta name="description" content="Transform through daily remembrance. Not warfare, but awareness. The Law of Daily Remembrance." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
         
-        {/* Open Graph */}
+        {/* Updated favicon references to use SVG */}
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="alternate icon" href="/icon.svg" />
+        
+        {/* Open Graph - updated to use SVG logo */}
         <meta property="og:title" content="VOW - Remember Who You Said You'd Be" />
         <meta property="og:description" content="Transform through daily remembrance. Not warfare, but awareness." />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="/logo.png" />
+        <meta property="og:image" content="/icon.svg" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="VOW - Remember Who You Said You'd Be" />
         <meta name="twitter:description" content="Transform through daily remembrance." />
+        <meta name="twitter:image" content="/icon.svg" />
       </Head>
 
       <div className={`min-h-screen bg-gradient-to-b from-white to-amber-50 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
@@ -35,7 +39,12 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center">
-                <span className="text-2xl font-light tracking-wider text-gray-900">VOW</span>
+                {/* Updated to use SVG logo */}
+                <img 
+                  src="/logo.svg" 
+                  alt="VOW" 
+                  className="h-10"
+                />
               </div>
               <div className="flex items-center space-x-4">
                 <Link href="/login" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors">
@@ -52,6 +61,13 @@ export default function Home() {
         {/* Hero Section */}
         <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
+            {/* Added logo in hero section */}
+            <img 
+              src="/logo.svg" 
+              alt="VOW Logo" 
+              className="h-16 mx-auto mb-8"
+            />
+            
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 mb-8 tracking-tight">
               Remember Who You<br />Said You'd Be
             </h1>
@@ -296,7 +312,12 @@ export default function Home() {
           <div className="max-w-7xl mx-auto">
             <div className="grid md:grid-cols-4 gap-8 mb-8">
               <div>
-                <h3 className="text-xl font-light mb-4">VOW</h3>
+                {/* Updated footer logo to SVG */}
+                <img 
+                  src="/logo-dark.svg" 
+                  alt="VOW" 
+                  className="h-10 mb-4"
+                />
                 <p className="text-gray-400 text-sm">
                   Remember who you said you'd be.
                 </p>
