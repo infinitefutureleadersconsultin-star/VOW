@@ -396,6 +396,6 @@ export const generateEmbodimentReminder = (alignmentScore) => {
     }
   } catch (error) {
     logError(error, 'GENERATE_EMBODIMENT_REMINDER');
-    return 'Remember who you said you'd be.';
+    return 'Remember who you said you\'d be.';
   }
 };
