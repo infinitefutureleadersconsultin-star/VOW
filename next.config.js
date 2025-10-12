@@ -56,11 +56,6 @@ const nextConfig = {
     pagesBufferLength: 2,
   },
 
-  // Experimental features
-  experimental: {
-    serverActions: true,
-  },
-
   // Webpack configuration
   webpack: (config, { isServer }) => {
     if (!isServer) {
