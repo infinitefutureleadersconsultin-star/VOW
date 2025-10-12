@@ -111,19 +111,19 @@ export const NotificationTemplates = {
   // Trial reminders
   trialDay1: {
     title: 'Day 1 of Becoming',
-    body: 'You've begun your vow. Remember who you said you'd be.',
+    body: 'You\'ve begun your vow. Remember who you said you\'d be.',
     icon: '/logo.png',
   },
   
   trialDay2: {
     title: 'The Gate of Awareness',
-    body: 'You've reached Day 2. Your transformation has already begun.',
+    body: 'You\'ve reached Day 2. Your transformation has already begun.',
     icon: '/logo.png',
   },
   
   trialEnding: {
     title: 'Crossing the Third Gate',
-    body: 'You've completed the first 48 hours. Most people stop here. Will you continue?',
+    body: 'You\'ve completed the first 48 hours. Most people stop here. Will you continue?',
     icon: '/logo.png',
     requireInteraction: true,
   },
