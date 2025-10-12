@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import NotificationToast from '../components/NotificationToast';
 import '../styles/globals.css';
 
@@ -87,6 +88,18 @@ export default function App({ Component, pageProps }) {
 
   return (
     <>
+      <Head>
+        {/* Favicon - SVG support with fallback */}
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="alternate icon" href="/icon.svg" />
+        <link rel="apple-touch-icon" href="/icon.svg" />
+        
+        {/* PWA Meta tags */}
+        <meta name="theme-color" content="#1A1A1A" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      </Head>
+
       <Component {...pageProps} />
       <NotificationToast />
     </>
