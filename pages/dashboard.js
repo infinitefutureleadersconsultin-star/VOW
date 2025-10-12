@@ -120,6 +120,9 @@ export default function Dashboard() {
       <Head>
         <title>Dashboard - VOW</title>
         <meta name="description" content="Your journey of becoming" />
+        {/* Updated favicon to use SVG */}
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="alternate icon" href="/icon.svg" />
       </Head>
 
       <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
@@ -128,7 +131,12 @@ export default function Dashboard() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center">
-                <span className="text-2xl font-light tracking-wider text-gray-900">VOW</span>
+                {/* Updated to use SVG logo */}
+                <img 
+                  src="/logo.svg" 
+                  alt="VOW" 
+                  className="h-10"
+                />
               </div>
               <div className="flex items-center space-x-4">
                 <button
