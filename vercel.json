@@ -9,6 +9,10 @@
       "maxDuration": 10
     }
   },
+  "crons": [{
+    "path": "/api/checkSubscriptionUpgrades",
+    "schedule": "0 2 * * *"
+  }],
   "headers": [
     {
       "source": "/api/(.*)",
