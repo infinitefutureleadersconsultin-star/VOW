@@ -1,4 +1,5 @@
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 // Error logging utility
 const logError = (error, context) => {
@@ -16,6 +17,28 @@ const logError = (error, context) => {
   // Send to monitoring service in production
   if (process.env.NODE_ENV === 'production') {
     // TODO: Send to monitoring service (e.g., Sentry, LogRocket)
+  }
+};
+
+// ============================================
+// JWT TOKEN VERIFICATION (for API routes)
+// ============================================
+export const verifyToken = (token) => {
+  try {
+    if (!token) {
+      throw new Error('No token provided');
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return decoded;
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      throw new Error('Token has expired');
+    }
+    if (error.name === 'JsonWebTokenError') {
+      throw new Error('Invalid token');
+    }
+    throw new Error('Token verification failed');
   }
 };
 
