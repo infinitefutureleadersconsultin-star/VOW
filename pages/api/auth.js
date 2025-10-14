@@ -1,31 +1,7 @@
-import { initializeApp, getApps, cert } from 'firebase-admin/app';
-import { getAuth } from 'firebase-admin/auth';
-import { getFirestore } from 'firebase-admin/firestore';
+import { db, auth } from '../../lib/firebase';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { validateEmail, validatePassword, validateUserRegistration } from '../../utils/validationUtils';
-
-// Initialize Firebase Admin
-if (!getApps().length) {
-  try {
-    initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-      }),
-    });
-  } catch (error) {
-    console.error('[FIREBASE_INIT_ERROR]', {
-      timestamp: new Date().toISOString(),
-      message: error.message,
-      stack: error.stack,
-    });
-  }
-}
-
-const auth = getAuth();
-const db = getFirestore();
 
 // Error logger
 const logError = (error, context, req) => {
