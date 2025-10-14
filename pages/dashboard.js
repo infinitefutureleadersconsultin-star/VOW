@@ -18,7 +18,6 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    // Update trial countdown every minute
     if (userData?.subscriptionStatus === 'trial' && userData?.trialEndDate) {
       const interval = setInterval(() => {
         calculateTrialTimeLeft(userData.trialEndDate);
@@ -93,11 +92,31 @@ export default function Dashboard() {
       router.push('/login');
     } catch (error) {
       console.error('Logout error:', error);
-      // Still redirect even if API call fails
       localStorage.removeItem('vow_auth_token');
       localStorage.removeItem('vow_refresh_token');
       router.push('/login');
     }
+  };
+
+  // NEW: Handle button clicks
+  const handleStartReflection = () => {
+    router.push('/reflection');
+  };
+
+  const handleLogTrigger = () => {
+    router.push('/log-trigger');
+  };
+
+  const handleCreateVow = () => {
+    router.push('/create-vow');
+  };
+
+  const handleUpgrade = () => {
+    router.push('/pricing');
+  };
+
+  const handleVowClick = (vowId) => {
+    router.push(`/vow/${vowId}`);
   };
 
   if (loading) {
@@ -120,7 +139,6 @@ export default function Dashboard() {
       <Head>
         <title>Dashboard - VOW</title>
         <meta name="description" content="Your journey of becoming" />
-        {/* Updated favicon to use SVG */}
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="alternate icon" href="/icon.svg" />
       </Head>
@@ -131,7 +149,6 @@ export default function Dashboard() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <div className="flex items-center">
-                {/* Updated to use SVG logo */}
                 <img 
                   src="/logo.svg" 
                   alt="VOW" 
@@ -157,7 +174,10 @@ export default function Dashboard() {
               <p className="text-sm font-medium">
                 <span className="mr-2">🌅</span>
                 Your First Two Days of Becoming • {trialTimeLeft} remaining
-                <button className="ml-4 underline hover:no-underline">
+                <button 
+                  onClick={handleUpgrade}
+                  className="ml-4 underline hover:no-underline"
+                >
                   Continue Your Journey →
                 </button>
               </p>
@@ -217,7 +237,10 @@ export default function Dashboard() {
               <p className="text-gray-600 mb-6">
                 How are you honoring your vow today? Take a moment to reflect.
               </p>
-              <button className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg font-medium transition-colors">
+              <button 
+                onClick={handleStartReflection}
+                className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg font-medium transition-colors"
+              >
                 Start Reflection
               </button>
             </div>
@@ -227,7 +250,10 @@ export default function Dashboard() {
               <p className="text-gray-600 mb-6">
                 Noticed an urge? Log it without judgment. Awareness is transformation.
               </p>
-              <button className="w-full border-2 border-amber-600 text-amber-600 hover:bg-amber-50 py-3 rounded-lg font-medium transition-colors">
+              <button 
+                onClick={handleLogTrigger}
+                className="w-full border-2 border-amber-600 text-amber-600 hover:bg-amber-50 py-3 rounded-lg font-medium transition-colors"
+              >
                 Log Trigger
               </button>
             </div>
@@ -242,6 +268,7 @@ export default function Dashboard() {
                 {userData.vows.filter(v => v.status === 'active').map((vow) => (
                   <div
                     key={vow.id}
+                    onClick={() => handleVowClick(vow.id)}
                     className="border border-gray-200 rounded-lg p-6 hover:border-amber-600 transition-colors cursor-pointer"
                   >
                     <div className="flex justify-between items-start mb-3">
@@ -272,7 +299,10 @@ export default function Dashboard() {
             ) : (
               <div className="text-center py-12">
                 <p className="text-gray-600 mb-4">You haven't created any vows yet</p>
-                <button className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                <button 
+                  onClick={handleCreateVow}
+                  className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                >
                   Create Your First Vow
                 </button>
               </div>
