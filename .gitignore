@@ -47,3 +47,5 @@ firestore-debug.log
 *.swp
 *.swo
 *~
+.env.local.backup
+.env.vercel
