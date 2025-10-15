@@ -1,341 +1,579 @@
-// pages/api/triggerLogging.js
-// Trigger Logging & Analytics API
-// Captures urges, patterns, emotions, and generates anticipatory insights
+import { db, auth } from '../../lib/firebase';
 
-import { verifyToken } from '../../utils/apiClient';
-import { z } from 'zod';
+// Helper function to verify JWT token
+const verifyToken = (req) => {
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    throw new Error('UNAUTHORIZED');
+  }
+  
+  const token = authHeader.substring(7);
+  
+  if (!token) {
+    throw new Error('UNAUTHORIZED');
+  }
+  
+  return token;
+};
 
-// ============================================
-// VALIDATION SCHEMAS
-// ============================================
+// Validate trigger data
+const validateTrigger = (trigger) => {
+  const errors = [];
+  
+  if (!trigger.type || typeof trigger.type !== 'string') {
+    errors.push('Trigger type is required');
+  }
+  
+  if (!trigger.context || typeof trigger.context !== 'string') {
+    errors.push('Context is required');
+  }
+  
+  if (trigger.context && trigger.context.length < 10) {
+    errors.push('Context must be at least 10 characters');
+  }
+  
+  if (trigger.context && trigger.context.length > 500) {
+    errors.push('Context must be less than 500 characters');
+  }
+  
+  if (!trigger.emotion || typeof trigger.emotion !== 'string') {
+    errors.push('Emotion is required');
+  }
+  
+  if (!trigger.response || typeof trigger.response !== 'string') {
+    errors.push('Response is required');
+  }
+  
+  if (trigger.intensity && (trigger.intensity < 1 || trigger.intensity > 10)) {
+    errors.push('Intensity must be between 1 and 10');
+  }
+  
+  return errors;
+};
 
-const logTriggerSchema = z.object({
-  vowId: z.string().min(1, 'Vow ID required'),
-  timestamp: z.number().optional(),
-  location: z.string().optional(),
-  emotions: z.array(z.string()).optional(),
-  intensity: z.number().min(1).max(10).optional(),
-  context: z.string().max(1000).optional(),
-  voiceNote: z.string().optional(), // Base64 or URL
-  resisted: z.boolean().optional(),
-});
-
-const getTriggerAnalyticsSchema = z.object({
-  vowId: z.string().optional(),
-  startDate: z.number().optional(),
-  endDate: z.number().optional(),
-  limit: z.number().min(1).max(100).default(50),
-});
-
-// ============================================
-// MOCK DATABASE (Replace with Firebase)
-// ============================================
-
-const triggerLogs = new Map(); // userId -> [logs]
-const analytics = new Map(); // userId -> analytics object
-
-// ============================================
-// HELPER FUNCTIONS
-// ============================================
-
-function generateTriggerId() {
-  return `trigger_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-}
-
-function calculateTriggerFingerprint(logs) {
-  // Analyze patterns: time of day, emotions, locations
-  const timePatterns = {};
-  const emotionCounts = {};
-  const locationCounts = {};
-  let totalIntensity = 0;
-  let resistedCount = 0;
-
-  logs.forEach(log => {
-    // Time of day analysis
-    const hour = new Date(log.timestamp).getHours();
-    const timeSlot = getTimeSlot(hour);
-    timePatterns[timeSlot] = (timePatterns[timeSlot] || 0) + 1;
-
-    // Emotion tracking
-    (log.emotions || []).forEach(emotion => {
-      emotionCounts[emotion] = (emotionCounts[emotion] || 0) + 1;
-    });
-
-    // Location tracking
-    if (log.location) {
-      locationCounts[log.location] = (locationCounts[log.location] || 0) + 1;
-    }
-
-    // Intensity & resistance
-    totalIntensity += log.intensity || 5;
-    if (log.resisted) resistedCount++;
+// Log error helper
+const logError = (error, context, req) => {
+  console.error('[TRIGGER_LOGGING_ERROR]', {
+    timestamp: new Date().toISOString(),
+    context,
+    method: req.method,
+    url: req.url,
+    message: error.message,
+    stack: error.stack,
+    headers: {
+      'user-agent': req.headers['user-agent'],
+      'x-forwarded-for': req.headers['x-forwarded-for'],
+    },
   });
-
-  const avgIntensity = logs.length > 0 ? totalIntensity / logs.length : 0;
-  const resistanceRate = logs.length > 0 ? (resistedCount / logs.length) * 100 : 0;
-
-  // Identify high-risk windows
-  const highRiskTimes = Object.entries(timePatterns)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([time]) => time);
-
-  // Most common emotions
-  const topEmotions = Object.entries(emotionCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([emotion]) => emotion);
-
-  // Most common locations
-  const topLocations = Object.entries(locationCounts)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 3)
-    .map(([location]) => location);
-
-  return {
-    totalTriggers: logs.length,
-    avgIntensity: Math.round(avgIntensity * 10) / 10,
-    resistanceRate: Math.round(resistanceRate),
-    highRiskTimes,
-    topEmotions,
-    topLocations,
-    lastTriggered: logs.length > 0 ? logs[logs.length - 1].timestamp : null,
-  };
-}
-
-function getTimeSlot(hour) {
-  if (hour >= 5 && hour < 12) return 'Morning (5am-12pm)';
-  if (hour >= 12 && hour < 17) return 'Afternoon (12pm-5pm)';
-  if (hour >= 17 && hour < 21) return 'Evening (5pm-9pm)';
-  return 'Night (9pm-5am)';
-}
-
-function generateAnticipatorySuggestion(fingerprint, currentHour) {
-  const suggestions = [];
-  const currentTimeSlot = getTimeSlot(currentHour);
-
-  // Check if current time is high-risk
-  if (fingerprint.highRiskTimes.includes(currentTimeSlot)) {
-    suggestions.push({
-      type: 'time_based',
-      priority: 'high',
-      message: `You tend to notice urges around this time (${currentTimeSlot.toLowerCase()}). A 5-minute grounding exercise may help.`,
-    });
-  }
-
-  // Suggest based on resistance rate
-  if (fingerprint.resistanceRate < 50) {
-    suggestions.push({
-      type: 'encouragement',
-      priority: 'medium',
-      message: 'Your resistance is building. Each observation strengthens your awareness.',
-    });
-  } else if (fingerprint.resistanceRate >= 75) {
-    suggestions.push({
-      type: 'celebration',
-      priority: 'low',
-      message: `${fingerprint.resistanceRate}% resistance rate - you're remembering your vow with strength.`,
-    });
-  }
-
-  // Intensity-based suggestions
-  if (fingerprint.avgIntensity > 7) {
-    suggestions.push({
-      type: 'intensity_alert',
-      priority: 'high',
-      message: 'Your triggers have been intense lately. Consider reaching out to your accountability partner.',
-    });
-  }
-
-  // Emotion-based suggestions
-  if (fingerprint.topEmotions.length > 0) {
-    const emotionStr = fingerprint.topEmotions.slice(0, 2).join(' and ');
-    suggestions.push({
-      type: 'emotional_insight',
-      priority: 'medium',
-      message: `${emotionStr} often precede your urges. Notice these feelings as early signals.`,
-    });
-  }
-
-  return suggestions;
-}
-
-// ============================================
-// API HANDLER
-// ============================================
+};
 
 export default async function handler(req, res) {
-  const { method } = req;
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  if (req.method !== 'POST' && req.method !== 'GET') {
+    return res.status(405).json({
+      success: false,
+      error: 'Method not allowed',
+      code: 'METHOD_NOT_ALLOWED',
+    });
+  }
 
   try {
-    // Authenticate user
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      console.error('[triggerLogging] Missing or invalid auth header');
-      return res.status(401).json({ error: 'Authentication required' });
-    }
-
-    const token = authHeader.substring(7);
-    let userId;
+    // Verify authentication
+    let token;
     try {
-      const decoded = verifyToken(token);
-      userId = decoded.userId;
+      token = verifyToken(req);
     } catch (error) {
-      console.error('[triggerLogging] Token verification failed:', error.message);
-      return res.status(401).json({ error: 'Invalid or expired token' });
+      return res.status(401).json({
+        success: false,
+        error: 'Unauthorized. Please log in.',
+        code: 'UNAUTHORIZED',
+      });
     }
 
-    // ============================================
-    // POST: Log a new trigger
-    // ============================================
-    if (method === 'POST') {
-      try {
-        const validated = logTriggerSchema.parse(req.body);
+    // Verify token with Firebase
+    let decodedToken;
+    try {
+      decodedToken = await auth.verifyIdToken(token);
+    } catch (error) {
+      console.error('Token verification failed:', error.message);
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid or expired token',
+        code: 'INVALID_TOKEN',
+      });
+    }
 
-        const trigger = {
-          id: generateTriggerId(),
+    const userId = decodedToken.uid;
+
+    if (req.method === 'POST') {
+      // POST: Log a new trigger
+      const { action, trigger } = req.body;
+
+      if (!action) {
+        return res.status(400).json({
+          success: false,
+          error: 'Action is required',
+          code: 'MISSING_ACTION',
+        });
+      }
+
+      if (action === 'log') {
+        if (!trigger) {
+          return res.status(400).json({
+            success: false,
+            error: 'Trigger data is required',
+            code: 'MISSING_DATA',
+          });
+        }
+
+        // Validate trigger data
+        const validationErrors = validateTrigger(trigger);
+        if (validationErrors.length > 0) {
+          return res.status(400).json({
+            success: false,
+            error: 'Validation failed',
+            code: 'VALIDATION_ERROR',
+            errors: validationErrors,
+          });
+        }
+
+        // Prepare trigger document
+        const triggerData = {
           userId,
-          vowId: validated.vowId,
-          timestamp: validated.timestamp || Date.now(),
-          location: validated.location || null,
-          emotions: validated.emotions || [],
-          intensity: validated.intensity || 5,
-          context: validated.context || '',
-          voiceNote: validated.voiceNote || null,
-          resisted: validated.resisted !== undefined ? validated.resisted : true,
-          createdAt: Date.now(),
+          type: trigger.type.trim(),
+          intensity: trigger.intensity || 5,
+          location: trigger.location?.trim() || null,
+          context: trigger.context.trim(),
+          emotion: trigger.emotion.trim(),
+          response: trigger.response.trim(),
+          notes: trigger.notes?.trim() || null,
+          timestamp: trigger.timestamp || new Date().toISOString(),
+          date: trigger.date || new Date().toISOString().split('T')[0],
+          createdAt: new Date().toISOString(),
         };
 
-        // Store trigger log
-        if (!triggerLogs.has(userId)) {
-          triggerLogs.set(userId, []);
+        // Save to Firestore
+        const triggerRef = await db.collection('triggers').add(triggerData);
+        const triggerId = triggerRef.id;
+
+        // Update user's trigger count
+        try {
+          const userRef = db.collection('users').doc(userId);
+          const userDoc = await userRef.get();
+          
+          if (userDoc.exists) {
+            const userData = userDoc.data();
+            const totalTriggers = (userData.totalTriggers || 0) + 1;
+            
+            await userRef.update({
+              totalTriggers,
+              lastTriggerDate: triggerData.date,
+              updatedAt: new Date().toISOString(),
+            });
+          }
+        } catch (error) {
+          console.warn('Failed to update user trigger count:', error.message);
+          // Don't fail the request if this update fails
         }
-        const userLogs = triggerLogs.get(userId);
-        userLogs.push(trigger);
 
-        // Update analytics
-        const fingerprint = calculateTriggerFingerprint(userLogs);
-        analytics.set(userId, fingerprint);
-
-        // Generate anticipatory suggestion
-        const currentHour = new Date().getHours();
-        const suggestions = generateAnticipatorySuggestion(fingerprint, currentHour);
-
-        console.log(`[triggerLogging] Logged trigger for user ${userId}:`, {
-          triggerId: trigger.id,
-          vowId: trigger.vowId,
-          intensity: trigger.intensity,
-          resisted: trigger.resisted,
+        // Log success
+        console.log('[TRIGGER_LOGGED]', {
+          timestamp: new Date().toISOString(),
+          userId,
+          triggerId,
+          type: triggerData.type,
+          intensity: triggerData.intensity,
         });
 
         return res.status(201).json({
           success: true,
-          trigger: {
-            id: trigger.id,
-            timestamp: trigger.timestamp,
-            intensity: trigger.intensity,
-            resisted: trigger.resisted,
-          },
-          suggestions,
-          fingerprint: {
-            totalTriggers: fingerprint.totalTriggers,
-            resistanceRate: fingerprint.resistanceRate,
+          message: 'Trigger logged successfully',
+          data: {
+            triggerId,
+            trigger: {
+              ...triggerData,
+              id: triggerId,
+            },
           },
         });
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          console.error('[triggerLogging] Validation error:', error.errors);
-          return res.status(400).json({
-            error: 'Validation failed',
-            details: error.errors,
-          });
-        }
-        throw error;
       }
-    }
 
-    // ============================================
-    // GET: Retrieve trigger analytics
-    // ============================================
-    if (method === 'GET') {
-      try {
-        const validated = getTriggerAnalyticsSchema.parse(req.query);
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid action',
+        code: 'INVALID_ACTION',
+      });
 
-        const userLogs = triggerLogs.get(userId) || [];
-        let filteredLogs = userLogs;
+    } else if (req.method === 'GET') {
+      // GET: Retrieve user's triggers
+      const { limit = 50, startDate, endDate } = req.query;
 
-        // Filter by vow ID
-        if (validated.vowId) {
-          filteredLogs = filteredLogs.filter(log => log.vowId === validated.vowId);
-        }
+      let query = db.collection('triggers')
+        .where('userId', '==', userId)
+        .orderBy('timestamp', 'desc')
+        .limit(parseInt(limit));
 
-        // Filter by date range
-        if (validated.startDate) {
-          filteredLogs = filteredLogs.filter(log => log.timestamp >= validated.startDate);
-        }
-        if (validated.endDate) {
-          filteredLogs = filteredLogs.filter(log => log.timestamp <= validated.endDate);
-        }
-
-        // Apply limit
-        const recentLogs = filteredLogs
-          .sort((a, b) => b.timestamp - a.timestamp)
-          .slice(0, validated.limit)
-          .map(log => ({
-            id: log.id,
-            vowId: log.vowId,
-            timestamp: log.timestamp,
-            emotions: log.emotions,
-            intensity: log.intensity,
-            location: log.location,
-            resisted: log.resisted,
-            context: log.context ? log.context.substring(0, 100) : null,
-          }));
-
-        // Get analytics
-        const fingerprint = calculateTriggerFingerprint(filteredLogs);
-
-        // Generate current suggestions
-        const currentHour = new Date().getHours();
-        const suggestions = generateAnticipatorySuggestion(fingerprint, currentHour);
-
-        console.log(`[triggerLogging] Retrieved analytics for user ${userId}:`, {
-          totalLogs: filteredLogs.length,
-          returned: recentLogs.length,
-        });
-
-        return res.status(200).json({
-          success: true,
-          logs: recentLogs,
-          analytics: fingerprint,
-          suggestions,
-        });
-      } catch (error) {
-        if (error instanceof z.ZodError) {
-          console.error('[triggerLogging] Query validation error:', error.errors);
-          return res.status(400).json({
-            error: 'Invalid query parameters',
-            details: error.errors,
-          });
-        }
-        throw error;
+      // Add date filters if provided
+      if (startDate) {
+        query = query.where('date', '>=', startDate);
       }
-    }
+      
+      if (endDate) {
+        query = query.where('date', '<=', endDate);
+      }
 
-    // Method not allowed
-    res.setHeader('Allow', ['POST', 'GET']);
-    console.error(`[triggerLogging] Method ${method} not allowed`);
-    return res.status(405).json({ error: `Method ${method} not allowed` });
+      const triggersSnapshot = await query.get();
+      
+      const triggers = triggersSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      // Calculate basic statistics
+      const stats = {
+        total: triggers.length,
+        avgIntensity: triggers.length > 0 
+          ? (triggers.reduce((sum, t) => sum + (t.intensity || 0), 0) / triggers.length).toFixed(1)
+          : 0,
+        mostCommonType: triggers.length > 0
+          ? Object.entries(
+              triggers.reduce((acc, t) => {
+                acc[t.type] = (acc[t.type] || 0) + 1;
+                return acc;
+              }, {})
+            ).sort((a, b) => b[1] - a[1])[0]?.[0] || null
+          : null,
+      };
+
+      return res.status(200).json({
+        success: true,
+        data: {
+          triggers,
+          stats,
+        },
+      });
+    }
 
   } catch (error) {
-    console.error('[triggerLogging] Unexpected error:', {
-      message: error.message,
-      stack: error.stack,
-      method: req.method,
+    logError(error, 'TRIGGER_LOGGING', req);
+
+    // Handle specific error types
+    if (error.code === 'permission-denied') {
+      return res.status(403).json({
+        success: false,
+        error: 'Permission denied',
+        code: 'PERMISSION_DENIED',
+      });
+    }
+
+    if (error.code === 'unavailable') {
+      return res.status(503).json({
+        success: false,
+        error: 'Service temporarily unavailable. Please try again.',
+        code: 'SERVICE_UNAVAILABLE',
+      });
+    }
+
+    return res.status(500).
+cat > pages/api/triggerLogging.js << 'ENDOFFILE'
+import { db, auth } from '../../lib/firebase';
+
+// Helper function to verify JWT token
+const verifyToken = (req) => {
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    throw new Error('UNAUTHORIZED');
+  }
+  
+  const token = authHeader.substring(7);
+  
+  if (!token) {
+    throw new Error('UNAUTHORIZED');
+  }
+  
+  return token;
+};
+
+// Validate trigger data
+const validateTrigger = (trigger) => {
+  const errors = [];
+  
+  if (!trigger.type || typeof trigger.type !== 'string') {
+    errors.push('Trigger type is required');
+  }
+  
+  if (!trigger.context || typeof trigger.context !== 'string') {
+    errors.push('Context is required');
+  }
+  
+  if (trigger.context && trigger.context.length < 10) {
+    errors.push('Context must be at least 10 characters');
+  }
+  
+  if (trigger.context && trigger.context.length > 500) {
+    errors.push('Context must be less than 500 characters');
+  }
+  
+  if (!trigger.emotion || typeof trigger.emotion !== 'string') {
+    errors.push('Emotion is required');
+  }
+  
+  if (!trigger.response || typeof trigger.response !== 'string') {
+    errors.push('Response is required');
+  }
+  
+  if (trigger.intensity && (trigger.intensity < 1 || trigger.intensity > 10)) {
+    errors.push('Intensity must be between 1 and 10');
+  }
+  
+  return errors;
+};
+
+// Log error helper
+const logError = (error, context, req) => {
+  console.error('[TRIGGER_LOGGING_ERROR]', {
+    timestamp: new Date().toISOString(),
+    context,
+    method: req.method,
+    url: req.url,
+    message: error.message,
+    stack: error.stack,
+    headers: {
+      'user-agent': req.headers['user-agent'],
+      'x-forwarded-for': req.headers['x-forwarded-for'],
+    },
+  });
+};
+
+export default async function handler(req, res) {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  if (req.method !== 'POST' && req.method !== 'GET') {
+    return res.status(405).json({
+      success: false,
+      error: 'Method not allowed',
+      code: 'METHOD_NOT_ALLOWED',
     });
+  }
+
+  try {
+    // Verify authentication
+    let token;
+    try {
+      token = verifyToken(req);
+    } catch (error) {
+      return res.status(401).json({
+        success: false,
+        error: 'Unauthorized. Please log in.',
+        code: 'UNAUTHORIZED',
+      });
+    }
+
+    // Verify token with Firebase
+    let decodedToken;
+    try {
+      decodedToken = await auth.verifyIdToken(token);
+    } catch (error) {
+      console.error('Token verification failed:', error.message);
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid or expired token',
+        code: 'INVALID_TOKEN',
+      });
+    }
+
+    const userId = decodedToken.uid;
+
+    if (req.method === 'POST') {
+      // POST: Log a new trigger
+      const { action, trigger } = req.body;
+
+      if (!action) {
+        return res.status(400).json({
+          success: false,
+          error: 'Action is required',
+          code: 'MISSING_ACTION',
+        });
+      }
+
+      if (action === 'log') {
+        if (!trigger) {
+          return res.status(400).json({
+            success: false,
+            error: 'Trigger data is required',
+            code: 'MISSING_DATA',
+          });
+        }
+
+        // Validate trigger data
+        const validationErrors = validateTrigger(trigger);
+        if (validationErrors.length > 0) {
+          return res.status(400).json({
+            success: false,
+            error: 'Validation failed',
+            code: 'VALIDATION_ERROR',
+            errors: validationErrors,
+          });
+        }
+
+        // Prepare trigger document
+        const triggerData = {
+          userId,
+          type: trigger.type.trim(),
+          intensity: trigger.intensity || 5,
+          location: trigger.location?.trim() || null,
+          context: trigger.context.trim(),
+          emotion: trigger.emotion.trim(),
+          response: trigger.response.trim(),
+          notes: trigger.notes?.trim() || null,
+          timestamp: trigger.timestamp || new Date().toISOString(),
+          date: trigger.date || new Date().toISOString().split('T')[0],
+          createdAt: new Date().toISOString(),
+        };
+
+        // Save to Firestore
+        const triggerRef = await db.collection('triggers').add(triggerData);
+        const triggerId = triggerRef.id;
+
+        // Update user's trigger count
+        try {
+          const userRef = db.collection('users').doc(userId);
+          const userDoc = await userRef.get();
+          
+          if (userDoc.exists) {
+            const userData = userDoc.data();
+            const totalTriggers = (userData.totalTriggers || 0) + 1;
+            
+            await userRef.update({
+              totalTriggers,
+              lastTriggerDate: triggerData.date,
+              updatedAt: new Date().toISOString(),
+            });
+          }
+        } catch (error) {
+          console.warn('Failed to update user trigger count:', error.message);
+          // Don't fail the request if this update fails
+        }
+
+        // Log success
+        console.log('[TRIGGER_LOGGED]', {
+          timestamp: new Date().toISOString(),
+          userId,
+          triggerId,
+          type: triggerData.type,
+          intensity: triggerData.intensity,
+        });
+
+        return res.status(201).json({
+          success: true,
+          message: 'Trigger logged successfully',
+          data: {
+            triggerId,
+            trigger: {
+              ...triggerData,
+              id: triggerId,
+            },
+          },
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid action',
+        code: 'INVALID_ACTION',
+      });
+
+    } else if (req.method === 'GET') {
+      // GET: Retrieve user's triggers
+      const { limit = 50, startDate, endDate } = req.query;
+
+      let query = db.collection('triggers')
+        .where('userId', '==', userId)
+        .orderBy('timestamp', 'desc')
+        .limit(parseInt(limit));
+
+      // Add date filters if provided
+      if (startDate) {
+        query = query.where('date', '>=', startDate);
+      }
+      
+      if (endDate) {
+        query = query.where('date', '<=', endDate);
+      }
+
+      const triggersSnapshot = await query.get();
+      
+      const triggers = triggersSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+
+      // Calculate basic statistics
+      const stats = {
+        total: triggers.length,
+        avgIntensity: triggers.length > 0 
+          ? (triggers.reduce((sum, t) => sum + (t.intensity || 0), 0) / triggers.length).toFixed(1)
+          : 0,
+        mostCommonType: triggers.length > 0
+          ? Object.entries(
+              triggers.reduce((acc, t) => {
+                acc[t.type] = (acc[t.type] || 0) + 1;
+                return acc;
+              }, {})
+            ).sort((a, b) => b[1] - a[1])[0]?.[0] || null
+          : null,
+      };
+
+      return res.status(200).json({
+        success: true,
+        data: {
+          triggers,
+          stats,
+        },
+      });
+    }
+
+  } catch (error) {
+    logError(error, 'TRIGGER_LOGGING', req);
+
+    // Handle specific error types
+    if (error.code === 'permission-denied') {
+      return res.status(403).json({
+        success: false,
+        error: 'Permission denied',
+        code: 'PERMISSION_DENIED',
+      });
+    }
+
+    if (error.code === 'unavailable') {
+      return res.status(503).json({
+        success: false,
+        error: 'Service temporarily unavailable. Please try again.',
+        code: 'SERVICE_UNAVAILABLE',
+      });
+    }
+
     return res.status(500).json({
-      error: 'Internal server error',
-      message: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      success: false,
+      error: 'Failed to process request. Please try again.',
+      code: 'INTERNAL_ERROR',
     });
   }
 }
