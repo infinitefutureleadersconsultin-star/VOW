@@ -212,9 +212,51 @@ export default async function handler(req, res) {
         vowsSnapshot.docs.forEach(doc => batch.delete(doc.ref));
 
         // Delete reflections
-        const reflectionsSnapshot = await db.collection('ref
-cat > update-package.sh << 'ENDOFFILE'
-#!/bin/bash
-# Install Stripe and micro packages
-npm install stripe@^14.0.0 micro@^10.0.1
-echo "✅ Stripe and micro packages installed!"
+        const reflectionsSnapshot = await db.collection('reflections').where('userId', '==', userId).get();
+        reflectionsSnapshot.docs.forEach(doc => batch.delete(doc.ref));
+
+        // Delete triggers
+        const triggersSnapshot = await db.collection('triggers').where('userId', '==', userId).get();
+        triggersSnapshot.docs.forEach(doc => batch.delete(doc.ref));
+
+        // Delete user
+        batch.delete(db.collection('users').doc(userId));
+
+        await batch.commit();
+
+        // Delete Firebase Auth user
+        try {
+          await auth.deleteUser(userId);
+        } catch (error) {
+          console.warn('Failed to delete auth user:', error.message);
+        }
+
+        return res.status(200).json({
+          success: true,
+          message: 'Account deleted',
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid action',
+        code: 'INVALID_ACTION',
+      });
+    }
+
+    return res.status(405).json({
+      success: false,
+      error: 'Method not allowed',
+      code: 'METHOD_NOT_ALLOWED',
+    });
+
+  } catch (error) {
+    logError(error, 'USER_DATA', req);
+
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      code: 'INTERNAL_ERROR',
+    });
+  }
+}
