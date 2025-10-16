@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { auth } from '../lib/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { app } from '../lib/firebaseClient';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressTracker from '../components/ProgressTracker';
 import ProfileAvatar from '../components/ProfileAvatar';
@@ -15,6 +15,7 @@ export default function Dashboard() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const auth = getAuth(app);
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (!firebaseUser) {
         router.push('/login');
@@ -33,10 +34,8 @@ export default function Dashboard() {
       setLoading(true);
       setError(null);
 
-      // Get fresh token
       const token = await firebaseUser.getIdToken(true);
 
-      // Fetch user data with stats
       const response = await fetch('/api/userData?include=stats', {
         method: 'GET',
         headers: {
@@ -64,6 +63,7 @@ export default function Dashboard() {
 
   const handleLogout = async () => {
     try {
+      const auth = getAuth(app);
       await auth.signOut();
       router.push('/login');
     } catch (error) {
@@ -97,7 +97,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
@@ -109,9 +108,7 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Welcome back, {userData?.name?.split(' ')[0] || 'there'}! 👋
@@ -121,14 +118,11 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Progress Tracker */}
           <div className="md:col-span-1">
             <ProgressTracker stats={stats} variant="card" />
           </div>
 
-          {/* Quick Stats */}
           <div className="md:col-span-2 grid grid-cols-2 gap-4">
             <div className="bg-white rounded-xl shadow-md p-6">
               <div className="flex items-center justify-between mb-2">
@@ -173,7 +167,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <button
             onClick={() => router.push('/create-vow')}
@@ -203,7 +196,6 @@ export default function Dashboard() {
           </button>
         </div>
 
-        {/* Recent Activity */}
         <div className="bg-white rounded-xl shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Quick Actions
