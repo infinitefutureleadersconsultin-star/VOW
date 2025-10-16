@@ -1,16 +1,25 @@
-import { db, auth } from '../../lib/firebase';
+import { db } from '../../lib/firebase';
+import jwt from 'jsonwebtoken';
 
-// Verify token
+// Verify JWT token
 const verifyToken = (req) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     throw new Error('UNAUTHORIZED');
   }
-  return authHeader.substring(7);
+  
+  const token = authHeader.substring(7);
+  
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return decoded;
+  } catch (error) {
+    throw new Error('INVALID_TOKEN');
+  }
 };
 
 // Log error
-const logError = (error, context, req) => {
+const logError = (error, context) => {
   console.error('[USER_DATA_ERROR]', {
     timestamp: new Date().toISOString(),
     context,
@@ -29,9 +38,9 @@ export default async function handler(req, res) {
 
   try {
     // Verify auth
-    let token;
+    let decoded;
     try {
-      token = verifyToken(req);
+      decoded = verifyToken(req);
     } catch (error) {
       return res.status(401).json({
         success: false,
@@ -40,18 +49,7 @@ export default async function handler(req, res) {
       });
     }
 
-    let decodedToken;
-    try {
-      decodedToken = await auth.verifyIdToken(token);
-    } catch (error) {
-      return res.status(401).json({
-        success: false,
-        error: 'Invalid token',
-        code: 'INVALID_TOKEN',
-      });
-    }
-
-    const userId = decodedToken.uid;
+    const userId = decoded.userId;
 
     if (req.method === 'GET') {
       // GET user data
@@ -224,13 +222,6 @@ export default async function handler(req, res) {
 
         await batch.commit();
 
-        // Delete Firebase Auth user
-        try {
-          await auth.deleteUser(userId);
-        } catch (error) {
-          console.warn('Failed to delete auth user:', error.message);
-        }
-
         return res.status(200).json({
           success: true,
           message: 'Account deleted',
@@ -251,7 +242,7 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    logError(error, 'USER_DATA', req);
+    logError(error, 'USER_DATA');
 
     return res.status(500).json({
       success: false,
