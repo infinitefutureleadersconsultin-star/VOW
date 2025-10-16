@@ -2,296 +2,196 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { api } from '../utils/apiClient';
-import { showToast } from '../utils/notificationUtils';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { app } from '../lib/firebaseClient';
 
 export default function Login() {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
-  const [resetEmail, setResetEmail] = useState('');
-  const [resetSent, setResetSent] = useState(false);
+  const [error, setError] = useState('');
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    // Check if user is already logged in
-    const token = localStorage.getItem('vow_auth_token');
-    if (token) {
-      router.push('/dashboard');
-    }
+    const auth = getAuth(app);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        router.push('/dashboard');
+      } else {
+        setCheckingAuth(false);
+      }
+    });
 
-    // Check for session expired message
-    if (router.query.session_expired) {
-      showToast('Your session has expired. Please log in again.', 'warning');
-    }
+    return () => unsubscribe();
   }, [router]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-    setError(null);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
-    setError(null);
 
     try {
-      // Validate inputs
-      if (!formData.email || !formData.password) {
-        throw new Error('Please enter both email and password');
+      const auth = getAuth(app);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Get token
+      const token = await user.getIdToken();
+
+      // Store token
+      if (rememberMe) {
+        localStorage.setItem('vow_auth_token', token);
+      } else {
+        sessionStorage.setItem('vow_auth_token', token);
       }
 
-      // Call login API
-      const response = await api.post('/auth', {
-        action: 'login',
-        email: formData.email,
-        password: formData.password,
-      });
+      console.log('Login successful, redirecting...');
+      
+      // Force redirect
+      window.location.href = '/dashboard';
 
-      const { token, refreshToken, subscriptionStatus, trialEndDate } = response.data.data;
-
-      // Store tokens
-      localStorage.setItem('vow_auth_token', token);
-      localStorage.setItem('vow_refresh_token', refreshToken);
-
-      // Show success message
-      showToast('Welcome back! Remember who you said you\'d be.', 'success');
-
-      // Redirect to dashboard
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 1000);
     } catch (err) {
       console.error('Login error:', err);
-      const errorMessage = err.message || 'Login failed. Please check your credentials.';
-      setError(errorMessage);
-      showToast(errorMessage, 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleForgotPassword = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      if (!resetEmail) {
-        throw new Error('Please enter your email address');
+      
+      let errorMessage = 'Login failed. Please try again.';
+      
+      if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
+        errorMessage = 'Invalid email or password';
+      } else if (err.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email';
+      } else if (err.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed attempts. Please try again later.';
+      } else if (err.code === 'auth/network-request-failed') {
+        errorMessage = 'Network error. Please check your connection.';
       }
-
-      await api.post('/auth', {
-        action: 'reset-password',
-        email: resetEmail,
-      });
-
-      setResetSent(true);
-      showToast('Password reset instructions sent to your email', 'success');
-    } catch (err) {
-      console.error('Password reset error:', err);
-      setError(err.message || 'Failed to send reset email');
-      showToast(err.message || 'Failed to send reset email', 'error');
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <>
       <Head>
-        <title>Log In - VOW</title>
-        <meta name="description" content="Log in to continue your journey of becoming" />
+        <title>Login - VOW</title>
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full">
-          {/* Logo and Title */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-light text-gray-900 mb-2">VOW</h1>
-            <p className="text-gray-600">
-              {showForgotPassword ? 'Reset Your Password' : 'Welcome Back'}
-            </p>
-          </div>
+      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <h1 className="text-center text-4xl font-bold text-gray-900 mb-2">VOW</h1>
+          <h2 className="text-center text-2xl font-medium text-gray-700">
+            Welcome back
+          </h2>
+        </div>
 
-          {/* Login Form */}
-          {!showForgotPassword ? (
-            <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="bg-white py-8 px-4 shadow-lg sm:rounded-xl sm:px-10">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               {error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                  <p className="text-red-800 text-sm">{error}</p>
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  {error}
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    Email
-                  </label>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Email address
+                </label>
+                <div className="mt-1">
                   <input
                     id="email"
                     name="email"
                     type="email"
                     autoComplete="email"
                     required
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                    placeholder="your@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-amber-600 focus:border-amber-600"
                   />
                 </div>
+              </div>
 
-                <div>
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                    Password
-                  </label>
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  Password
+                </label>
+                <div className="mt-1">
                   <input
                     id="password"
                     name="password"
                     type="password"
                     autoComplete="current-password"
                     required
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-amber-600 focus:border-amber-600"
                   />
                 </div>
+              </div>
 
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      className="rounded border-gray-300 text-amber-600 focus:ring-amber-600"
-                    />
-                    <span className="ml-2 text-sm text-gray-600">Remember me</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <input
+                    id="remember-me"
+                    name="remember-me"
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="h-4 w-4 text-amber-600 focus:ring-amber-600 border-gray-300 rounded"
+                  />
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                    Remember me
                   </label>
-
-                  <button
-                    type="button"
-                    onClick={() => setShowForgotPassword(true)}
-                    className="text-sm text-amber-600 hover:text-amber-700 font-medium"
-                  >
-                    Forgot password?
-                  </button>
                 </div>
 
+                <div className="text-sm">
+                  <a href="#" className="font-medium text-amber-600 hover:text-amber-500">
+                    Forgot password?
+                  </a>
+                </div>
+              </div>
+
+              <div>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-600 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? (
-                    <span className="flex items-center justify-center">
-                      <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                      Logging in...
-                    </span>
-                  ) : (
-                    'Log In'
-                  )}
+                  {loading ? 'Signing in...' : 'Sign in'}
                 </button>
-              </form>
+              </div>
+            </form>
 
-              <div className="mt-6 text-center">
-                <p className="text-sm text-gray-600">
-                  Don't have an account?{' '}
-                  <Link href="/signup" className="text-amber-600 hover:text-amber-700 font-medium">
-                    Start your journey
-                  </Link>
-                </p>
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">New to VOW?</span>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <Link
+                  href="/signup"
+                  className="w-full flex justify-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                >
+                  Create an account
+                </Link>
               </div>
             </div>
-          ) : (
-            /* Forgot Password Form */
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              {resetSent ? (
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-medium text-gray-900 mb-2">Check Your Email</h3>
-                  <p className="text-gray-600 mb-6">
-                    We've sent password reset instructions to {resetEmail}
-                  </p>
-                  <button
-                    onClick={() => {
-                      setShowForgotPassword(false);
-                      setResetSent(false);
-                      setResetEmail('');
-                    }}
-                    className="text-amber-600 hover:text-amber-700 font-medium"
-                  >
-                    ← Back to login
-                  </button>
-                </div>
-              ) : (
-                <>
-                  {error && (
-                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                      <p className="text-red-800 text-sm">{error}</p>
-                    </div>
-                  )}
-
-                  <form onSubmit={handleForgotPassword} className="space-y-6">
-                    <div>
-                      <label htmlFor="reset-email" className="block text-sm font-medium text-gray-700 mb-2">
-                        Email Address
-                      </label>
-                      <input
-                        id="reset-email"
-                        name="reset-email"
-                        type="email"
-                        required
-                        value={resetEmail}
-                        onChange={(e) => setResetEmail(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                        placeholder="your@email.com"
-                      />
-                      <p className="mt-2 text-sm text-gray-500">
-                        We'll send you a code to reset your password
-                      </p>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {loading ? 'Sending...' : 'Send Reset Code'}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setShowForgotPassword(false)}
-                      className="w-full text-gray-600 hover:text-gray-900 py-2 text-sm"
-                    >
-                      ← Back to login
-                    </button>
-                  </form>
-                </>
-              )}
-            </div>
-          )}
-
-          {/* Footer */}
-          <div className="mt-8 text-center">
-            <Link href="/" className="text-sm text-gray-600 hover:text-gray-900">
-              ← Back to home
-            </Link>
           </div>
         </div>
       </div>
