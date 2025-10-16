@@ -44,54 +44,6 @@ export default function CreateVow() {
   }, [router]);
 
   const handleChange = (field, value) => {
-    setVow(prev => ({ ...
-cat > pages/create-vow.js << 'EOF'
-import { useState, useEffect } from 'react';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { showToast } from '../utils/notificationUtils';
-import { celebrateMilestone, MILESTONE_KEYS } from '../utils/celebrationUtils';
-
-export default function CreateVow() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [step, setStep] = useState(1);
-  
-  const [vow, setVow] = useState({
-    category: '',
-    identityType: '',
-    boundary: '',
-    duration: 30,
-    whyMatters: '',
-  });
-
-  const categories = [
-    { name: 'Addiction Recovery', value: 'addiction', emoji: '🔗' },
-    { name: 'Procrastination', value: 'procrastination', emoji: '⏰' },
-    { name: 'Self-Sabotage', value: 'self_sabotage', emoji: '🛑' },
-    { name: 'Emotional Healing', value: 'emotional', emoji: '💙' },
-    { name: 'Habit Building', value: 'habit', emoji: '🌱' },
-    { name: 'Other', value: 'other', emoji: '✨' }
-  ];
-
-  const durations = [
-    { label: '7 days', value: 7, desc: 'Test the waters' },
-    { label: '30 days', value: 30, desc: 'Build momentum' },
-    { label: '90 days', value: 90, desc: 'Deep transformation' },
-    { label: '1 year', value: 365, desc: 'Lifetime shift' }
-  ];
-
-  useEffect(() => {
-    const token = localStorage.getItem('vow_auth_token');
-    if (!token) {
-      router.push('/login');
-      return;
-    }
-    setLoading(false);
-  }, [router]);
-
-  const handleChange = (field, value) => {
     setVow(prev => ({ ...prev, [field]: value }));
   };
 
