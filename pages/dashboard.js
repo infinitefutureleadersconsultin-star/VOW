@@ -9,6 +9,7 @@ import ProfileAvatar from '../components/ProfileAvatar';
 export default function Dashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [authChecked, setAuthChecked] = useState(false);
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [stats, setStats] = useState(null);
@@ -16,13 +17,24 @@ export default function Dashboard() {
 
   useEffect(() => {
     const auth = getAuth(app);
+    
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setAuthChecked(true);
+      
       if (!firebaseUser) {
+        // Clear localStorage and redirect
+        localStorage.removeItem('vow_auth_token');
         router.push('/login');
         return;
       }
 
       setUser(firebaseUser);
+      
+      // Store fresh token
+      const token = await firebaseUser.getIdToken(true);
+      localStorage.setItem('vow_auth_token', token);
+      
+      // Fetch user data
       await fetchUserData(firebaseUser);
     });
 
@@ -65,13 +77,15 @@ export default function Dashboard() {
     try {
       const auth = getAuth(app);
       await auth.signOut();
+      localStorage.removeItem('vow_auth_token');
       router.push('/login');
     } catch (error) {
       console.error('Logout error:', error);
     }
   };
 
-  if (loading) {
+  // Show loading only if auth hasn't been checked yet
+  if (!authChecked || loading) {
     return <LoadingSpinner fullScreen text="Loading your dashboard..." />;
   }
 
