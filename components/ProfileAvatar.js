@@ -6,7 +6,6 @@ export default function ProfileAvatar({ userData, onLogout }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -20,7 +19,6 @@ export default function ProfileAvatar({ userData, onLogout }) {
     }
   }, [isOpen]);
 
-  // Close dropdown on route change
   useEffect(() => {
     setIsOpen(false);
   }, [router.pathname]);
@@ -56,7 +54,6 @@ export default function ProfileAvatar({ userData, onLogout }) {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* Avatar Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-amber-600 rounded-lg p-1 transition-all"
@@ -64,12 +61,10 @@ export default function ProfileAvatar({ userData, onLogout }) {
         aria-expanded={isOpen}
       >
         <div className="flex items-center space-x-2">
-          {/* Avatar Circle */}
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-medium text-sm shadow-sm">
             {getInitials(userData?.name)}
           </div>
           
-          {/* Name and Chevron (hidden on mobile) */}
           <div className="hidden md:block text-left">
             <p className="text-sm font-medium text-gray-900 leading-tight">
               {userData?.name || 'User'}
@@ -92,10 +87,8 @@ export default function ProfileAvatar({ userData, onLogout }) {
         </div>
       </button>
 
-      {/* Dropdown Menu */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-          {/* User Info Section */}
           <div className="px-4 py-3 border-b border-gray-100">
             <p className="text-sm font-medium text-gray-900">{userData?.name || 'User'}</p>
             <p className="text-xs text-gray-500 truncate">{userData?.email || ''}</p>
@@ -106,7 +99,6 @@ export default function ProfileAvatar({ userData, onLogout }) {
             )}
           </div>
 
-          {/* Menu Items */}
           <div className="py-1">
             <button
               onClick={() => {
@@ -153,16 +145,17 @@ export default function ProfileAvatar({ userData, onLogout }) {
             </button>
           </div>
 
-          {/* Help Section */}
           <div className="border-t border-gray-100 py-1">
-            
-              href="mailto:support@vowapp.com"
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                window.location.href = 'mailto:support@vowapp.com';
+              }}
               className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2"
-              onClick={() => setIsOpen(false)}
             >
               <span>📧</span>
               <span>Help & Support</span>
-            </a>
+            </button>
 
             <button
               onClick={() => {
@@ -176,7 +169,6 @@ export default function ProfileAvatar({ userData, onLogout }) {
             </button>
           </div>
 
-          {/* Logout Section */}
           <div className="border-t border-gray-100 py-1">
             <button
               onClick={handleLogout}
