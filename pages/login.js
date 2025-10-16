@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { app } from '../lib/firebaseClient';
 
 export default function Login() {
   const router = useRouter();
@@ -12,19 +10,12 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
-    const auth = getAuth(app);
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        router.push('/dashboard');
-      } else {
-        setCheckingAuth(false);
-      }
-    });
-
-    return () => unsubscribe();
+    const token = localStorage.getItem('vow_auth_token');
+    if (token) {
+      router.push('/dashboard');
+    }
   }, [router]);
 
   const handleSubmit = async (e) => {
@@ -33,53 +24,37 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const auth = getAuth(app);
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'login',
+          email,
+          password,
+        }),
+      });
 
-      // Get token
-      const token = await user.getIdToken();
+      const data = await response.json();
 
-      // Store token
-      if (rememberMe) {
-        localStorage.setItem('vow_auth_token', token);
-      } else {
-        sessionStorage.setItem('vow_auth_token', token);
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
       }
 
-      console.log('Login successful, redirecting...');
-      
-      // Force redirect
-      window.location.href = '/dashboard';
+      if (data.success && data.token) {
+        localStorage.setItem('vow_auth_token', data.token);
+        console.log('Login successful, redirecting...');
+        window.location.href = '/dashboard';
+      } else {
+        throw new Error('Invalid response from server');
+      }
 
     } catch (err) {
       console.error('Login error:', err);
-      
-      let errorMessage = 'Login failed. Please try again.';
-      
-      if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
-        errorMessage = 'Invalid email or password';
-      } else if (err.code === 'auth/user-not-found') {
-        errorMessage = 'No account found with this email';
-      } else if (err.code === 'auth/too-many-requests') {
-        errorMessage = 'Too many failed attempts. Please try again later.';
-      } else if (err.code === 'auth/network-request-failed') {
-        errorMessage = 'Network error. Please check your connection.';
-      }
-      
-      setError(errorMessage);
+      setError(err.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-
-  if (checkingAuth) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
-      </div>
-    );
-  }
 
   return (
     <>
