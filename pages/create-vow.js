@@ -1,219 +1,173 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { api } from '../utils/apiClient';
 import { showToast } from '../utils/notificationUtils';
+import { celebrateMilestone, MILESTONE_KEYS } from '../utils/celebrationUtils';
 
 export default function CreateVow() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [userData, setUserData] = useState(null);
-  const [error, setError] = useState(null);
   const [step, setStep] = useState(1);
+  
   const [vow, setVow] = useState({
     category: '',
-    customCategory: '',
-    statement: '',
+    identityType: '',
+    boundary: '',
     duration: 30,
     whyMatters: '',
-    beforeIdentity: '',
-    becomingIdentity: '',
-    dailyReminder: true,
-    accountability: 'solo'
   });
 
   const categories = [
-    { name: 'Addiction Recovery', value: 'addiction', emoji: '🕊️' },
-    { name: 'Procrastination', value: 'procrastination', emoji: '⚡' },
-    { name: 'Self-Sabotage', value: 'self_sabotage', emoji: '🎯' },
-    { name: 'Emotional Healing', value: 'emotional', emoji: '💚' },
+    { name: 'Addiction Recovery', value: 'addiction', emoji: '🔗' },
+    { name: 'Procrastination', value: 'procrastination', emoji: '⏰' },
+    { name: 'Self-Sabotage', value: 'self_sabotage', emoji: '🛑' },
+    { name: 'Emotional Healing', value: 'emotional', emoji: '💙' },
     { name: 'Habit Building', value: 'habit', emoji: '🌱' },
-    { name: 'Other', value: 'other', emoji: '💭' }
+    { name: 'Other', value: 'other', emoji: '✨' }
   ];
 
   const durations = [
-    { label: '7 days', value: 7 },
-    { label: '30 days', value: 30 },
-    { label: '90 days', value: 90 },
-    { label: '1 year', value: 365 }
+    { label: '7 days', value: 7, desc: 'Test the waters' },
+    { label: '30 days', value: 30, desc: 'Build momentum' },
+    { label: '90 days', value: 90, desc: 'Deep transformation' },
+    { label: '1 year', value: 365, desc: 'Lifetime shift' }
   ];
 
   useEffect(() => {
-    checkAuth();
-    loadUserData();
-  }, []);
-
-  const checkAuth = () => {
     const token = localStorage.getItem('vow_auth_token');
     if (!token) {
-      showToast('Please log in to continue', 'error');
       router.push('/login');
+      return;
     }
-  };
+    setLoading(false);
+  }, [router]);
 
-  const loadUserData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await api.get('/userData', {
-        timeout: 10000
-      });
-      
-      if (response?.data?.success) {
-        setUserData(response.data.data);
-      } else {
-        throw new Error('Failed to load user data');
-      }
-    } catch (error) {
-      console.error('Load user data error:', error);
-      
-      if (error.code === 'UNAUTHORIZED') {
-        localStorage.removeItem('vow_auth_token');
-        showToast('Session expired. Please log in again', 'error');
-        router.push('/login');
-      } else if (error.code === 'ECONNABORTED') {
-        setError('Request timeout. Please check your connection.');
-      } else {
-        setError('Failed to load your profile. Please try again.');
-      }
-    } finally {
-      setLoading(false);
+  const handleChange = (field, value) => {
+    setVow(prev => ({ ...
+cat > pages/create-vow.js << 'EOF'
+import { useState, useEffect } from 'react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { showToast } from '../utils/notificationUtils';
+import { celebrateMilestone, MILESTONE_KEYS } from '../utils/celebrationUtils';
+
+export default function CreateVow() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [step, setStep] = useState(1);
+  
+  const [vow, setVow] = useState({
+    category: '',
+    identityType: '',
+    boundary: '',
+    duration: 30,
+    whyMatters: '',
+  });
+
+  const categories = [
+    { name: 'Addiction Recovery', value: 'addiction', emoji: '🔗' },
+    { name: 'Procrastination', value: 'procrastination', emoji: '⏰' },
+    { name: 'Self-Sabotage', value: 'self_sabotage', emoji: '🛑' },
+    { name: 'Emotional Healing', value: 'emotional', emoji: '💙' },
+    { name: 'Habit Building', value: 'habit', emoji: '🌱' },
+    { name: 'Other', value: 'other', emoji: '✨' }
+  ];
+
+  const durations = [
+    { label: '7 days', value: 7, desc: 'Test the waters' },
+    { label: '30 days', value: 30, desc: 'Build momentum' },
+    { label: '90 days', value: 90, desc: 'Deep transformation' },
+    { label: '1 year', value: 365, desc: 'Lifetime shift' }
+  ];
+
+  useEffect(() => {
+    const token = localStorage.getItem('vow_auth_token');
+    if (!token) {
+      router.push('/login');
+      return;
     }
-  };
+    setLoading(false);
+  }, [router]);
 
-  const handleInputChange = (field, value) => {
-    setVow(prev => ({
-      ...prev,
-      [field]: value
-    }));
-    
-    if (error) setError(null);
+  const handleChange = (field, value) => {
+    setVow(prev => ({ ...prev, [field]: value }));
   };
 
   const validateStep = () => {
-    if (step === 1) {
-      if (!vow.category) {
-        showToast('Please select a category', 'error');
-        return false;
-      }
-      if (vow.category === 'other' && !vow.customCategory.trim()) {
-        showToast('Please describe your vow category', 'error');
-        return false;
-      }
+    if (step === 1 && !vow.category) {
+      showToast('Please select a category', 'error');
+      return false;
     }
-    
-    if (step === 2) {
-      if (!vow.statement.trim()) {
-        showToast('Please write your vow statement', 'error');
-        return false;
-      }
-      if (vow.statement.length < 10) {
-        showToast('Your vow should be at least 10 characters', 'error');
-        return false;
-      }
-      if (!vow.whyMatters.trim()) {
-        showToast('Please explain why this vow matters to you', 'error');
-        return false;
-      }
+    if (step === 2 && (!vow.identityType || !vow.boundary)) {
+      showToast('Please fill in both parts of your vow', 'error');
+      return false;
     }
-    
-    if (step === 3) {
-      if (!vow.beforeIdentity.trim()) {
-        showToast('Please describe who you were before', 'error');
-        return false;
-      }
-      if (!vow.becomingIdentity.trim()) {
-        showToast('Please describe who you are becoming', 'error');
-        return false;
-      }
+    if (step === 3 && !vow.whyMatters) {
+      showToast('Please explain why this matters', 'error');
+      return false;
     }
-    
     return true;
   };
 
-  const handleNext = () => {
-    if (!validateStep()) {
-      return;
-    }
-    
-    if (step < 4) {
-      setStep(step + 1);
-    } else {
-      handleSubmit();
-    }
+  const nextStep = () => {
+    if (validateStep()) setStep(step + 1);
   };
 
-  const handleBack = () => {
-    if (step > 1) {
-      setStep(step - 1);
-    }
-  };
+  const prevStep = () => setStep(step - 1);
 
-  const handleSubmit = async () => {
-    if (!validateStep()) {
-      return;
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateStep()) return;
+
+    setSubmitting(true);
 
     try {
-      setSubmitting(true);
-      setError(null);
+      const token = localStorage.getItem('vow_auth_token');
+      
+      const statement = `I'm the type of person that ${vow.identityType}; therefore, I will ${vow.boundary}.`;
 
       const vowData = {
-        category: vow.category === 'other' ? vow.customCategory : vow.category,
-        statement: vow.statement.trim(),
+        statement,
+        identityType: vow.identityType,
+        boundary: vow.boundary,
+        category: vow.category,
         duration: vow.duration,
-        whyMatters: vow.whyMatters.trim(),
-        beforeIdentity: vow.beforeIdentity.trim(),
-        becomingIdentity: vow.becomingIdentity.trim(),
-        dailyReminder: vow.dailyReminder,
-        accountability: vow.accountability,
+        whyMatters: vow.whyMatters,
         status: 'active',
-        startDate: new Date().toISOString(),
-        currentDay: 1,
+        currentDay: 0,
         currentStreak: 0,
-        createdAt: new Date().toISOString()
+        longestStreak: 0,
       };
 
-      const response = await api.post('/userData', {
-        action: 'create_vow',
-        vow: vowData
-      }, {
-        timeout: 15000
+      const response = await fetch('/api/vowSubmit', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ vow: vowData }),
       });
 
-      if (response?.data?.success) {
-        showToast('Your vow has been created! 🕊️', 'success');
-        
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1500);
-      } else {
-        throw new Error(response?.data?.error || 'Failed to create vow');
-      }
-    } catch (error) {
-      console.error('Create vow error:', error);
+      if (!response.ok) throw new Error('Failed to create vow');
+
+      const message = celebrateMilestone(
+        MILESTONE_KEYS.FIRST_VOW,
+        '🎉 Your first vow is created!'
+      );
       
-      if (error.code === 'UNAUTHORIZED') {
-        localStorage.removeItem('vow_auth_token');
-        showToast('Session expired. Please log in again', 'error');
-        router.push('/login');
-      } else if (error.code === 'ECONNABORTED') {
-        setError('Request timeout. Your vow may not have been saved. Please try again.');
-        showToast('Timeout. Please try again', 'error');
-      } else if (error.response?.status === 400) {
-        const errorMsg = error.response?.data?.error || 'Invalid data. Please check your entries.';
-        setError(errorMsg);
-        showToast(errorMsg, 'error');
-      } else if (error.response?.status === 500) {
-        setError('Server error. Please try again in a moment.');
-        showToast('Server error. Please try again', 'error');
+      if (message) {
+        showToast(message, 'success');
       } else {
-        const errorMessage = error.response?.data?.error || error.message || 'Failed to create vow';
-        setError(errorMessage);
-        showToast(errorMessage, 'error');
+        showToast('Vow created successfully!', 'success');
       }
+
+      setTimeout(() => router.push('/dashboard'), 1500);
+
+    } catch (error) {
+      console.error('Submit error:', error);
+      showToast('Failed to create vow. Please try again.', 'error');
     } finally {
       setSubmitting(false);
     }
@@ -221,325 +175,205 @@ export default function CreateVow() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-amber-50/30 to-gray-50 flex items-center justify-center">
+        <p className="text-gray-600">Loading...</p>
       </div>
     );
   }
-
-  const progressPercent = (step / 4) * 100;
 
   return (
     <>
       <Head>
         <title>Create Your Vow - VOW</title>
-        <meta name="description" content="Create your daily vow of remembrance" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
-        {/* Header */}
-        <nav className="bg-white border-b border-amber-100">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <button
-                onClick={() => router.push('/dashboard')}
-                className="text-gray-600 hover:text-gray-900"
-                disabled={submitting}
-              >
-                ← Back
-              </button>
-              <h1 className="text-lg font-medium text-gray-900">Create Your Vow</h1>
-              <div className="w-16"></div>
-            </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-amber-50/30 to-gray-50 py-12 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Create Your Vow</h1>
+            <p className="text-gray-600">Fill the void with intention</p>
           </div>
-        </nav>
 
-        {/* Progress Bar */}
-        <div className="bg-white border-b border-gray-200">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-600">Step {step} of 4</span>
-              <span className="text-sm text-gray-600">{Math.round(progressPercent)}%</span>
+              {[1, 2, 3, 4].map((s) => (
+                <div
+                  key={s}
+                  className={`flex-1 h-2 rounded-full mx-1 transition-all ${
+                    s <= step ? 'bg-amber-500' : 'bg-gray-200'
+                  }`}
+                />
+              ))}
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-amber-600 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${progressPercent}%` }}
-              ></div>
-            </div>
+            <p className="text-sm text-center text-gray-600">Step {step} of 4</p>
           </div>
-        </div>
 
-        {/* Error Message */}
-        {error && (
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
-          </div>
-        )}
-
-        {/* Main Content */}
-        <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="bg-white rounded-xl shadow-md p-8">
-            {/* Step 1: Category */}
+          <form onSubmit={handleSubmit}>
             {step === 1 && (
-              <div>
-                <h2 className="text-2xl font-light text-gray-900 mb-2">
-                  What area are you focusing on?
+              <div className="glass-card rounded-2xl p-8 space-y-6">
+                <h2 className="text-2xl font-semibold text-gray-900 text-center mb-6">
+                  What chain are you breaking?
                 </h2>
-                <p className="text-gray-600 mb-6">
-                  Choose the area where you want to reclaim your identity.
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {categories.map((cat) => (
                     <button
                       key={cat.value}
                       type="button"
-                      onClick={() => handleInputChange('category', cat.value)}
-                      className={`p-6 border-2 rounded-lg transition-all ${
-                        vow.category === cat.value
-                          ? 'border-amber-600 bg-amber-50'
-                          : 'border-gray-200 hover:border-amber-300'
+                      onClick={() => handleChange('category', cat.value)}
+                      className={`glass-button rounded-xl p-6 text-left floating ${
+                        vow.category === cat.value ? 'ring-2 ring-amber-500' : ''
                       }`}
                     >
                       <div className="text-4xl mb-2">{cat.emoji}</div>
-                      <div className="text-sm font-medium text-gray-900">{cat.name}</div>
+                      <div className="font-medium text-gray-900">{cat.name}</div>
                     </button>
                   ))}
                 </div>
-                
-                {vow.category === 'other' && (
-                  <div className="mt-4">
-                    <input
-                      type="text"
-                      value={vow.customCategory}
-                      onChange={(e) => handleInputChange('customCategory', e.target.value)}
-                      placeholder="Describe your focus area..."
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                      maxLength={50}
-                    />
-                  </div>
-                )}
               </div>
             )}
 
-            {/* Step 2: Vow Statement */}
             {step === 2 && (
-              <div>
-                <h2 className="text-2xl font-light text-gray-900 mb-2">
-                  Write your vow statement
-                </h2>
-                <p className="text-gray-600 mb-6">
-                  This is your daily reminder of who you are becoming.
-                </p>
-                <textarea
-                  value={vow.statement}
-                  onChange={(e) => handleInputChange('statement', e.target.value)}
-                  placeholder="I vow to remember..."
-                  className="w-full h-40 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none mb-4"
-                  maxLength={300}
-                />
-                <p className="text-sm text-gray-500 mb-6">
-                  {vow.statement.length}/300 characters
-                </p>
-                
-                <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  Why does this matter to you?
-                </h3>
-                <textarea
-                  value={vow.whyMatters}
-                  onChange={(e) => handleInputChange('whyMatters', e.target.value)}
-                  placeholder="This matters because..."
-                  className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
-                  maxLength={500}
-                />
-                
-                <div className="mt-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Duration
-                  </label>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    {durations.map((duration) => (
-                      <button
-                        key={duration.value}
-                        type="button"
-                        onClick={() => handleInputChange('duration', duration.value)}
-                        className={`p-4 border-2 rounded-lg transition-all ${
-                          vow.duration === duration.value
-                            ? 'border-amber-600 bg-amber-50'
-                            : 'border-gray-200 hover:border-amber-300'
-                        }`}
-                      >
-                        <div className="text-sm font-medium text-gray-900">{duration.label}</div>
-                      </button>
-                    ))}
-                  </div>
+              <div className="glass-card rounded-2xl p-8 space-y-6">
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                    Fill the void with intention
+                  </h2>
+                  <p className="text-gray-600">Define yourself apart from the pattern</p>
                 </div>
-              </div>
-            )}
 
-            {/* Step 3: Identity Transformation */}
-            {step === 3 && (
-              <div>
-                <h2 className="text-2xl font-light text-gray-900 mb-2">
-                  Map your transformation
-                </h2>
-                <p className="text-gray-600 mb-6">
-                  Separate who you were from who you are becoming.
-                </p>
-                
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Who I was (before)
-                  </label>
-                  <textarea
-                    value={vow.beforeIdentity}
-                    onChange={(e) => handleInputChange('beforeIdentity', e.target.value)}
-                    placeholder="Before, I was someone who..."
-                    className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
-                    maxLength={300}
-                  />
-                </div>
-                
-                <div className="flex justify-center my-4">
-                  <div className="text-2xl text-amber-600">→</div>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Who I am becoming
-                  </label>
-                  <textarea
-                    value={vow.becomingIdentity}
-                    onChange={(e) => handleInputChange('becomingIdentity', e.target.value)}
-                    placeholder="Now, I am becoming someone who..."
-                    className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
-                    maxLength={300}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Step 4: Preferences */}
-            {step === 4 && (
-              <div>
-                <h2 className="text-2xl font-light text-gray-900 mb-2">
-                  Set your preferences
-                </h2>
-                <p className="text-gray-600 mb-6">
-                  Customize how you'll be supported on this journey.
-                </p>
-                
                 <div className="space-y-6">
-                  <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-900">Daily Reminder</h3>
-                      <p className="text-sm text-gray-500">Receive a morning reminder for your vow</p>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handleInputChange('dailyReminder', !vow.dailyReminder)}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                        vow.dailyReminder ? 'bg-amber-600' : 'bg-gray-200'
-                      }`}
-                    >
-                      <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                          vow.dailyReminder ? 'translate-x-6' : 'translate-x-1'
-                        }`}
-                      />
-                    </button>
-                  </div>
-                  
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Accountability Level
+                      I'm the type of person that...
                     </label>
-                    <div className="space-y-2">
-                      <label className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                        vow.accountability === 'solo'
-                          ? 'border-amber-600 bg-amber-50'
-                          : 'border-gray-200 hover:border-amber-300'
-                      }`}>
-                        <input
-                          type="radio"
-                          name="accountability"
-                          value="solo"
-                          checked={vow.accountability === 'solo'}
-                          onChange={(e) => handleInputChange('accountability', e.target.value)}
-                          className="mr-3"
-                        />
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">Solo Journey</div>
-                          <div className="text-sm text-gray-500">Keep this vow private</div>
-                        </div>
-                      </label>
-                      
-                      <label className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                        vow.accountability === 'partner'
-                          ? 'border-amber-600 bg-amber-50'
-                          : 'border-gray-200 hover:border-amber-300'
-                      }`}>
-                        <input
-                          type="radio"
-                          name="accountability"
-                          value="partner"
-                          checked={vow.accountability === 'partner'}
-                          onChange={(e) => handleInputChange('accountability', e.target.value)}
-                          className="mr-3"
-                        />
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">Accountability Partner</div>
-                          <div className="text-sm text-gray-500">Share with a trusted person (coming soon)</div>
-                        </div>
-                      </label>
-                    </div>
+                    <input
+                      type="text"
+                      value={vow.identityType}
+                      onChange={(e) => handleChange('identityType', e.target.value)}
+                      placeholder="honors time"
+                      className="input-glass w-full px-4 py-3 rounded-xl"
+                    />
+                    <p className="text-xs text-gray-500 mt-2 italic">
+                      Example: "honors time" or "values my peace" or "seeks clarity"
+                    </p>
                   </div>
+
+                  <div className="text-center text-2xl text-amber-600 font-light">
+                    therefore,
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      I will never (or always)...
+                    </label>
+                    <input
+                      type="text"
+                      value={vow.boundary}
+                      onChange={(e) => handleChange('boundary', e.target.value)}
+                      placeholder="never delay my purpose again"
+                      className="input-glass w-full px-4 py-3 rounded-xl"
+                    />
+                    <p className="text-xs text-gray-500 mt-2 italic">
+                      Example: "never delay my purpose again" or "always choose my peace"
+                    </p>
+                  </div>
+                </div>
+
+                {vow.identityType && vow.boundary && (
+                  <div className="glass-card rounded-xl p-6 bg-amber-50/50 mt-6">
+                    <p className="text-sm font-medium text-amber-900 mb-2">Your Vow:</p>
+                    <p className="text-lg text-gray-900 leading-relaxed">
+                      "I'm the type of person that <span className="font-semibold text-amber-700">{vow.identityType}</span>; therefore, I will <span className="font-semibold text-amber-700">{vow.boundary}</span>."
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {step === 3 && (
+              <div className="glass-card rounded-2xl p-8 space-y-6">
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                    Why does this matter?
+                  </h2>
+                  <p className="text-gray-600">Anchor your vow in meaning</p>
+                </div>
+
+                <textarea
+                  value={vow.whyMatters}
+                  onChange={(e) => handleChange('whyMatters', e.target.value)}
+                  placeholder="This matters because..."
+                  className="input-glass w-full h-40 px-4 py-3 rounded-xl resize-none"
+                  maxLength={500}
+                />
+                <p className="text-xs text-gray-500">{vow.whyMatters.length}/500</p>
+              </div>
+            )}
+
+            {step === 4 && (
+              <div className="glass-card rounded-2xl p-8 space-y-6">
+                <div className="text-center mb-6">
+                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                    How long will you honor this?
+                  </h2>
+                  <p className="text-gray-600">Choose your commitment period</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {durations.map((dur) => (
+                    <button
+                      key={dur.value}
+                      type="button"
+                      onClick={() => handleChange('duration', dur.value)}
+                      className={`glass-button rounded-xl p-6 text-center floating ${
+                        vow.duration === dur.value ? 'ring-2 ring-amber-500' : ''
+                      }`}
+                    >
+                      <div className="text-3xl font-light text-gray-900 mb-1">
+                        {dur.label}
+                      </div>
+                      <div className="text-sm text-gray-600">{dur.desc}</div>
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8">
-              <button
-                onClick={handleBack}
-                disabled={step === 1 || submitting}
-                className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-                  step === 1 || submitting
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                Back
-              </button>
-              <button
-                onClick={handleNext}
-                disabled={submitting}
-                className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-                  submitting
-                    ? 'bg-gray-400 text-white cursor-not-allowed'
-                    : 'bg-amber-600 text-white hover:bg-amber-700'
-                }`}
-              >
-                {submitting ? (
-                  <span className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Creating...
-                  </span>
-                ) : (
-                  step === 4 ? 'Create Vow' : 'Next'
-                )}
-              </button>
+            <div className="flex justify-between items-center mt-8">
+              {step > 1 ? (
+                <button
+                  type="button"
+                  onClick={prevStep}
+                  className="glass-button px-6 py-3 rounded-xl font-medium"
+                  disabled={submitting}
+                >
+                  ← Back
+                </button>
+              ) : (
+                <div />
+              )}
+
+              {step < 4 ? (
+                <button
+                  type="button"
+                  onClick={nextStep}
+                  className="bg-amber-600 text-white px-8 py-3 rounded-xl font-medium hover:bg-amber-700 transition-colors"
+                >
+                  Continue →
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="bg-amber-600 text-white px-8 py-3 rounded-xl font-medium hover:bg-amber-700 transition-colors disabled:opacity-50"
+                >
+                  {submitting ? 'Creating...' : 'Create My Vow 🙏'}
+                </button>
+              )}
             </div>
-          </div>
-        </main>
+          </form>
+        </div>
       </div>
     </>
   );

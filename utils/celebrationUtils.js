@@ -1,58 +1,41 @@
 import confetti from 'canvas-confetti';
 
-// Track first-time feature usage
-const MILESTONE_KEYS = {
+export const MILESTONE_KEYS = {
   FIRST_VOW: 'milestone_first_vow',
   FIRST_REFLECTION: 'milestone_first_reflection',
   FIRST_TRIGGER: 'milestone_first_trigger',
-  FIRST_LOGIN: 'milestone_first_login',
-  VOW_COMPLETED: 'milestone_vow_completed',
 };
 
-// Check if milestone already celebrated
-export const hasCelebrated = (milestoneKey) => {
+export const hasCelebrated = (key) => {
   if (typeof window === 'undefined') return true;
-  return localStorage.getItem(milestoneKey) === 'true';
+  return localStorage.getItem(key) === 'true';
 };
 
-// Mark milestone as celebrated
-export const markCelebrated = (milestoneKey) => {
+export const markCelebrated = (key) => {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(milestoneKey, 'true');
+  localStorage.setItem(key, 'true');
 };
 
-// Confetti celebration
-export const celebrate = (options = {}) => {
-  const defaults = {
-    particleCount: 100,
+export const celebrate = () => {
+  confetti({
+    particleCount: 150,
     spread: 70,
     origin: { y: 0.6 },
-    colors: ['#D97706', '#F59E0B', '#FBBF24', '#FCD34D'],
-  };
-
-  confetti({
-    ...defaults,
-    ...options,
+    colors: ['#D97706', '#F59E0B', '#FBBF24'],
   });
-
-  // Second burst for extra effect
+  
   setTimeout(() => {
     confetti({
-      ...defaults,
-      ...options,
-      particleCount: 50,
+      particleCount: 100,
+      spread: 90,
+      origin: { y: 0.6 },
     });
   }, 250);
 };
 
-// Milestone celebration with message
-export const celebrateMilestone = (milestoneKey, message) => {
-  if (hasCelebrated(milestoneKey)) return null;
-
+export const celebrateMilestone = (key, message) => {
+  if (hasCelebrated(key)) return null;
   celebrate();
-  markCelebrated(milestoneKey);
-
+  markCelebrated(key);
   return message;
 };
-
-export { MILESTONE_KEYS };
