@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { app } from '../lib/firebaseClient';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressTracker from '../components/ProgressTracker';
 import ProfileAvatar from '../components/ProfileAvatar';
@@ -9,44 +7,25 @@ import ProfileAvatar from '../components/ProfileAvatar';
 export default function Dashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [authChecked, setAuthChecked] = useState(false);
-  const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const auth = getAuth(app);
+    const token = localStorage.getItem('vow_auth_token');
     
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setAuthChecked(true);
-      
-      if (!firebaseUser) {
-        // Clear localStorage and redirect
-        localStorage.removeItem('vow_auth_token');
-        router.push('/login');
-        return;
-      }
+    if (!token) {
+      router.push('/login');
+      return;
+    }
 
-      setUser(firebaseUser);
-      
-      // Store fresh token
-      const token = await firebaseUser.getIdToken(true);
-      localStorage.setItem('vow_auth_token', token);
-      
-      // Fetch user data
-      await fetchUserData(firebaseUser);
-    });
-
-    return () => unsubscribe();
+    fetchUserData(token);
   }, [router]);
 
-  const fetchUserData = async (firebaseUser) => {
+  const fetchUserData = async (token) => {
     try {
       setLoading(true);
       setError(null);
-
-      const token = await firebaseUser.getIdToken(true);
 
       const response = await fetch('/api/userData?include=stats', {
         method: 'GET',
@@ -57,6 +36,12 @@ export default function Dashboard() {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('vow_auth_token');
+          router.push('/login');
+          return;
+        }
+        
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to load dashboard');
       }
@@ -73,19 +58,12 @@ export default function Dashboard() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      const auth = getAuth(app);
-      await auth.signOut();
-      localStorage.removeItem('vow_auth_token');
-      router.push('/login');
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem('vow_auth_token');
+    router.push('/login');
   };
 
-  // Show loading only if auth hasn't been checked yet
-  if (!authChecked || loading) {
+  if (loading) {
     return <LoadingSpinner fullScreen text="Loading your dashboard..." />;
   }
 
@@ -99,7 +77,12 @@ export default function Dashboard() {
           </h2>
           <p className="text-gray-600 mb-6">{error}</p>
           <button
-            onClick={() => fetchUserData(user)}
+            onClick={() => {
+              const token = localStorage.getItem('vow_auth_token');
+              if (token) {
+                fetchUserData(token);
+              }
+            }}
             className="px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
           >
             Try Again
