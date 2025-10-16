@@ -34,14 +34,15 @@ export default function Login() {
         }),
       });
 
-      const data = await response.json();
+      const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+        throw new Error(result.error || 'Login failed');
       }
 
-      if (data.success && data.token) {
-        localStorage.setItem('vow_auth_token', data.token);
+      // ✅ FIX: Token is inside result.data.token, not result.token
+      if (result.success && result.data && result.data.token) {
+        localStorage.setItem('vow_auth_token', result.data.token);
         console.log('Login successful, redirecting...');
         window.location.href = '/dashboard';
       } else {
