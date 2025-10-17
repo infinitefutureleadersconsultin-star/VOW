@@ -164,8 +164,8 @@ export default function CreateVow() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <p className="text-gray-400">Loading...</p>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0C1117' }}>
+        <p className="text-[#8E8A84]">Loading...</p>
       </div>
     );
   }
@@ -176,11 +176,15 @@ export default function CreateVow() {
         <title>Create Your Vow</title>
       </Head>
 
-      <div className="min-h-screen bg-gray-900 py-12 px-4">
+      <div className="min-h-screen py-12 px-4" style={{ background: 'linear-gradient(135deg, #0C1117 0%, #1a1f2e 100%)' }}>
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-light text-gray-100 mb-2 tracking-wide">Create Your Vow</h1>
-            <p className="text-gray-400">Fill the void with intention</p>
+            <h1 className="text-4xl font-light text-[#F4F1ED] mb-2 tracking-wide" style={{ fontFamily: "'Playfair Display', serif" }}>
+              Create Your Vow
+            </h1>
+            <p className="text-[#8E8A84]" style={{ fontFamily: "'Inter', sans-serif" }}>
+              Fill the void with intention
+            </p>
           </div>
 
           {/* Progress */}
@@ -190,19 +194,19 @@ export default function CreateVow() {
                 <div
                   key={s}
                   className={`flex-1 h-1 mx-1 transition-all duration-500 ${
-                    s <= step ? 'bg-yellow-600' : 'bg-gray-700'
+                    s <= step ? 'bg-[#E3C27D]' : 'bg-[#252b3d]'
                   }`}
                 />
               ))}
             </div>
-            <p className="text-sm text-center text-gray-500">Step {step} of 4</p>
+            <p className="text-sm text-center text-[#8E8A84]">Step {step} of 4</p>
           </div>
 
           <form onSubmit={handleSubmit}>
             {/* Step 1: Category */}
             {step === 1 && (
               <div className="glass-card rounded-2xl p-8 space-y-6">
-                <h2 className="text-2xl font-light text-gray-100 text-center mb-8">
+                <h2 className="text-2xl font-light text-[#F4F1ED] text-center mb-8" style={{ fontFamily: "'Playfair Display', serif" }}>
                   What pattern are you transforming?
                 </h2>
                 
@@ -215,12 +219,12 @@ export default function CreateVow() {
                         type="button"
                         onClick={() => handleChange('category', cat.value)}
                         className={`glass-button rounded-xl p-6 text-left floating ${cat.color} ${
-                          vow.category === cat.value ? 'ring-2 ring-yellow-600' : ''
+                          vow.category === cat.value ? 'ring-2 ring-[#E3C27D]' : ''
                         }`}
                       >
-                        <Icon size={32} className="text-yellow-600 mb-3" strokeWidth={1.5} />
-                        <div className="font-medium text-gray-100 mb-1">{cat.name}</div>
-                        <div className="text-sm text-gray-400">{cat.desc}</div>
+                        <Icon size={32} className="text-[#E3C27D] mb-3" strokeWidth={1.5} />
+                        <div className="font-medium text-[#F4F1ED] mb-1">{cat.name}</div>
+                        <div className="text-sm text-[#8E8A84]">{cat.desc}</div>
                       </button>
                     );
                   })}
@@ -232,15 +236,15 @@ export default function CreateVow() {
             {step === 2 && (
               <div className="glass-card rounded-2xl p-8 space-y-6">
                 <div className="text-center mb-8">
-                  <h2 className="text-2xl font-light text-gray-100 mb-2">
+                  <h2 className="text-2xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
                     Fill the void with intention
                   </h2>
-                  <p className="text-gray-400">Define yourself apart from the pattern</p>
+                  <p className="text-[#8E8A84]">Define yourself apart from the pattern</p>
                 </div>
 
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-3">
+                    <label className="block text-sm font-medium text-[#C8C4BE] mb-3">
                       I'm the type of person that...
                     </label>
                     <input
@@ -250,17 +254,17 @@ export default function CreateVow() {
                       placeholder="honors time"
                       className="input-glass w-full px-4 py-3 rounded-xl"
                     />
-                    <p className="text-xs text-gray-500 mt-2 italic">
+                    <p className="text-xs text-[#8E8A84] mt-2 italic">
                       Example: "honors time" or "values peace" or "seeks clarity"
                     </p>
                   </div>
 
-                  <div className="text-center text-xl text-yellow-600 font-light tracking-wider">
+                  <div className="text-center text-xl text-[#E3C27D] font-light tracking-wider" style={{ fontFamily: "'Playfair Display', serif" }}>
                     therefore,
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-3">
+                    <label className="block text-sm font-medium text-[#C8C4BE] mb-3">
                       I will never (or always)...
                     </label>
                     <input
@@ -270,17 +274,20 @@ export default function CreateVow() {
                       placeholder="never delay my purpose again"
                       className="input-glass w-full px-4 py-3 rounded-xl"
                     />
-                    <p className="text-xs text-gray-500 mt-2 italic">
+                    <p className="text-xs text-[#8E8A84] mt-2 italic">
                       Example: "never delay my purpose" or "always choose peace"
                     </p>
                   </div>
                 </div>
 
                 {vow.identityType && vow.boundary && (
-                  <div className="glass-card rounded-xl p-6 bg-yellow-900/10 border-yellow-600/20 mt-6">
-                    <p className="text-sm font-medium text-yellow-600 mb-2">Your Vow:</p>
-                    <p className="text-lg text-gray-200 leading-relaxed">
-                      "I'm the type of person that <span className="font-semibold text-yellow-600">{vow.identityType}</span>; therefore, I will <span className="font-semibold text-yellow-600">{vow.boundary}</span>."
+                  <div className="glass-card rounded-xl p-6 mt-6" style={{ 
+                    background: 'rgba(227, 194, 125, 0.05)',
+                    borderColor: 'rgba(227, 194, 125, 0.2)'
+                  }}>
+                    <p className="text-sm font-medium text-[#E3C27D] mb-2">Your Vow:</p>
+                    <p className="text-lg text-[#F4F1ED] leading-relaxed" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      "I'm the type of person that <span className="font-semibold text-[#E3C27D]">{vow.identityType}</span>; therefore, I will <span className="font-semibold text-[#E3C27D]">{vow.boundary}</span>."
                     </p>
                   </div>
                 )}
@@ -291,10 +298,10 @@ export default function CreateVow() {
             {step === 3 && (
               <div className="glass-card rounded-2xl p-8 space-y-6">
                 <div className="text-center mb-8">
-                  <h2 className="text-2xl font-light text-gray-100 mb-2">
+                  <h2 className="text-2xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
                     Why does this matter?
                   </h2>
-                  <p className="text-gray-400">Anchor your vow in meaning</p>
+                  <p className="text-[#8E8A84]">Anchor your vow in meaning</p>
                 </div>
 
                 <textarea
@@ -304,7 +311,7 @@ export default function CreateVow() {
                   className="input-glass w-full h-40 px-4 py-3 rounded-xl resize-none"
                   maxLength={500}
                 />
-                <p className="text-xs text-gray-500 text-right">{vow.whyMatters.length}/500</p>
+                <p className="text-xs text-[#8E8A84] text-right">{vow.whyMatters.length}/500</p>
               </div>
             )}
 
@@ -312,10 +319,10 @@ export default function CreateVow() {
             {step === 4 && (
               <div className="glass-card rounded-2xl p-8 space-y-6">
                 <div className="text-center mb-8">
-                  <h2 className="text-2xl font-light text-gray-100 mb-2">
+                  <h2 className="text-2xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
                     Choose your commitment
                   </h2>
-                  <p className="text-gray-400">How long will you honor this vow?</p>
+                  <p className="text-[#8E8A84]">How long will you honor this vow?</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -325,13 +332,13 @@ export default function CreateVow() {
                       type="button"
                       onClick={() => handleChange('duration', dur.value)}
                       className={`glass-button rounded-xl p-6 text-center floating ${
-                        vow.duration === dur.value ? 'ring-2 ring-yellow-600' : ''
+                        vow.duration === dur.value ? 'ring-2 ring-[#E3C27D]' : ''
                       }`}
                     >
-                      <div className="text-3xl font-light text-gray-100 mb-1">
+                      <div className="text-3xl font-light text-[#F4F1ED] mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>
                         {dur.label}
                       </div>
-                      <div className="text-sm text-gray-400">{dur.desc}</div>
+                      <div className="text-sm text-[#8E8A84]">{dur.desc}</div>
                     </button>
                   ))}
                 </div>

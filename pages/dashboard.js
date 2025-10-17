@@ -73,13 +73,13 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0C1117' }}>
         <div className="glass-card rounded-2xl p-8 max-w-md w-full text-center">
-          <div className="text-yellow-600 text-5xl mb-4">⚠</div>
-          <h2 className="text-2xl font-light text-gray-100 mb-2">
+          <div className="text-[#E3C27D] text-5xl mb-4">⚠</div>
+          <h2 className="text-2xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
             Connection Issue
           </h2>
-          <p className="text-gray-400 mb-6">{error}</p>
+          <p className="text-[#8E8A84] mb-6">{error}</p>
           <button
             onClick={() => {
               const token = localStorage.getItem('vow_auth_token');
@@ -95,11 +95,13 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      <header className="glass-card border-b border-gray-800">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0C1117 0%, #1a1f2e 100%)' }}>
+      <header className="glass-card border-b" style={{ borderColor: 'rgba(244, 241, 237, 0.08)' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-2xl font-light tracking-wider text-gray-100">VOW</h1>
+            <h1 className="text-2xl font-light tracking-wider text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+              VOW
+            </h1>
             <ProfileAvatar userData={userData} onLogout={handleLogout} />
           </div>
         </div>
@@ -107,10 +109,10 @@ export default function Dashboard() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-light text-gray-100 mb-2">
+          <h2 className="text-3xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
             Welcome back, {userData?.name?.split(' ')[0] || 'there'}
           </h2>
-          <p className="text-gray-400">Continue your transformation</p>
+          <p className="text-[#8E8A84]">Continue your transformation</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -121,37 +123,45 @@ export default function Dashboard() {
           <div className="md:col-span-2 grid grid-cols-2 gap-4">
             <div className="glass-card rounded-2xl p-6 floating">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-400 text-sm">Active Vows</span>
-                <ScrollText size={24} className="text-yellow-600" strokeWidth={1.5} />
+                <span className="text-[#8E8A84] text-sm">Active Vows</span>
+                <ScrollText size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
               </div>
-              <p className="text-3xl font-light text-gray-100">{stats?.activeVows || 0}</p>
+              <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                {stats?.activeVows || 0}
+              </p>
             </div>
 
             <div className="glass-card rounded-2xl p-6 floating">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-400 text-sm">Current Streak</span>
-                <Activity size={24} className="text-yellow-600" strokeWidth={1.5} />
+                <span className="text-[#8E8A84] text-sm">Current Streak</span>
+                <Activity size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
               </div>
-              <p className="text-3xl font-light text-gray-100">{stats?.currentStreak || 0}</p>
-              <p className="text-xs text-gray-500 mt-1">days</p>
+              <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                {stats?.currentStreak || 0}
+              </p>
+              <p className="text-xs text-[#8E8A84] mt-1">days</p>
             </div>
 
             <div className="glass-card rounded-2xl p-6 floating">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-400 text-sm">Reflections</span>
-                <Sparkles size={24} className="text-yellow-600" strokeWidth={1.5} />
+                <span className="text-[#8E8A84] text-sm">Reflections</span>
+                <Sparkles size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
               </div>
-              <p className="text-3xl font-light text-gray-100">{stats?.totalReflections || 0}</p>
+              <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                {stats?.totalReflections || 0}
+              </p>
             </div>
 
-            <div className="glass-card rounded-2xl p-6 floating">
+            <div className="glass-card rounded-2xl p-6 floating celebrate-complete">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-400 text-sm">Alignment</span>
-                <div className="w-6 h-6 rounded-full border-2 border-yellow-600 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-yellow-600"></div>
+                <span className="text-[#8E8A84] text-sm">Alignment</span>
+                <div className="w-6 h-6 rounded-full border-2 border-[#E3C27D] flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-[#E3C27D]"></div>
                 </div>
               </div>
-              <p className="text-3xl font-light text-gray-100">{stats?.alignmentScore || 0}%</p>
+              <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                {stats?.alignmentScore || 0}%
+              </p>
             </div>
           </div>
         </div>
@@ -161,32 +171,32 @@ export default function Dashboard() {
             onClick={() => router.push('/create-vow')}
             className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all text-left"
           >
-            <ScrollText size={32} className="text-yellow-600 mb-3" strokeWidth={1.5} />
-            <h3 className="text-lg font-medium mb-1 text-gray-100">Create a Vow</h3>
-            <p className="text-sm text-gray-400">Begin a new commitment</p>
+            <ScrollText size={32} className="text-[#E3C27D] mb-3" strokeWidth={1.5} />
+            <h3 className="text-lg font-medium mb-1 text-[#F4F1ED]">Create a Vow</h3>
+            <p className="text-sm text-[#8E8A84]">Begin a new commitment</p>
           </button>
 
           <button
             onClick={() => router.push('/reflection')}
             className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all text-left"
           >
-            <Sparkles size={32} className="text-yellow-600 mb-3" strokeWidth={1.5} />
-            <h3 className="text-lg font-medium mb-1 text-gray-100">Reflect</h3>
-            <p className="text-sm text-gray-400">Check in with yourself</p>
+            <Sparkles size={32} className="text-[#E3C27D] mb-3" strokeWidth={1.5} />
+            <h3 className="text-lg font-medium mb-1 text-[#F4F1ED]">Reflect</h3>
+            <p className="text-sm text-[#8E8A84]">Check in with yourself</p>
           </button>
 
           <button
             onClick={() => router.push('/log-trigger')}
             className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all text-left"
           >
-            <Activity size={32} className="text-yellow-600 mb-3" strokeWidth={1.5} />
-            <h3 className="text-lg font-medium mb-1 text-gray-100">Log Pattern</h3>
-            <p className="text-sm text-gray-400">Track your triggers</p>
+            <Activity size={32} className="text-[#E3C27D] mb-3" strokeWidth={1.5} />
+            <h3 className="text-lg font-medium mb-1 text-[#F4F1ED]">Log Pattern</h3>
+            <p className="text-sm text-[#8E8A84]">Track your triggers</p>
           </button>
         </div>
 
         <div className="glass-card rounded-2xl p-6">
-          <h3 className="text-lg font-medium text-gray-100 mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-medium text-[#F4F1ED] mb-4">Quick Actions</h3>
           <div className="space-y-3">
             <button
               onClick={() => router.push('/profile')}
@@ -194,10 +204,10 @@ export default function Dashboard() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-100">View Profile</p>
-                  <p className="text-sm text-gray-400">Manage your account</p>
+                  <p className="font-medium text-[#F4F1ED]">View Profile</p>
+                  <p className="text-sm text-[#8E8A84]">Manage your account</p>
                 </div>
-                <User size={24} className="text-yellow-600" strokeWidth={1.5} />
+                <User size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
               </div>
             </button>
 
@@ -208,14 +218,14 @@ export default function Dashboard() {
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-gray-100">Unlock Path</p>
-                    <p className="text-sm text-gray-400">
+                    <p className="font-medium text-[#F4F1ED]">Unlock Path</p>
+                    <p className="text-sm text-[#8E8A84]">
                       {userData?.subscriptionStatus === 'active' 
                         ? 'Manage your journey' 
                         : 'Continue your transformation'}
                     </p>
                   </div>
-                  <Unlock size={24} className="text-yellow-600" strokeWidth={1.5} />
+                  <Unlock size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
                 </div>
               </button>
             )}

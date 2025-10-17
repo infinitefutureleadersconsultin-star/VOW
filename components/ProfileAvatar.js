@@ -31,21 +31,23 @@ export default function ProfileAvatar({ userData, onLogout }) {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-3 focus:outline-none"
+        className="flex items-center space-x-3 focus:outline-none group"
       >
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-600 to-yellow-500 flex items-center justify-center text-gray-900 font-semibold shadow-lg">
+        <div className="w-10 h-10 rounded-full flex items-center justify-center text-[#0C1117] font-semibold shadow-lg transition-all duration-300 group-hover:shadow-xl" style={{
+          background: 'linear-gradient(135deg, #D8B26E 0%, #E3C27D 100%)'
+        }}>
           {getInitials(userData?.name)}
         </div>
-        <span className="text-gray-100 font-medium hidden sm:block">
+        <span className="text-[#F4F1ED] font-medium hidden sm:block">
           {userData?.name || 'User'}
         </span>
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 glass-card rounded-xl shadow-2xl overflow-hidden z-50">
-          <div className="p-4 border-b border-gray-700">
-            <p className="text-sm font-medium text-gray-100">{userData?.name}</p>
-            <p className="text-xs text-gray-400 mt-1">{userData?.email}</p>
+        <div className="absolute right-0 mt-2 w-56 glass-card rounded-xl shadow-2xl overflow-hidden z-50 animate-fade-in">
+          <div className="p-4 border-b" style={{ borderColor: 'rgba(244, 241, 237, 0.08)' }}>
+            <p className="text-sm font-medium text-[#F4F1ED]">{userData?.name}</p>
+            <p className="text-xs text-[#8E8A84] mt-1">{userData?.email}</p>
           </div>
 
           <div className="py-2">
@@ -54,9 +56,9 @@ export default function ProfileAvatar({ userData, onLogout }) {
                 router.push('/profile');
                 setIsOpen(false);
               }}
-              className="w-full px-4 py-2 text-left text-sm text-gray-100 hover:bg-gray-700/50 flex items-center space-x-2 transition-colors"
+              className="w-full px-4 py-2 text-left text-sm text-[#F4F1ED] hover:bg-[#1a1f2e]/50 flex items-center space-x-2 transition-colors"
             >
-              <User size={16} className="text-yellow-600" />
+              <User size={16} className="text-[#E3C27D]" />
               <span>Profile</span>
             </button>
 
@@ -65,9 +67,9 @@ export default function ProfileAvatar({ userData, onLogout }) {
                 onLogout();
                 setIsOpen(false);
               }}
-              className="w-full px-4 py-2 text-left text-sm text-gray-100 hover:bg-gray-700/50 flex items-center space-x-2 transition-colors"
+              className="w-full px-4 py-2 text-left text-sm text-[#F4F1ED] hover:bg-[#1a1f2e]/50 flex items-center space-x-2 transition-colors"
             >
-              <LogOut size={16} className="text-yellow-600" />
+              <LogOut size={16} className="text-[#E3C27D]" />
               <span>Sign Out</span>
             </button>
           </div>

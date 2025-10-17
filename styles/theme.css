@@ -1,28 +1,62 @@
 :root {
-  /* Charcoal Base */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #2a2a2a;
-  --bg-elevated: #333333;
+  /* Deep Charcoal Blue - Calm foundation */
+  --bg-primary: #0C1117;
+  --bg-secondary: #1a1f2e;
+  --bg-elevated: #252b3d;
   
-  /* Gold Accents */
-  --gold-primary: #D4AF37;
-  --gold-light: #E5C76B;
-  --gold-dark: #B8941F;
+  /* Soft Gold - Value & illumination (use sparingly) */
+  --gold-primary: #E3C27D;
+  --gold-light: #F0D9A8;
+  --gold-dark: #D8B26E;
   
-  /* Soft Neutrals */
-  --text-primary: #F5F5F5;
-  --text-secondary: #B8B8B8;
-  --text-muted: #808080;
+  /* Warm Ivory - Trust & readability */
+  --text-primary: #F4F1ED;
+  --text-secondary: #C8C4BE;
+  --text-muted: #8E8A84;
   
-  /* Category Colors (subtle, sophisticated) */
-  --category-addiction: #B85450;
-  --category-procrastination: #8B7B5E;
-  --category-sabotage: #6B5D7A;
-  --category-emotional: #5E7B8B;
-  --category-habit: #5E8B65;
-  --category-other: #7A7A7A;
+  /* Soft Blue - Stability */
+  --accent-blue: #5B708F;
+  --accent-blue-light: #7A8FA8;
+  
+  /* Sage Green - Growth & success */
+  --success-primary: #93B89A;
+  --success-light: #B0CDB6;
+  
+  /* Muted Burgundy - Reflection & warnings */
+  --warning-primary: #6E3B3B;
+  --warning-light: #8F5353;
   
   /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.1);
-  --border-emphasis: rgba(212, 175, 55, 0.3);
+  --border-subtle: rgba(244, 241, 237, 0.08);
+  --border-emphasis: rgba(227, 194, 125, 0.2);
+  
+  /* Breathing gradient keyframes */
+  --gradient-breath-start: #D8B26E;
+  --gradient-breath-end: #E3C27D;
+}
+
+/* Breathing animation for gold elements */
+@keyframes breathe {
+  0%, 100% { 
+    background: linear-gradient(135deg, var(--gradient-breath-start) 0%, var(--gradient-breath-end) 100%);
+  }
+  50% { 
+    background: linear-gradient(135deg, var(--gradient-breath-end) 0%, var(--gradient-breath-start) 100%);
+  }
+}
+
+/* Pulse glow animation */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 rgba(227, 194, 125, 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 20px 10px rgba(227, 194, 125, 0.1);
+  }
+}
+
+/* Subtle fade in */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
