@@ -119,7 +119,19 @@ export default async function handler(req, res) {
 // Handle user signup
 async function handleSignup(req, res) {
   try {
-    const { name, email, password, gender, nationality, language, consentData, consentAI } = req.body;
+    const { 
+      name, 
+      email, 
+      password, 
+      gender, 
+      nationality, 
+      ethnicity,
+      language, 
+      consentData, 
+      consentAI,
+      subscriptionStatus,
+      paymentIntentId,
+    } = req.body;
 
     // Validate input
     const validation = validateUserRegistration({
@@ -128,12 +140,19 @@ async function handleSignup(req, res) {
       password,
       gender,
       nationality,
+      ethnicity,
       language,
       consentData,
       consentAI,
     });
 
-    if (!validation.success) {
+    if (!validation.valid) {
+      console.log('[VALIDATION_ERROR] USER_REGISTRATION:', {
+        timestamp: new Date().toISOString(),
+        errors: validation.errors,
+        context: 'USER_REGISTRATION',
+      });
+
       return res.status(400).json({
         success: false,
         error: 'Validation failed',
@@ -157,23 +176,29 @@ async function handleSignup(req, res) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    // Determine subscription status
+    const isPaidSignup = subscriptionStatus === 'active' && paymentIntentId;
+    const finalSubscriptionStatus = isPaidSignup ? 'active' : 'trial';
+
     // Create user in Firestore
     const userData = {
-      name: validation.value.name,
-      email: validation.value.email.toLowerCase(),
+      name,
+      email: email.toLowerCase(),
       password: hashedPassword,
-      gender: validation.value.gender || null,
-      nationality: validation.value.nationality || null,
-      language: validation.value.language,
-      consentData: validation.value.consentData,
-      consentAI: validation.value.consentAI,
+      gender: gender || null,
+      nationality: nationality || null,
+      ethnicity: ethnicity || null,
+      language: language || 'en',
+      consentData,
+      consentAI,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       emailVerified: false,
       trialStartDate: new Date().toISOString(),
       trialEndDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days
-      subscriptionStatus: 'trial',
-      subscriptionTier: null,
+      subscriptionStatus: finalSubscriptionStatus,
+      subscriptionTier: isPaidSignup ? 'awareness' : null,
+      paymentIntentId: paymentIntentId || null,
     };
 
     const userDoc = await usersRef.add(userData);
@@ -196,6 +221,7 @@ async function handleSignup(req, res) {
       timestamp: new Date().toISOString(),
       userId,
       email: email.toLowerCase(),
+      subscriptionStatus: finalSubscriptionStatus,
     });
 
     return res.status(201).json({
@@ -204,10 +230,11 @@ async function handleSignup(req, res) {
       data: {
         userId,
         email: email.toLowerCase(),
-        name: validation.value.name,
+        name,
         token,
         refreshToken,
         trialEndDate: userData.trialEndDate,
+        subscriptionStatus: finalSubscriptionStatus,
       },
     });
   } catch (error) {
@@ -218,6 +245,16 @@ async function handleSignup(req, res) {
         success: false,
         error: 'Email already in use',
         code: 'EMAIL_EXISTS',
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to create account. Please try again.',
+      code: 'SIGNUP_FAILED',
+    });
+  }
+}
       });
     }
 

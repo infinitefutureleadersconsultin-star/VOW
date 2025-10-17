@@ -4,7 +4,8 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressTracker from '../components/ProgressTracker';
 import ProfileAvatar from '../components/ProfileAvatar';
 import { hasCelebrated, MILESTONE_KEYS } from '../utils/celebrationUtils';
-import { ScrollText, Sparkles, Activity, User, Unlock } from 'lucide-react';
+import { checkUserAccess, getTrialDaysRemaining } from '../utils/accessControl';
+import { ScrollText, Sparkles, Activity, User, Unlock, AlertCircle } from 'lucide-react';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+  const [accessInfo, setAccessInfo] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('vow_auth_token');
@@ -53,6 +55,15 @@ export default function Dashboard() {
       const result = await response.json();
       setUserData(result.data);
       setStats(result.data.stats || {});
+
+      // Check user access
+      const access = checkUserAccess(result.data);
+      setAccessInfo(access);
+
+      // If no access, redirect to profile
+      if (!access.hasAccess) {
+        router.push('/profile');
+      }
 
     } catch (err) {
       console.error('Failed to fetch user data:', err);
@@ -108,6 +119,31 @@ export default function Dashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Trial Banner */}
+        {accessInfo?.isTrial && (
+          <div className="mb-6 p-4 rounded-xl glass-card border-2 border-[#E3C27D]/30 animate-fade-in">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <AlertCircle size={24} className="text-[#E3C27D]" />
+                <div>
+                  <p className="text-[#F4F1ED] font-medium">
+                    Free Trial Active
+                  </p>
+                  <p className="text-sm text-[#8E8A84]">
+                    {accessInfo.daysLeft} {accessInfo.daysLeft === 1 ? 'day' : 'days'} remaining
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => router.push('/pricing')}
+                className="btn-primary text-sm px-6 py-2"
+              >
+                Upgrade Now
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="mb-8">
           <h2 className="text-3xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
             Welcome back, {userData?.name?.split(' ')[0] || 'there'}

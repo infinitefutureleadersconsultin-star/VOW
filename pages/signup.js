@@ -24,6 +24,7 @@ function SignupForm() {
     confirmPassword: '',
     gender: '',
     nationality: '',
+    ethnicity: '',
     language: 'en',
     consentData: false,
     consentAI: false,
@@ -33,6 +34,28 @@ function SignupForm() {
     priceId: 'price_monthly_4_99',
     interval: 'monthly',
   });
+
+  const nationalityOptions = [
+    { value: '', label: 'Select your country (optional)' },
+    { value: 'US', label: 'United States' },
+    { value: 'UK', label: 'United Kingdom' },
+    { value: 'CA', label: 'Canada' },
+    { value: 'MX', label: 'Mexico' },
+    { value: 'OTHER', label: 'Other' },
+  ];
+
+  const ethnicityOptions = [
+    { value: '', label: 'Prefer not to say' },
+    { value: 'white', label: 'White/Caucasian' },
+    { value: 'black', label: 'Black/African American' },
+    { value: 'hispanic', label: 'Hispanic/Latino' },
+    { value: 'asian', label: 'Asian' },
+    { value: 'native', label: 'Native American/Indigenous' },
+    { value: 'pacific', label: 'Pacific Islander' },
+    { value: 'middle_eastern', label: 'Middle Eastern/North African' },
+    { value: 'mixed', label: 'Mixed/Multiracial' },
+    { value: 'other', label: 'Other' },
+  ];
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -60,6 +83,10 @@ function SignupForm() {
       setError('Passwords do not match');
       return false;
     }
+    if (!formData.gender) {
+      setError('Please select your gender');
+      return false;
+    }
     return true;
   };
 
@@ -76,6 +103,39 @@ function SignupForm() {
       setStep(2);
     } else if (step === 2 && validateStep2()) {
       setStep(3);
+    }
+  };
+
+  const handleStartFreeTrial = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await api.post('/auth', {
+        action: 'signup',
+        ...formData,
+      });
+
+      if (response?.data?.success) {
+        showToast('Welcome! Your 2-day free trial has started.', 'success');
+        
+        // Store auth token
+        if (response.data.token) {
+          localStorage.setItem('vow_auth_token', response.data.token);
+        }
+
+        // Redirect to dashboard
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1000);
+      } else {
+        throw new Error(response?.data?.error || 'Signup failed');
+      }
+    } catch (err) {
+      console.error('Free trial signup error:', err);
+      setError(err.message || 'Failed to start free trial. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,7 +158,7 @@ function SignupForm() {
         priceId: paymentData.priceId,
       });
 
-      const { clientSecret } = intentResponse.data.data;
+      const { clientSecret } = intentResponse.data;
 
       // Confirm payment
       const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
@@ -116,127 +176,89 @@ function SignupForm() {
       }
 
       if (paymentIntent.status === 'succeeded') {
-        // Create user account
-        const signupResponse = await api.post('/auth', {
+        // Create user account with payment
+        const response = await api.post('/auth', {
           action: 'signup',
           ...formData,
-        });
-
-        const { userId, token, refreshToken } = signupResponse.data.data;
-
-        // Store tokens
-        localStorage.setItem('vow_auth_token', token);
-        localStorage.setItem('vow_refresh_token', refreshToken);
-
-        // Create subscription
-        await api.post('/subscription', {
-          action: 'create-subscription',
+          subscriptionStatus: 'active',
           paymentIntentId: paymentIntent.id,
-          userId,
         });
 
-        showToast('Account created successfully! Welcome to VOW.', 'success');
-        
-        // Redirect to dashboard
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1500);
+        if (response?.data?.success) {
+          showToast('Account created successfully!', 'success');
+          
+          if (response.data.token) {
+            localStorage.setItem('vow_auth_token', response.data.token);
+          }
+
+          setTimeout(() => {
+            router.push('/dashboard');
+          }, 1000);
+        }
       }
     } catch (err) {
-      console.error('Signup error:', err);
+      console.error('Payment error:', err);
       setError(err.message || 'Payment failed. Please try again.');
-      showToast(err.message || 'Payment failed', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const startFreeTrial = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      // Create user account without payment
-      const signupResponse = await api.post('/auth', {
-        action: 'signup',
-        ...formData,
-      });
-
-      const { userId, token, refreshToken, trialEndDate } = signupResponse.data.data;
-
-      // Store tokens
-      localStorage.setItem('vow_auth_token', token);
-      localStorage.setItem('vow_refresh_token', refreshToken);
-
-      showToast('Welcome! Your First Two Days of Becoming start now.', 'success');
-      
-      // Redirect to dashboard
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 1500);
-    } catch (err) {
-      console.error('Signup error:', err);
-      setError(err.message || 'Signup failed. Please try again.');
-      showToast(err.message || 'Signup failed', 'error');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md mx-auto">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-light text-gray-900 mb-2">VOW</h1>
-          <p className="text-gray-600">Begin Your Journey of Becoming</p>
-        </div>
+    <>
+      <Head>
+        <title>Sign Up - VOW</title>
+      </Head>
 
-        {/* Progress indicator */}
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center space-x-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 1 ? 'bg-amber-600 text-white' : 'bg-gray-200 text-gray-600'}`}>
-              1
-            </div>
-            <div className={`w-12 h-0.5 ${step >= 2 ? 'bg-amber-600' : 'bg-gray-200'}`} />
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 2 ? 'bg-amber-600 text-white' : 'bg-gray-200 text-gray-600'}`}>
-              2
-            </div>
-            <div className={`w-12 h-0.5 ${step >= 3 ? 'bg-amber-600' : 'bg-gray-200'}`} />
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step >= 3 ? 'bg-amber-600 text-white' : 'bg-gray-200 text-gray-600'}`}>
-              3
-            </div>
+      <div className="min-h-screen flex items-center justify-center py-12 px-4" style={{ background: 'linear-gradient(135deg, #0C1117 0%, #1a1f2e 100%)' }}>
+        <div className="max-w-md w-full">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+              Create Your Account
+            </h1>
+            <p className="text-[#8E8A84]">Begin your transformation</p>
           </div>
-        </div>
 
-        {/* Form Card */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+          {/* Progress indicator */}
+          <div className="flex justify-between mb-8">
+            {[1, 2, 3].map((s) => (
+              <div
+                key={s}
+                className={`flex-1 h-1 mx-1 transition-all ${
+                  s <= step ? 'bg-[#E3C27D]' : 'bg-[#252b3d]'
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Error message */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-800 text-sm">{error}</p>
+            <div className="mb-6 p-4 rounded-xl bg-[#6E3B3B]/20 border border-[#6E3B3B]/30">
+              <p className="text-[#F4F1ED] text-sm">{error}</p>
             </div>
           )}
 
-          {/* Step 1: Basic Info */}
+          {/* Step 1: Account Info */}
           {step === 1 && (
-            <div className="space-y-6">
+            <div className="glass-card rounded-2xl p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Your Name
+                <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
+                  Full Name
                 </label>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                  placeholder="Enter your name"
-                  required
+                  className="input-glass w-full px-4 py-3 rounded-xl"
+                  placeholder="John Doe"
+                  disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
                   Email
                 </label>
                 <input
@@ -244,14 +266,14 @@ function SignupForm() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                  placeholder="your@email.com"
-                  required
+                  className="input-glass w-full px-4 py-3 rounded-xl"
+                  placeholder="you@example.com"
+                  disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
                   Password
                 </label>
                 <input
@@ -259,14 +281,14 @@ function SignupForm() {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                  className="input-glass w-full px-4 py-3 rounded-xl"
                   placeholder="At least 8 characters"
-                  required
+                  disabled={loading}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
                   Confirm Password
                 </label>
                 <input
@@ -274,117 +296,124 @@ function SignupForm() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                  placeholder="Confirm your password"
-                  required
+                  className="input-glass w-full px-4 py-3 rounded-xl"
+                  placeholder="Re-enter password"
+                  disabled={loading}
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
+                  Gender
+                </label>
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleInputChange}
+                  className="input-glass w-full px-4 py-3 rounded-xl"
+                  disabled={loading}
+                >
+                  <option value="">Select your gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="non-binary">Non-binary</option>
+                  <option value="prefer-not-to-say">Prefer not to say</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
+                  Nationality <span className="text-[#8E8A84] text-xs">(Optional)</span>
+                </label>
+                <select
+                  name="nationality"
+                  value={formData.nationality}
+                  onChange={handleInputChange}
+                  className="input-glass w-full px-4 py-3 rounded-xl"
+                  disabled={loading}
+                >
+                  {nationalityOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
+                  Ethnicity <span className="text-[#8E8A84] text-xs">(Optional)</span>
+                </label>
+                <select
+                  name="ethnicity"
+                  value={formData.ethnicity}
+                  onChange={handleInputChange}
+                  className="input-glass w-full px-4 py-3 rounded-xl"
+                  disabled={loading}
+                >
+                  {ethnicityOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <button
                 onClick={handleNextStep}
-                className="w-full bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg font-medium transition-colors"
+                disabled={loading}
+                className="w-full btn-primary mt-6"
               >
                 Continue
               </button>
             </div>
           )}
 
-          {/* Step 2: Preferences & Consent */}
+          {/* Step 2: Consent */}
           {step === 2 && (
-            <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Gender (Optional)
-                </label>
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                >
-                  <option value="">Prefer not to say</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="non-binary">Non-binary</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Nationality/Ethnicity (Optional)
-                </label>
-                <input
-                  type="text"
-                  name="nationality"
-                  value={formData.nationality}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                  placeholder="For personalized intro video"
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  This helps us provide a culturally relevant welcome experience
-                </p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Primary Language
-                </label>
-                <select
-                  name="language"
-                  value={formData.language}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                >
-                  <option value="en">English</option>
-                  <option value="es">Español</option>
-                  <option value="pt">Português</option>
-                  <option value="fr">Français</option>
-                  <option value="hi">हिन्दी</option>
-                </select>
-              </div>
-
-              <div className="space-y-3">
-                <label className="flex items-start">
+            <div className="glass-card rounded-2xl p-6 space-y-4">
+              <div className="space-y-4">
+                <label className="flex items-start space-x-3 cursor-pointer">
                   <input
                     type="checkbox"
                     name="consentData"
                     checked={formData.consentData}
                     onChange={handleInputChange}
-                    className="mt-1 mr-3"
-                    required
+                    className="mt-1"
+                    disabled={loading}
                   />
-                  <span className="text-sm text-gray-700">
-                    I consent to VOW storing my data securely and using it to provide personalized guidance
+                  <span className="text-sm text-[#C8C4BE]">
+                    I agree to the collection and processing of my data for app functionality
                   </span>
                 </label>
 
-                <label className="flex items-start">
+                <label className="flex items-start space-x-3 cursor-pointer">
                   <input
                     type="checkbox"
                     name="consentAI"
                     checked={formData.consentAI}
                     onChange={handleInputChange}
-                    className="mt-1 mr-3"
-                    required
+                    className="mt-1"
+                    disabled={loading}
                   />
-                  <span className="text-sm text-gray-700">
-                    I consent to AI-powered coaching and pattern analysis to support my journey
+                  <span className="text-sm text-[#C8C4BE]">
+                    I consent to AI-powered insights and recommendations
                   </span>
                 </label>
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex space-x-3 mt-6">
                 <button
                   onClick={() => setStep(1)}
-                  className="flex-1 border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                  disabled={loading}
+                  className="flex-1 btn-secondary"
                 >
                   Back
                 </button>
                 <button
                   onClick={handleNextStep}
-                  className="flex-1 bg-amber-600 hover:bg-amber-700 text-white py-3 rounded-lg font-medium transition-colors"
+                  disabled={loading}
+                  className="flex-1 btn-primary"
                 >
                   Continue
                 </button>
@@ -392,115 +421,119 @@ function SignupForm() {
             </div>
           )}
 
-          {/* Step 3: Payment or Trial */}
+          {/* Step 3: Payment or Free Trial */}
           {step === 3 && (
-            <div className="space-y-6">
+            <div className="glass-card rounded-2xl p-6 space-y-6">
               <div className="text-center mb-6">
-                <h3 className="text-xl font-medium text-gray-900 mb-2">
-                  Begin Your First Two Days
-                </h3>
-                <p className="text-gray-600">
-                  Start your free 2-day trial. No credit card required.
-                </p>
+                <h2 className="text-2xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  Choose Your Path
+                </h2>
+                <p className="text-[#8E8A84]">Start your 2-day free trial or upgrade now</p>
               </div>
 
+              {/* Free Trial Option */}
               <button
-                onClick={startFreeTrial}
+                onClick={handleStartFreeTrial}
                 disabled={loading}
-                className="w-full bg-amber-600 hover:bg-amber-700 text-white py-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+                className="w-full p-6 rounded-xl glass-button floating text-left border-2 border-[#E3C27D]/30 hover:border-[#E3C27D]"
               >
-                {loading ? 'Creating Your Account...' : 'Start Free Trial'}
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-lg font-medium text-[#F4F1ED]">Start Free Trial</h3>
+                  <span className="text-[#93B89A] text-sm font-medium">Recommended</span>
+                </div>
+                <p className="text-sm text-[#8E8A84] mb-3">
+                  2 days of full access. No credit card required.
+                </p>
+                <ul className="text-xs text-[#8E8A84] space-y-1">
+                  <li>✓ Create unlimited vows</li>
+                  <li>✓ Daily reflections</li>
+                  <li>✓ Pattern tracking</li>
+                </ul>
               </button>
 
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white text-gray-500">or subscribe now</span>
-                </div>
+              {/* Or Divider */}
+              <div className="flex items-center my-4">
+                <div className="flex-1 h-px bg-[#252b3d]"></div>
+                <span className="px-3 text-sm text-[#8E8A84]">or</span>
+                <div className="flex-1 h-px bg-[#252b3d]"></div>
               </div>
 
-              <form onSubmit={handlePayment}>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Payment Details
-                  </label>
-                  <div className="p-4 border border-gray-300 rounded-lg">
+              {/* Paid Option */}
+              <div className="p-6 rounded-xl" style={{ background: 'rgba(227, 194, 125, 0.05)' }}>
+                <h3 className="text-lg font-medium text-[#F4F1ED] mb-3">Upgrade Now</h3>
+                
+                <select
+                  value={paymentData.priceId}
+                  onChange={(e) => setPaymentData({ ...paymentData, priceId: e.target.value })}
+                  className="input-glass w-full px-4 py-3 rounded-xl mb-4"
+                  disabled={loading}
+                >
+                  <option value="price_monthly_4_99">$4.99/month</option>
+                  <option value="price_monthly_9_99">$9.99/month</option>
+                  <option value="price_monthly_14_99">$14.99/month</option>
+                </select>
+
+                <form onSubmit={handlePayment}>
+                  <div className="mb-4">
                     <CardElement
                       options={{
                         style: {
                           base: {
                             fontSize: '16px',
-                            color: '#374151',
+                            color: '#F4F1ED',
                             '::placeholder': {
-                              color: '#9CA3AF',
+                              color: '#8E8A84',
                             },
                           },
                         },
                       }}
                     />
                   </div>
-                </div>
 
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Subscription Plan
-                  </label>
-                  <select
-                    value={paymentData.priceId}
-                    onChange={(e) => setPaymentData({ ...paymentData, priceId: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                  <button
+                    type="submit"
+                    disabled={loading || !stripe}
+                    className="w-full btn-primary"
                   >
-                    <option value="price_monthly_4_99">$4.99/month</option>
-                    <option value="price_quarterly_4_99">$14.97/quarter (Save 10%)</option>
-                  </select>
-                </div>
+                    {loading ? 'Processing...' : 'Subscribe Now'}
+                  </button>
+                </form>
 
-                <button
-                  type="submit"
-                  disabled={!stripe || loading}
-                  className="w-full bg-gray-900 hover:bg-gray-800 text-white py-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loading ? 'Processing...' : 'Subscribe Now'}
-                </button>
-              </form>
+                <p className="text-xs text-[#8E8A84] mt-3 text-center">
+                  Secure payment powered by Stripe
+                </p>
+              </div>
 
               <button
                 onClick={() => setStep(2)}
-                className="w-full text-gray-600 hover:text-gray-900 py-2 text-sm"
+                disabled={loading}
+                className="w-full btn-secondary mt-4"
               >
-                ← Back
+                Back
               </button>
-
-              <p className="text-xs text-center text-gray-500">
-                Secure payment powered by Stripe. Your data is encrypted and safe.
-              </p>
             </div>
           )}
-        </div>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Already have an account?{' '}
-          <a href="/login" className="text-amber-600 hover:text-amber-700 font-medium">
-            Log in
-          </a>
-        </p>
+          {/* Login link */}
+          <p className="text-center text-[#8E8A84] mt-6">
+            Already have an account?{' '}
+            <button
+              onClick={() => router.push('/login')}
+              className="text-[#E3C27D] hover:underline"
+            >
+              Sign in
+            </button>
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
 export default function Signup() {
   return (
-    <>
-      <Head>
-        <title>Sign Up - VOW</title>
-        <meta name="description" content="Begin your journey of becoming. Start your free 2-day trial." />
-      </Head>
-      <Elements stripe={stripePromise}>
-        <SignupForm />
-      </Elements>
-    </>
+    <Elements stripe={stripePromise}>
+      <SignupForm />
+    </Elements>
   );
 }
