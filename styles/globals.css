@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Apple Human Interface Guidelines + Glassmorphism */
+@import './theme.css';
+
 @layer base {
   * {
     -webkit-font-smoothing: antialiased;
@@ -10,115 +11,131 @@
   }
 
   body {
-    @apply bg-gradient-to-br from-gray-50 via-amber-50/30 to-gray-50;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Roboto', sans-serif;
+    @apply bg-gray-900 text-gray-100;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
   }
 }
 
 @layer components {
-  /* Glass card effect */
+  /* Sophisticated glass card */
   .glass-card {
-    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-lg;
-    box-shadow: 
-      0 8px 32px 0 rgba(31, 38, 135, 0.07),
-      0 2px 8px 0 rgba(0, 0, 0, 0.04);
+    background: rgba(42, 42, 42, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card:hover {
+    border-color: var(--border-emphasis);
+    box-shadow: 0 8px 32px 0 rgba(212, 175, 55, 0.1);
   }
 
   /* Glass button */
   .glass-button {
-    @apply bg-white/60 backdrop-blur-md border border-white/30 hover:bg-white/80 transition-all duration-300;
-    box-shadow: 
-      0 4px 16px 0 rgba(31, 38, 135, 0.05),
-      0 1px 4px 0 rgba(0, 0, 0, 0.02);
+    background: rgba(51, 51, 51, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-subtle);
+    transition: all 0.3s ease;
   }
 
-  /* Primary action button (Apple style) */
+  .glass-button:hover {
+    background: rgba(51, 51, 51, 0.8);
+    border-color: var(--border-emphasis);
+    transform: translateY(-2px);
+  }
+
+  /* Premium action button */
   .btn-primary {
-    @apply bg-gradient-to-b from-amber-500 to-amber-600 text-white font-medium;
-    @apply rounded-xl px-6 py-3 shadow-md hover:shadow-lg;
-    @apply transition-all duration-200 hover:scale-[1.02] active:scale-[0.98];
+    background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+    color: #1a1a1a;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 12px 32px;
+    box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s ease;
   }
 
-  /* Secondary action button */
+  .btn-primary:hover {
+    box-shadow: 0 6px 24px rgba(212, 175, 55, 0.4);
+    transform: translateY(-2px);
+  }
+
+  /* Secondary button */
   .btn-secondary {
-    @apply glass-button rounded-xl px-6 py-3 font-medium text-gray-700;
+    background: transparent;
+    border: 1px solid var(--border-emphasis);
+    color: var(--gold-light);
+    border-radius: 12px;
+    padding: 12px 32px;
+    transition: all 0.3s ease;
   }
 
-  /* Floating element */
+  .btn-secondary:hover {
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  /* Floating animation */
   .floating {
-    @apply transform transition-all duration-300 hover:-translate-y-1;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  /* Input with glass effect */
+  .floating:hover {
+    transform: translateY(-4px);
+  }
+
+  /* Sophisticated input */
   .input-glass {
-    @apply bg-white/50 backdrop-blur-sm border border-gray-200/50;
-    @apply rounded-xl px-4 py-3 focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500/50;
-    @apply transition-all duration-200;
+    background: rgba(51, 51, 51, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .input-glass:focus {
+    background: rgba(51, 51, 51, 0.7);
+    border-color: var(--border-emphasis);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    outline: none;
+  }
+
+  .input-glass::placeholder {
+    color: var(--text-muted);
   }
 }
+
+/* Category color classes */
+.category-addiction { border-left: 3px solid var(--category-addiction); }
+.category-procrastination { border-left: 3px solid var(--category-procrastination); }
+.category-sabotage { border-left: 3px solid var(--category-sabotage); }
+.category-emotional { border-left: 3px solid var(--category-emotional); }
+.category-habit { border-left: 3px solid var(--category-habit); }
+.category-other { border-left: 3px solid var(--category-other); }
 
 /* Smooth transitions */
 * {
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-/* Custom scrollbar (Apple style) */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(26, 26, 26, 0.3);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(212, 175, 55, 0.3);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25);
-}
-
-/* Apple HIG + Glassmorphism */
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-}
-
-.glass-button {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
-}
-
-.glass-button:hover {
-  background: rgba(255, 255, 255, 0.8);
-  transform: translateY(-2px);
-}
-
-.floating {
-  transition: transform 0.3s ease;
-}
-
-.floating:hover {
-  transform: translateY(-4px);
-}
-
-.input-glass {
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(209, 213, 219, 0.5);
-}
-
-.input-glass:focus {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(217, 119, 6, 0.5);
-  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+  background: rgba(212, 175, 55, 0.5);
 }

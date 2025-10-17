@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { showToast } from '../utils/notificationUtils';
 import { celebrateMilestone, MILESTONE_KEYS } from '../utils/celebrationUtils';
+import { Link2, Clock, ShieldOff, Heart, Sprout, Sparkles } from 'lucide-react';
 
 export default function CreateVow() {
   const router = useRouter();
@@ -19,19 +20,55 @@ export default function CreateVow() {
   });
 
   const categories = [
-    { name: 'Addiction Recovery', value: 'addiction', emoji: '🔗' },
-    { name: 'Procrastination', value: 'procrastination', emoji: '⏰' },
-    { name: 'Self-Sabotage', value: 'self_sabotage', emoji: '🛑' },
-    { name: 'Emotional Healing', value: 'emotional', emoji: '💙' },
-    { name: 'Habit Building', value: 'habit', emoji: '🌱' },
-    { name: 'Other', value: 'other', emoji: '✨' }
+    {
+      name: 'Breaking Chains',
+      value: 'addiction',
+      icon: Link2,
+      desc: 'Release what binds you',
+      color: 'category-addiction'
+    },
+    {
+      name: 'Honoring Time',
+      value: 'procrastination',
+      icon: Clock,
+      desc: 'Reclaim your moments',
+      color: 'category-procrastination'
+    },
+    {
+      name: 'Ending Self-Sabotage',
+      value: 'self_sabotage',
+      icon: ShieldOff,
+      desc: 'Stop blocking your path',
+      color: 'category-sabotage'
+    },
+    {
+      name: 'Healing Within',
+      value: 'emotional',
+      icon: Heart,
+      desc: 'Restore inner peace',
+      color: 'category-emotional'
+    },
+    {
+      name: 'Building Rituals',
+      value: 'habit',
+      icon: Sprout,
+      desc: 'Create lasting patterns',
+      color: 'category-habit'
+    },
+    {
+      name: 'Personal Journey',
+      value: 'other',
+      icon: Sparkles,
+      desc: 'Your unique path',
+      color: 'category-other'
+    }
   ];
 
   const durations = [
-    { label: '7 days', value: 7, desc: 'Test the waters' },
-    { label: '30 days', value: 30, desc: 'Build momentum' },
-    { label: '90 days', value: 90, desc: 'Deep transformation' },
-    { label: '1 year', value: 365, desc: 'Lifetime shift' }
+    { label: '7 Days', value: 7, desc: 'Begin the practice' },
+    { label: '30 Days', value: 30, desc: 'Build momentum' },
+    { label: '90 Days', value: 90, desc: 'Deep transformation' },
+    { label: '365 Days', value: 365, desc: 'Complete evolution' }
   ];
 
   useEffect(() => {
@@ -106,13 +143,13 @@ export default function CreateVow() {
 
       const message = celebrateMilestone(
         MILESTONE_KEYS.FIRST_VOW,
-        '🎉 Your first vow is created!'
+        'Your first vow is sealed'
       );
       
       if (message) {
         showToast(message, 'success');
       } else {
-        showToast('Vow created successfully!', 'success');
+        showToast('Vow created successfully', 'success');
       }
 
       setTimeout(() => router.push('/dashboard'), 1500);
@@ -127,8 +164,8 @@ export default function CreateVow() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-amber-50/30 to-gray-50 flex items-center justify-center">
-        <p className="text-gray-600">Loading...</p>
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <p className="text-gray-400">Loading...</p>
       </div>
     );
   }
@@ -136,67 +173,74 @@ export default function CreateVow() {
   return (
     <>
       <Head>
-        <title>Create Your Vow - VOW</title>
+        <title>Create Your Vow</title>
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-amber-50/30 to-gray-50 py-12 px-4">
+      <div className="min-h-screen bg-gray-900 py-12 px-4">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Create Your Vow</h1>
-            <p className="text-gray-600">Fill the void with intention</p>
+            <h1 className="text-4xl font-light text-gray-100 mb-2 tracking-wide">Create Your Vow</h1>
+            <p className="text-gray-400">Fill the void with intention</p>
           </div>
 
-          <div className="mb-8">
+          {/* Progress */}
+          <div className="mb-12">
             <div className="flex items-center justify-between mb-2">
               {[1, 2, 3, 4].map((s) => (
                 <div
                   key={s}
-                  className={`flex-1 h-2 rounded-full mx-1 transition-all ${
-                    s <= step ? 'bg-amber-500' : 'bg-gray-200'
+                  className={`flex-1 h-1 mx-1 transition-all duration-500 ${
+                    s <= step ? 'bg-yellow-600' : 'bg-gray-700'
                   }`}
                 />
               ))}
             </div>
-            <p className="text-sm text-center text-gray-600">Step {step} of 4</p>
+            <p className="text-sm text-center text-gray-500">Step {step} of 4</p>
           </div>
 
           <form onSubmit={handleSubmit}>
+            {/* Step 1: Category */}
             {step === 1 && (
               <div className="glass-card rounded-2xl p-8 space-y-6">
-                <h2 className="text-2xl font-semibold text-gray-900 text-center mb-6">
-                  What chain are you breaking?
+                <h2 className="text-2xl font-light text-gray-100 text-center mb-8">
+                  What pattern are you transforming?
                 </h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat.value}
-                      type="button"
-                      onClick={() => handleChange('category', cat.value)}
-                      className={`glass-button rounded-xl p-6 text-left floating ${
-                        vow.category === cat.value ? 'ring-2 ring-amber-500' : ''
-                      }`}
-                    >
-                      <div className="text-4xl mb-2">{cat.emoji}</div>
-                      <div className="font-medium text-gray-900">{cat.name}</div>
-                    </button>
-                  ))}
+                  {categories.map((cat) => {
+                    const Icon = cat.icon;
+                    return (
+                      <button
+                        key={cat.value}
+                        type="button"
+                        onClick={() => handleChange('category', cat.value)}
+                        className={`glass-button rounded-xl p-6 text-left floating ${cat.color} ${
+                          vow.category === cat.value ? 'ring-2 ring-yellow-600' : ''
+                        }`}
+                      >
+                        <Icon size={32} className="text-yellow-600 mb-3" strokeWidth={1.5} />
+                        <div className="font-medium text-gray-100 mb-1">{cat.name}</div>
+                        <div className="text-sm text-gray-400">{cat.desc}</div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
+            {/* Step 2: The Void */}
             {step === 2 && (
               <div className="glass-card rounded-2xl p-8 space-y-6">
-                <div className="text-center mb-6">
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-light text-gray-100 mb-2">
                     Fill the void with intention
                   </h2>
-                  <p className="text-gray-600">Define yourself apart from the pattern</p>
+                  <p className="text-gray-400">Define yourself apart from the pattern</p>
                 </div>
 
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                    <label className="block text-sm font-medium text-gray-300 mb-3">
                       I'm the type of person that...
                     </label>
                     <input
@@ -207,16 +251,16 @@ export default function CreateVow() {
                       className="input-glass w-full px-4 py-3 rounded-xl"
                     />
                     <p className="text-xs text-gray-500 mt-2 italic">
-                      Example: "honors time" or "values my peace" or "seeks clarity"
+                      Example: "honors time" or "values peace" or "seeks clarity"
                     </p>
                   </div>
 
-                  <div className="text-center text-2xl text-amber-600 font-light">
+                  <div className="text-center text-xl text-yellow-600 font-light tracking-wider">
                     therefore,
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                    <label className="block text-sm font-medium text-gray-300 mb-3">
                       I will never (or always)...
                     </label>
                     <input
@@ -227,29 +271,30 @@ export default function CreateVow() {
                       className="input-glass w-full px-4 py-3 rounded-xl"
                     />
                     <p className="text-xs text-gray-500 mt-2 italic">
-                      Example: "never delay my purpose again" or "always choose my peace"
+                      Example: "never delay my purpose" or "always choose peace"
                     </p>
                   </div>
                 </div>
 
                 {vow.identityType && vow.boundary && (
-                  <div className="glass-card rounded-xl p-6 bg-amber-50/50 mt-6">
-                    <p className="text-sm font-medium text-amber-900 mb-2">Your Vow:</p>
-                    <p className="text-lg text-gray-900 leading-relaxed">
-                      "I'm the type of person that <span className="font-semibold text-amber-700">{vow.identityType}</span>; therefore, I will <span className="font-semibold text-amber-700">{vow.boundary}</span>."
+                  <div className="glass-card rounded-xl p-6 bg-yellow-900/10 border-yellow-600/20 mt-6">
+                    <p className="text-sm font-medium text-yellow-600 mb-2">Your Vow:</p>
+                    <p className="text-lg text-gray-200 leading-relaxed">
+                      "I'm the type of person that <span className="font-semibold text-yellow-600">{vow.identityType}</span>; therefore, I will <span className="font-semibold text-yellow-600">{vow.boundary}</span>."
                     </p>
                   </div>
                 )}
               </div>
             )}
 
+            {/* Step 3: Why */}
             {step === 3 && (
               <div className="glass-card rounded-2xl p-8 space-y-6">
-                <div className="text-center mb-6">
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-light text-gray-100 mb-2">
                     Why does this matter?
                   </h2>
-                  <p className="text-gray-600">Anchor your vow in meaning</p>
+                  <p className="text-gray-400">Anchor your vow in meaning</p>
                 </div>
 
                 <textarea
@@ -259,17 +304,18 @@ export default function CreateVow() {
                   className="input-glass w-full h-40 px-4 py-3 rounded-xl resize-none"
                   maxLength={500}
                 />
-                <p className="text-xs text-gray-500">{vow.whyMatters.length}/500</p>
+                <p className="text-xs text-gray-500 text-right">{vow.whyMatters.length}/500</p>
               </div>
             )}
 
+            {/* Step 4: Duration */}
             {step === 4 && (
               <div className="glass-card rounded-2xl p-8 space-y-6">
-                <div className="text-center mb-6">
-                  <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                    How long will you honor this?
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-light text-gray-100 mb-2">
+                    Choose your commitment
                   </h2>
-                  <p className="text-gray-600">Choose your commitment period</p>
+                  <p className="text-gray-400">How long will you honor this vow?</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -279,28 +325,29 @@ export default function CreateVow() {
                       type="button"
                       onClick={() => handleChange('duration', dur.value)}
                       className={`glass-button rounded-xl p-6 text-center floating ${
-                        vow.duration === dur.value ? 'ring-2 ring-amber-500' : ''
+                        vow.duration === dur.value ? 'ring-2 ring-yellow-600' : ''
                       }`}
                     >
-                      <div className="text-3xl font-light text-gray-900 mb-1">
+                      <div className="text-3xl font-light text-gray-100 mb-1">
                         {dur.label}
                       </div>
-                      <div className="text-sm text-gray-600">{dur.desc}</div>
+                      <div className="text-sm text-gray-400">{dur.desc}</div>
                     </button>
                   ))}
                 </div>
               </div>
             )}
 
+            {/* Navigation */}
             <div className="flex justify-between items-center mt-8">
               {step > 1 ? (
                 <button
                   type="button"
                   onClick={prevStep}
-                  className="glass-button px-6 py-3 rounded-xl font-medium"
+                  className="btn-secondary"
                   disabled={submitting}
                 >
-                  ← Back
+                  ← Return
                 </button>
               ) : (
                 <div />
@@ -310,7 +357,7 @@ export default function CreateVow() {
                 <button
                   type="button"
                   onClick={nextStep}
-                  className="bg-amber-600 text-white px-8 py-3 rounded-xl font-medium hover:bg-amber-700 transition-colors"
+                  className="btn-primary"
                 >
                   Continue →
                 </button>
@@ -318,9 +365,9 @@ export default function CreateVow() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="bg-amber-600 text-white px-8 py-3 rounded-xl font-medium hover:bg-amber-700 transition-colors disabled:opacity-50"
+                  className="btn-primary disabled:opacity-50"
                 >
-                  {submitting ? 'Creating...' : 'Create My Vow 🙏'}
+                  {submitting ? 'Sealing...' : 'Seal My Vow'}
                 </button>
               )}
             </div>

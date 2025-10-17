@@ -1,0 +1,28 @@
+:root {
+  /* Charcoal Base */
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --bg-elevated: #333333;
+  
+  /* Gold Accents */
+  --gold-primary: #D4AF37;
+  --gold-light: #E5C76B;
+  --gold-dark: #B8941F;
+  
+  /* Soft Neutrals */
+  --text-primary: #F5F5F5;
+  --text-secondary: #B8B8B8;
+  --text-muted: #808080;
+  
+  /* Category Colors (subtle, sophisticated) */
+  --category-addiction: #B85450;
+  --category-procrastination: #8B7B5E;
+  --category-sabotage: #6B5D7A;
+  --category-emotional: #5E7B8B;
+  --category-habit: #5E8B65;
+  --category-other: #7A7A7A;
+  
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-emphasis: rgba(212, 175, 55, 0.3);
+}

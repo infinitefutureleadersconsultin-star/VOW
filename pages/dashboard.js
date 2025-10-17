@@ -4,6 +4,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressTracker from '../components/ProgressTracker';
 import ProfileAvatar from '../components/ProfileAvatar';
 import { hasCelebrated, MILESTONE_KEYS } from '../utils/celebrationUtils';
+import { ScrollText, Sparkles, Activity, User, Unlock } from 'lucide-react';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -67,24 +68,24 @@ export default function Dashboard() {
   };
 
   if (loading) {
-    return <LoadingSpinner fullScreen text="Loading your dashboard..." />;
+    return <LoadingSpinner fullScreen text="Loading your journey..." />;
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-amber-50/30 to-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
         <div className="glass-card rounded-2xl p-8 max-w-md w-full text-center">
-          <div className="text-red-500 text-5xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Error Loading Dashboard
+          <div className="text-yellow-600 text-5xl mb-4">⚠</div>
+          <h2 className="text-2xl font-light text-gray-100 mb-2">
+            Connection Issue
           </h2>
-          <p className="text-gray-600 mb-6">{error}</p>
+          <p className="text-gray-400 mb-6">{error}</p>
           <button
             onClick={() => {
               const token = localStorage.getItem('vow_auth_token');
               if (token) fetchUserData(token);
             }}
-            className="bg-amber-600 text-white px-6 py-3 rounded-xl hover:bg-amber-700 transition-colors"
+            className="btn-primary"
           >
             Try Again
           </button>
@@ -94,11 +95,11 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-amber-50/30 to-gray-50">
-      <header className="glass-card border-b border-white/20">
+    <div className="min-h-screen bg-gray-900">
+      <header className="glass-card border-b border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <h1 className="text-2xl font-bold text-gray-900">VOW</h1>
+            <h1 className="text-2xl font-light tracking-wider text-gray-100">VOW</h1>
             <ProfileAvatar userData={userData} onLogout={handleLogout} />
           </div>
         </div>
@@ -106,10 +107,10 @@ export default function Dashboard() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {userData?.name?.split(' ')[0] || 'there'}! 👋
+          <h2 className="text-3xl font-light text-gray-100 mb-2">
+            Welcome back, {userData?.name?.split(' ')[0] || 'there'}
           </h2>
-          <p className="text-gray-600">Track your progress and honor your commitments</p>
+          <p className="text-gray-400">Continue your transformation</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -120,35 +121,37 @@ export default function Dashboard() {
           <div className="md:col-span-2 grid grid-cols-2 gap-4">
             <div className="glass-card rounded-2xl p-6 floating">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-600 text-sm">Active Vows</span>
-                <span className="text-2xl">📜</span>
+                <span className="text-gray-400 text-sm">Active Vows</span>
+                <ScrollText size={24} className="text-yellow-600" strokeWidth={1.5} />
               </div>
-              <p className="text-3xl font-bold text-gray-900">{stats?.activeVows || 0}</p>
+              <p className="text-3xl font-light text-gray-100">{stats?.activeVows || 0}</p>
             </div>
 
             <div className="glass-card rounded-2xl p-6 floating">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-600 text-sm">Current Streak</span>
-                <span className="text-2xl">🔥</span>
+                <span className="text-gray-400 text-sm">Current Streak</span>
+                <Activity size={24} className="text-yellow-600" strokeWidth={1.5} />
               </div>
-              <p className="text-3xl font-bold text-gray-900">{stats?.currentStreak || 0}</p>
+              <p className="text-3xl font-light text-gray-100">{stats?.currentStreak || 0}</p>
               <p className="text-xs text-gray-500 mt-1">days</p>
             </div>
 
             <div className="glass-card rounded-2xl p-6 floating">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-600 text-sm">Reflections</span>
-                <span className="text-2xl">✨</span>
+                <span className="text-gray-400 text-sm">Reflections</span>
+                <Sparkles size={24} className="text-yellow-600" strokeWidth={1.5} />
               </div>
-              <p className="text-3xl font-bold text-gray-900">{stats?.totalReflections || 0}</p>
+              <p className="text-3xl font-light text-gray-100">{stats?.totalReflections || 0}</p>
             </div>
 
             <div className="glass-card rounded-2xl p-6 floating">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-gray-600 text-sm">Alignment</span>
-                <span className="text-2xl">🎯</span>
+                <span className="text-gray-400 text-sm">Alignment</span>
+                <div className="w-6 h-6 rounded-full border-2 border-yellow-600 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-yellow-600"></div>
+                </div>
               </div>
-              <p className="text-3xl font-bold text-gray-900">{stats?.alignmentScore || 0}%</p>
+              <p className="text-3xl font-light text-gray-100">{stats?.alignmentScore || 0}%</p>
             </div>
           </div>
         </div>
@@ -156,34 +159,34 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <button
             onClick={() => router.push('/create-vow')}
-            className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all"
+            className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all text-left"
           >
-            <div className="text-3xl mb-2">📜</div>
-            <h3 className="text-lg font-semibold mb-1 text-gray-900">Create a Vow</h3>
-            <p className="text-sm text-gray-600">Make a new commitment</p>
+            <ScrollText size={32} className="text-yellow-600 mb-3" strokeWidth={1.5} />
+            <h3 className="text-lg font-medium mb-1 text-gray-100">Create a Vow</h3>
+            <p className="text-sm text-gray-400">Begin a new commitment</p>
           </button>
 
           <button
             onClick={() => router.push('/reflection')}
-            className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all"
+            className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all text-left"
           >
-            <div className="text-3xl mb-2">✨</div>
-            <h3 className="text-lg font-semibold mb-1 text-gray-900">Daily Reflection</h3>
-            <p className="text-sm text-gray-600">Check in with yourself</p>
+            <Sparkles size={32} className="text-yellow-600 mb-3" strokeWidth={1.5} />
+            <h3 className="text-lg font-medium mb-1 text-gray-100">Reflect</h3>
+            <p className="text-sm text-gray-400">Check in with yourself</p>
           </button>
 
           <button
             onClick={() => router.push('/log-trigger')}
-            className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all"
+            className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all text-left"
           >
-            <div className="text-3xl mb-2">📊</div>
-            <h3 className="text-lg font-semibold mb-1 text-gray-900">Log Trigger</h3>
-            <p className="text-sm text-gray-600">Track patterns</p>
+            <Activity size={32} className="text-yellow-600 mb-3" strokeWidth={1.5} />
+            <h3 className="text-lg font-medium mb-1 text-gray-100">Log Pattern</h3>
+            <p className="text-sm text-gray-400">Track your triggers</p>
           </button>
         </div>
 
         <div className="glass-card rounded-2xl p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-medium text-gray-100 mb-4">Quick Actions</h3>
           <div className="space-y-3">
             <button
               onClick={() => router.push('/profile')}
@@ -191,10 +194,10 @@ export default function Dashboard() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium text-gray-900">View Profile</p>
-                  <p className="text-sm text-gray-600">Manage your account</p>
+                  <p className="font-medium text-gray-100">View Profile</p>
+                  <p className="text-sm text-gray-400">Manage your account</p>
                 </div>
-                <span className="text-2xl">👤</span>
+                <User size={24} className="text-yellow-600" strokeWidth={1.5} />
               </div>
             </button>
 
@@ -205,14 +208,14 @@ export default function Dashboard() {
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-gray-900">Unlock Path</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="font-medium text-gray-100">Unlock Path</p>
+                    <p className="text-sm text-gray-400">
                       {userData?.subscriptionStatus === 'active' 
                         ? 'Manage your journey' 
                         : 'Continue your transformation'}
                     </p>
                   </div>
-                  <span className="text-2xl">✨</span>
+                  <Unlock size={24} className="text-yellow-600" strokeWidth={1.5} />
                 </div>
               </button>
             )}
