@@ -255,17 +255,6 @@ async function handleSignup(req, res) {
     });
   }
 }
-      });
-    }
-
-    return res.status(500).json({
-      success: false,
-      error: 'Signup failed. Please try again.',
-      code: 'SIGNUP_FAILED',
-    });
-  }
-}
-
 // Handle user login
 async function handleLogin(req, res) {
   try {
