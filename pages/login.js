@@ -134,7 +134,7 @@ export default function Login() {
                 <div className="text-sm">
                   <button type="button" onClick={() => router.push("/forgot-password")} className="font-medium text-amber-600 hover:text-amber-500">
                     Forgot password?
-                  </a>
+                  </button>
                 </div>
               </div>
 
