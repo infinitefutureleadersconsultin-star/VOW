@@ -146,12 +146,21 @@ function SignupForm() {
       }
     } catch (err) {
       console.error('Free trial signup error:', err);
-      setError(err.message || 'Failed to start free trial. Please try again.');
+      
+      if (err.response?.status === 409 || err.message?.includes('already exists')) {
+        setError('This email is already registered. Please log in instead.');
+        showToast('Account already exists. Redirecting to login...', 'info');
+        setTimeout(() => {
+          router.push(`/login?email=${encodeURIComponent(formData.email)}`);
+        }, 2000);
+      } else {
+        setError(err.message || 'Failed to start free trial. Please try again.');
+        showToast(err.message || 'Signup failed', 'error');
+      }
     } finally {
       setLoading(false);
     }
   };
-
   const handlePayment = async (e) => {
     e.preventDefault();
     
@@ -211,6 +220,17 @@ function SignupForm() {
         }
       }
     } catch (err) {
+      console.error('Payment error:', err);
+      
+      if (err.response?.status === 409 || err.message?.includes('already exists')) {
+        setError('This email is already registered. Please log in instead.');
+        showToast('Account already exists. Redirecting to login...', 'info');
+        setTimeout(() => {
+          router.push(`/login?email=${encodeURIComponent(formData.email)}`);
+        }, 2000);
+        return;
+      }
+      
       console.error('Payment error:', err);
       setError(err.message || 'Payment failed. Please try again.');
     } finally {
