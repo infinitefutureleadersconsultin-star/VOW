@@ -307,7 +307,7 @@ export default function Dashboard() {
               onClick={() => router.push('/log-trigger')}
               className="action-card-log rounded-2xl p-8 floating smooth-transition hover:shadow-xl text-left h-48 flex flex-col justify-between"
             >
-              <Activity size={40} className="text-[#E3C27D] mb-4" strokeWidth={1.5} />
+              <Activity size={40} className="text-[#C6D6C0] mb-4" strokeWidth={1.5} />
               <div>
                 <h3 className="text-xl font-medium mb-2 text-[#F4F1ED]">Log Pattern</h3>
                 <p className="text-sm text-[#8E8A84]">Track your triggers</p>

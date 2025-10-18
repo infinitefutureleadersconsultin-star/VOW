@@ -35,7 +35,7 @@ export default function ProgressRing({ percentage = 0, size = 120, strokeWidth =
           fill="none"
         />
         
-        {/* Progress circle */}
+        {/* Progress circle - ORIGINAL GOLD GRADIENT */}
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -51,10 +51,10 @@ export default function ProgressRing({ percentage = 0, size = 120, strokeWidth =
           }}
         />
         
-        {/* Gradient definition */}
+        {/* Gradient definition - ORIGINAL COLORS */}
         <defs>
           <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#E4C580" />
+            <stop offset="0%" stopColor="#E3C27D" />
             <stop offset="100%" stopColor="#F4F1ED" />
           </linearGradient>
         </defs>
@@ -68,12 +68,12 @@ export default function ProgressRing({ percentage = 0, size = 120, strokeWidth =
         <div className="tier-label mt-1">{getTierLabel(percentage)}</div>
       </div>
 
-      {/* Pulse effect at 0% */}
+      {/* Pulse effect at 0% - ORIGINAL GOLD */}
       {percentage === 0 && (
         <div 
           className="absolute inset-0 rounded-full"
           style={{
-            background: 'radial-gradient(circle, rgba(228, 197, 128, 0.2) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(227, 194, 125, 0.2) 0%, transparent 70%)',
             animation: 'gentlePulse 3s ease-in-out infinite'
           }}
         />
