@@ -155,6 +155,14 @@ apiClient.interceptors.response.use(
           type: 'FORBIDDEN',
         });
 
+      case 409:
+        logError(error, 'CONFLICT');
+        return Promise.reject({
+          message: data.message || 'This resource already exists.',
+          type: 'CONFLICT',
+          status: 409,
+          response: error.response,
+        });
       case 404:
         logError(error, 'NOT_FOUND');
         return Promise.reject({

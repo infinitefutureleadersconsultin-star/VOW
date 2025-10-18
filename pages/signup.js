@@ -147,7 +147,7 @@ function SignupForm() {
     } catch (err) {
       console.error('Free trial signup error:', err);
       
-      if (err.response?.status === 409 || err.message?.includes('already exists')) {
+      if (err.type === 'CONFLICT' || err.status === 409 || err.message?.includes('already exists')) {
         setError('This email is already registered. Please log in instead.');
         showToast('Account already exists. Redirecting to login...', 'info');
         setTimeout(() => {
@@ -222,7 +222,7 @@ function SignupForm() {
     } catch (err) {
       console.error('Payment error:', err);
       
-      if (err.response?.status === 409 || err.message?.includes('already exists')) {
+      if (err.type === 'CONFLICT' || err.status === 409 || err.message?.includes('already exists')) {
         setError('This email is already registered. Please log in instead.');
         showToast('Account already exists. Redirecting to login...', 'info');
         setTimeout(() => {
