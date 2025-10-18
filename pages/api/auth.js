@@ -199,7 +199,8 @@ async function handleSignup(req, res) {
       subscriptionStatus: finalSubscriptionStatus,
       subscriptionTier: isPaidSignup ? 'awareness' : null,
       paymentIntentId: paymentIntentId || null,
-    };
+      termsAccepted: req.body.termsAccepted || false,
+      termsAcceptedAt: req.body.termsAcceptedAt || null,    };
 
     const userDoc = await usersRef.add(userData);
     const userId = userDoc.id;

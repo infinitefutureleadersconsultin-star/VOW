@@ -5,6 +5,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { api } from '../utils/apiClient';
 import { showToast } from '../utils/notificationUtils';
+import TermsAgreement from '../components/TermsAgreement';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
@@ -16,6 +17,7 @@ function SignupForm() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -98,6 +100,15 @@ function SignupForm() {
     return true;
   };
 
+  const validateStep3 = () => {
+    if (!termsAccepted) {
+      setError('Please accept the Terms of Service to continue');
+      showToast('You must accept the terms to continue', 'error');
+      return false;
+    }
+    return true;
+  };
+
   const handleNextStep = () => {
     if (step === 1 && validateStep1()) {
       setStep(2);
@@ -107,6 +118,8 @@ function SignupForm() {
   };
 
   const handleStartFreeTrial = async () => {
+    if (!validateStep3()) return;
+
     setLoading(true);
     setError(null);
 
@@ -114,17 +127,17 @@ function SignupForm() {
       const response = await api.post('/auth', {
         action: 'signup',
         ...formData,
+        termsAccepted: true,
+        termsAcceptedAt: new Date().toISOString(),
       });
 
       if (response?.data?.success) {
         showToast('Welcome! Your 2-day free trial has started.', 'success');
         
-        // Store auth token
         if (response.data.token) {
           localStorage.setItem('vow_auth_token', response.data.token);
         }
 
-        // Redirect to dashboard
         setTimeout(() => {
           router.push('/dashboard');
         }, 1000);
@@ -142,6 +155,8 @@ function SignupForm() {
   const handlePayment = async (e) => {
     e.preventDefault();
     
+    if (!validateStep3()) return;
+    
     if (!stripe || !elements) {
       setError('Payment system not loaded. Please refresh the page.');
       return;
@@ -151,7 +166,6 @@ function SignupForm() {
     setError(null);
 
     try {
-      // Create payment intent
       const intentResponse = await api.post('/subscription', {
         action: 'create-payment-intent',
         email: formData.email,
@@ -160,7 +174,6 @@ function SignupForm() {
 
       const { clientSecret } = intentResponse.data;
 
-      // Confirm payment
       const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: elements.getElement(CardElement),
@@ -176,12 +189,13 @@ function SignupForm() {
       }
 
       if (paymentIntent.status === 'succeeded') {
-        // Create user account with payment
         const response = await api.post('/auth', {
           action: 'signup',
           ...formData,
           subscriptionStatus: 'active',
           paymentIntentId: paymentIntent.id,
+          termsAccepted: true,
+          termsAcceptedAt: new Date().toISOString(),
         });
 
         if (response?.data?.success) {
@@ -212,7 +226,6 @@ function SignupForm() {
 
       <div className="min-h-screen flex items-center justify-center py-12 px-4" style={{ background: 'linear-gradient(135deg, #0C1117 0%, #1a1f2e 100%)' }}>
         <div className="max-w-md w-full">
-          {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
               Create Your Account
@@ -220,7 +233,6 @@ function SignupForm() {
             <p className="text-[#8E8A84]">Begin your transformation</p>
           </div>
 
-          {/* Progress indicator */}
           <div className="flex justify-between mb-8">
             {[1, 2, 3].map((s) => (
               <div
@@ -232,7 +244,6 @@ function SignupForm() {
             ))}
           </div>
 
-          {/* Error message */}
           {error && (
             <div className="mb-6 p-4 rounded-xl bg-[#6E3B3B]/20 border border-[#6E3B3B]/30">
               <p className="text-[#F4F1ED] text-sm">{error}</p>
@@ -421,7 +432,7 @@ function SignupForm() {
             </div>
           )}
 
-          {/* Step 3: Payment or Free Trial */}
+          {/* Step 3: Terms & Payment */}
           {step === 3 && (
             <div className="glass-card rounded-2xl p-6 space-y-6">
               <div className="text-center mb-6">
@@ -431,11 +442,21 @@ function SignupForm() {
                 <p className="text-[#8E8A84]">Start your 2-day free trial or upgrade now</p>
               </div>
 
+              {/* Terms Agreement - REQUIRED */}
+              <TermsAgreement 
+                onAcceptanceChange={setTermsAccepted}
+                initialAccepted={termsAccepted}
+              />
+
               {/* Free Trial Option */}
               <button
                 onClick={handleStartFreeTrial}
-                disabled={loading}
-                className="w-full p-6 rounded-xl glass-button floating text-left border-2 border-[#E3C27D]/30 hover:border-[#E3C27D]"
+                disabled={loading || !termsAccepted}
+                className={`w-full p-6 rounded-xl glass-button floating text-left border-2 transition-all ${
+                  termsAccepted 
+                    ? 'border-[#E3C27D]/30 hover:border-[#E3C27D]' 
+                    : 'border-[#252b3d] opacity-50 cursor-not-allowed'
+                }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-lg font-medium text-[#F4F1ED]">Start Free Trial</h3>
@@ -459,14 +480,16 @@ function SignupForm() {
               </div>
 
               {/* Paid Option */}
-              <div className="p-6 rounded-xl" style={{ background: 'rgba(227, 194, 125, 0.05)' }}>
+              <div className={`p-6 rounded-xl transition-opacity ${
+                !termsAccepted ? 'opacity-50' : ''
+              }`} style={{ background: 'rgba(227, 194, 125, 0.05)' }}>
                 <h3 className="text-lg font-medium text-[#F4F1ED] mb-3">Upgrade Now</h3>
                 
                 <select
                   value={paymentData.priceId}
                   onChange={(e) => setPaymentData({ ...paymentData, priceId: e.target.value })}
                   className="input-glass w-full px-4 py-3 rounded-xl mb-4"
-                  disabled={loading}
+                  disabled={loading || !termsAccepted}
                 >
                   <option value="price_monthly_4_99">$4.99/month</option>
                   <option value="price_monthly_9_99">$9.99/month</option>
@@ -477,6 +500,7 @@ function SignupForm() {
                   <div className="mb-4">
                     <CardElement
                       options={{
+                        disabled: !termsAccepted,
                         style: {
                           base: {
                             fontSize: '16px',
@@ -492,8 +516,8 @@ function SignupForm() {
 
                   <button
                     type="submit"
-                    disabled={loading || !stripe}
-                    className="w-full btn-primary"
+                    disabled={loading || !stripe || !termsAccepted}
+                    className="w-full btn-primary disabled:opacity-50"
                   >
                     {loading ? 'Processing...' : 'Subscribe Now'}
                   </button>
@@ -514,7 +538,6 @@ function SignupForm() {
             </div>
           )}
 
-          {/* Login link */}
           <p className="text-center text-[#8E8A84] mt-6">
             Already have an account?{' '}
             <button

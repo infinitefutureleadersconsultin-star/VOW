@@ -254,7 +254,8 @@ async function handleSignup(req, res) {
       code: 'SIGNUP_FAILED',
     });
   }
-}// Handle user login
+}
+// Handle user login
 async function handleLogin(req, res) {
   try {
     const { email, password } = req.body;
