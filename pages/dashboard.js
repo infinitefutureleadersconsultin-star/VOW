@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import LoadingSpinner from '../components/LoadingSpinner';
-import ProgressRing from '../components/ProgressRing';
+import AlignmentIndex from '../components/AlignmentIndex';
 import ProfileAvatar from '../components/ProfileAvatar';
 import UpgradeModal from '../components/UpgradeModal';
 import { hasCelebrated, MILESTONE_KEYS } from '../utils/celebrationUtils';
 import { checkUserAccess } from '../utils/accessControl';
 import { api } from '../utils/apiClient';
 import { showToast } from '../utils/notificationUtils';
-import { ScrollText, Sparkles, Activity, User, Unlock, AlertCircle } from 'lucide-react';
+import { ScrollText, Sparkles, Activity, User, AlertCircle } from 'lucide-react';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -17,7 +17,6 @@ export default function Dashboard() {
   const [userData, setUserData] = useState(null);
   const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);
-  const [showUpgrade, setShowUpgrade] = useState(false);
   const [accessInfo, setAccessInfo] = useState(null);
   const [upgradeModal, setUpgradeModal] = useState({ show: false, tier: null });
   const [upgrading, setUpgrading] = useState(false);
@@ -30,7 +29,6 @@ export default function Dashboard() {
       return;
     }
 
-    setShowUpgrade(hasCelebrated(MILESTONE_KEYS.FIRST_VOW));
     fetchUserData(token);
   }, [router]);
 
@@ -152,26 +150,26 @@ export default function Dashboard() {
   };
 
   if (loading) {
-    return <LoadingSpinner fullScreen text="Loading your journey..." />;
+    return <LoadingSpinner fullScreen text="Loading..." />;
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0C0E13' }}>
-        <div className="glass-card rounded-2xl p-8 max-w-md w-full text-center">
-          <div className="text-[#E3C27D] text-5xl mb-4">⚠</div>
-          <h2 className="text-2xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+      <div className="min-h-screen flex items-center justify-center p-4 corrective-bg">
+        <div className="separation-card rounded-xl p-8 max-w-md w-full text-center">
+          <div className="text-[#C6A664] text-4xl mb-4">⚠</div>
+          <h2 className="text-xl awareness-text mb-2">
             Connection Issue
           </h2>
-          <p className="text-[#8E8A84] mb-6">{error}</p>
+          <p className="observation-text mb-6">{error}</p>
           <button
             onClick={() => {
               const token = localStorage.getItem('vow_auth_token');
               if (token) fetchUserData(token);
             }}
-            className="btn-primary"
+            className="vow-action px-6 py-2 rounded-lg surgical-transition"
           >
-            Try Again
+            Retry
           </button>
         </div>
       </div>
@@ -181,15 +179,19 @@ export default function Dashboard() {
   return (
     <>
       <Head>
-        <title>Dashboard - VOW</title>
-        <link rel="stylesheet" href="/dashboard-enhanced.css" />
+        <title>VOW - Dashboard</title>
+        <link rel="stylesheet" href="/corrective-separation.css" />
       </Head>
 
-      <div className="min-h-screen dashboard-bg">
-        <header className="glass-card border-b" style={{ borderColor: 'rgba(244, 241, 237, 0.08)' }}>
+      <div className="min-h-screen corrective-bg">
+        {/* Clean header - no gradients */}
+        <header className="border-b" style={{ borderColor: '#1A1C1F' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-              <h1 className="text-2xl font-light tracking-wider text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+              <h1 
+                className="text-2xl awareness-text tracking-tight"
+                style={{ fontFamily: "'SF Pro Display', sans-serif", fontWeight: 600 }}
+              >
                 VOW
               </h1>
               <ProfileAvatar userData={userData} onLogout={handleLogout} />
@@ -198,153 +200,161 @@ export default function Dashboard() {
         </header>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Trial Banner */}
+          {/* Trial Banner - clinical */}
           {accessInfo?.isTrial && (
-            <div className="mb-6 p-4 rounded-xl glass-card border-2 border-[#E3C27D]/30 animate-fade-in">
+            <div className="mb-6 p-4 rounded-xl separation-card border-[#C6A664]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <AlertCircle size={24} className="text-[#E3C27D]" />
+                  <AlertCircle size={20} className="text-[#C6A664]" />
                   <div>
-                    <p className="text-[#F4F1ED] font-medium">
-                      Free Trial Active
+                    <p className="awareness-text text-sm font-medium">
+                      Trial Active
                     </p>
-                    <p className="text-sm text-[#8E8A84]">
+                    <p className="observation-text text-xs">
                       {accessInfo.daysLeft} {accessInfo.daysLeft === 1 ? 'day' : 'days'} remaining
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => router.push('/pricing')}
-                  className="btn-primary text-sm px-6 py-2"
+                  className="vow-action text-xs px-4 py-2 rounded-lg surgical-transition"
                 >
-                  Upgrade Now
+                  Upgrade
                 </button>
               </div>
             </div>
           )}
 
-          {/* Enhanced Greeting */}
-          <div className="mb-8 greeting-fade">
-            <h2 className="text-3xl font-light text-[#F4F1ED] greeting-glow mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
-              Welcome back, {userData?.name?.split(' ')[0] || 'there'}. Your path continues.
+          {/* Clinical greeting - observational, not motivational */}
+          <div className="mb-8 unlock-fade">
+            <h2 
+              className="text-2xl awareness-text mb-1"
+              style={{ fontFamily: "'SF Pro Display', sans-serif", fontWeight: 500 }}
+            >
+              Welcome back, {userData?.name?.split(' ')[0] || 'there'}.
             </h2>
-            <p className="text-[#8E8A84] text-sm">Every moment you return, your vow strengthens.</p>
+            <p className="observation-text text-sm">
+              Continue refining your alignment.
+            </p>
           </div>
 
-          {/* Enhanced Progress + Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {/* Animated Progress Ring */}
-            <div className="glass-card rounded-2xl p-6 floating alignment-glow">
-              <div className="flex flex-col items-center">
-                <p className="text-sm text-[#8E8A84] mb-4">Alignment</p>
-                <ProgressRing percentage={stats?.alignmentScore || 0} />
-                {stats?.alignmentScore === 0 && (
-                  <p className="text-xs text-[#8E8A84] mt-4 italic">Your energy is gathering.</p>
-                )}
-              </div>
+          {/* Two-column symmetrical layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Left: Alignment Index (Centerpiece) */}
+            <div>
+              <AlignmentIndex 
+                percentage={stats?.alignmentScore || 0}
+                activeVows={stats?.activeVows || 0}
+                reflections={stats?.totalReflections || 0}
+              />
             </div>
 
-            {/* Stats Grid */}
-            <div className="md:col-span-2 grid grid-cols-2 gap-4">
-              <div className="glass-card rounded-2xl p-6 floating smooth-transition">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[#8E8A84] text-sm">Active Vows</span>
-                  <ScrollText size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
+            {/* Right: Secondary Metrics Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="separation-card rounded-xl p-6 surgical-transition">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="observation-text text-xs uppercase tracking-wide">Active Vows</span>
+                  <ScrollText size={18} className="text-[#C6A664]" strokeWidth={2} />
                 </div>
-                <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <p 
+                  className="text-3xl awareness-text"
+                  style={{ fontFamily: "'SF Pro Display', sans-serif", fontWeight: 500 }}
+                >
                   {stats?.activeVows || 0}
                 </p>
               </div>
 
-              <div className="glass-card rounded-2xl p-6 floating smooth-transition">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[#8E8A84] text-sm">Current Streak</span>
-                  <Activity size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
+              <div className="separation-card rounded-xl p-6 surgical-transition">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="observation-text text-xs uppercase tracking-wide">Reflections</span>
+                  <Sparkles size={18} className="text-[#C6A664]" strokeWidth={2} />
                 </div>
-                <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  {stats?.currentStreak || 0}
-                </p>
-                <p className="text-xs text-[#8E8A84] mt-1">days</p>
-              </div>
-
-              <div className="glass-card rounded-2xl p-6 floating smooth-transition col-span-2">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[#8E8A84] text-sm">Reflections</span>
-                  <Sparkles size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
-                </div>
-                <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                <p 
+                  className="text-3xl awareness-text"
+                  style={{ fontFamily: "'SF Pro Display', sans-serif", fontWeight: 500 }}
+                >
                   {stats?.totalReflections || 0}
                 </p>
+              </div>
+
+              <div className="separation-card rounded-xl p-6 surgical-transition">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="observation-text text-xs uppercase tracking-wide">Triggers</span>
+                  <Activity size={18} className="text-[#C6A664]" strokeWidth={2} />
+                </div>
+                <p 
+                  className="text-3xl awareness-text"
+                  style={{ fontFamily: "'SF Pro Display', sans-serif", fontWeight: 500 }}
+                >
+                  {stats?.triggersLogged || 0}
+                </p>
+              </div>
+
+              <div className="separation-card rounded-xl p-6 surgical-transition">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="observation-text text-xs uppercase tracking-wide">Streak</span>
+                  <div className="text-[#5FD3A5]">✓</div>
+                </div>
+                <p 
+                  className="text-3xl awareness-text"
+                  style={{ fontFamily: "'SF Pro Display', sans-serif", fontWeight: 500 }}
+                >
+                  {stats?.currentStreak || 0}
+                </p>
+                <p className="observation-text text-xs mt-1">days</p>
               </div>
             </div>
           </div>
 
-          {/* Enhanced Action Cards - Enlarged & Reordered */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Action Row - Clinical precision */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <button
               onClick={() => router.push('/create-vow')}
-              className="action-card-create rounded-2xl p-8 floating smooth-transition hover:shadow-xl text-left h-48 flex flex-col justify-between"
+              className="action-card-clinical rounded-xl surgical-transition text-left"
             >
-              <ScrollText size={40} className="text-[#E3C27D] mb-4" strokeWidth={1.5} />
-              <div>
-                <h3 className="text-xl font-medium mb-2 text-[#F4F1ED]">Create a Vow</h3>
-                <p className="text-sm text-[#8E8A84]">Begin a new commitment</p>
-              </div>
+              <ScrollText size={24} className="text-[#C6A664] mb-4" strokeWidth={2} />
+              <h3 className="text-lg awareness-text font-medium mb-1">New Vow</h3>
+              <p className="observation-text text-sm">Create commitment</p>
             </button>
 
             <button
               onClick={() => router.push('/reflection')}
-              className="action-card-reflect rounded-2xl p-8 floating smooth-transition hover:shadow-xl text-left h-48 flex flex-col justify-between"
+              className="action-card-clinical rounded-xl surgical-transition text-left"
             >
-              <Sparkles size={40} className="text-[#93B89A] mb-4" strokeWidth={1.5} />
-              <div>
-                <h3 className="text-xl font-medium mb-2 text-[#F4F1ED]">Reflect</h3>
-                <p className="text-sm text-[#8E8A84]">Check in with yourself</p>
-              </div>
+              <Sparkles size={24} className="text-[#C6A664] mb-4" strokeWidth={2} />
+              <h3 className="text-lg awareness-text font-medium mb-1">Check-In</h3>
+              <p className="observation-text text-sm">Observe patterns</p>
             </button>
 
             <button
               onClick={() => router.push('/log-trigger')}
-              className="action-card-log rounded-2xl p-8 floating smooth-transition hover:shadow-xl text-left h-48 flex flex-col justify-between"
+              className="action-card-clinical rounded-xl surgical-transition text-left"
             >
-              <Activity size={40} className="text-[#E3C27D] mb-4" strokeWidth={1.5} />
-              <div>
-                <h3 className="text-xl font-medium mb-2 text-[#F4F1ED]">Log Pattern</h3>
-                <p className="text-sm text-[#8E8A84]">Track your triggers</p>
-              </div>
+              <Activity size={24} className="text-[#C6A664] mb-4" strokeWidth={2} />
+              <h3 className="text-lg awareness-text font-medium mb-1">Track Trigger</h3>
+              <p className="observation-text text-sm">Log awareness</p>
             </button>
           </div>
 
           {/* Quick Actions */}
-          <div className="glass-card rounded-2xl p-6">
-            <h3 className="text-lg font-medium text-[#F4F1ED] mb-4">Quick Actions</h3>
-            <div className="space-y-3">
+          <div className="separation-card rounded-xl p-6">
+            <h3 className="awareness-text font-medium mb-4">Quick Actions</h3>
+            <div className="space-y-2">
               <button
                 onClick={() => router.push('/profile')}
-                className="w-full text-left p-4 rounded-xl glass-button floating smooth-transition"
+                className="w-full text-left p-4 rounded-lg surgical-transition hover:bg-[#1A1C1F]"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-[#F4F1ED]">View Profile</p>
-                    <p className="text-sm text-[#8E8A84]">Manage your account</p>
+                    <p className="awareness-text text-sm font-medium">Profile</p>
+                    <p className="observation-text text-xs">Manage account</p>
                   </div>
-                  <User size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
+                  <User size={20} className="text-[#C6A664]" strokeWidth={2} />
                 </div>
               </button>
             </div>
           </div>
         </main>
-
-        {/* Floating Unlock Button */}
-        {showUpgrade && (
-          <button
-            onClick={() => router.push('/pricing')}
-            className="floating-unlock px-6 py-3 rounded-full text-[#0C0E13] font-medium flex items-center space-x-2 smooth-transition hover:scale-105"
-          >
-            <Unlock size={20} strokeWidth={2} />
-            <span>Unlock Next Path</span>
-          </button>
-        )}
 
         {/* Upgrade Modal */}
         {upgradeModal.show && (
