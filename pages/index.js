@@ -218,89 +218,74 @@ export default function Home() {
         {/* Pricing */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-amber-50">
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-4xl font-light text-gray-900 mb-4 text-center">Simple, Transparent Pricing</h2>
-            <p className="text-xl text-gray-600 mb-16 text-center">Pricing grows with your commitment</p>
+            <h2 className="text-4xl font-light text-gray-900 mb-4 text-center">Begin Your Vow</h2>
+            <p className="text-xl text-gray-600 mb-16 text-center">Your daily act of unlocking</p>
             
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-200">
+            <div className="max-w-lg mx-auto">
+              <div className="bg-gradient-to-br from-amber-50 to-white rounded-2xl shadow-xl p-8 border-2 border-amber-600">
                 <div className="text-center mb-6">
-                  <p className="text-sm text-gray-600 mb-2">Months 0-3</p>
-                  <p className="text-4xl font-light text-gray-900 mb-2">$4.99</p>
-                  <p className="text-gray-600">per month</p>
+                  <p className="text-sm text-amber-600 font-medium mb-4">Initiation</p>
+                  <div className="mb-4">
+                    <p className="text-6xl font-light text-gray-900 mb-2">$0.16</p>
+                    <p className="text-xl text-gray-600">per day</p>
+                  </div>
+                  <div className="bg-white rounded-lg p-3 inline-block">
+                    <p className="text-sm text-gray-600">Billed monthly at <span className="font-semibold text-gray-900">$4.99</span></p>
+                    <p className="text-xs text-gray-500 mt-1">4-week minimum commitment</p>
+                  </div>
                 </div>
-                <ul className="space-y-3 mb-8">
+
+                <ul className="space-y-4 mb-8">
                   <li className="flex items-start">
-                    <span className="text-amber-600 mr-2">✓</span>
-                    <span className="text-gray-700">Unlimited vows</span>
+                    <span className="text-amber-600 mr-3 text-lg">✓</span>
+                    <span className="text-gray-700">Create unlimited vows</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-amber-600 mr-2">✓</span>
-                    <span className="text-gray-700">Daily reflections</span>
+                    <span className="text-amber-600 mr-3 text-lg">✓</span>
+                    <span className="text-gray-700">Daily reflection journaling</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-amber-600 mr-2">✓</span>
-                    <span className="text-gray-700">Trigger logging</span>
+                    <span className="text-amber-600 mr-3 text-lg">✓</span>
+                    <span className="text-gray-700">Track patterns & triggers</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-amber-600 mr-2">✓</span>
-                    <span className="text-gray-700">AI awareness guidance</span>
+                    <span className="text-amber-600 mr-3 text-lg">✓</span>
+                    <span className="text-gray-700">Monitor your progress</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-amber-600 mr-3 text-lg">✓</span>
+                    <span className="text-gray-700">Access on all devices</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-amber-600 mr-3 text-lg">✓</span>
+                    <span className="text-gray-700">2-day free trial included</span>
                   </li>
                 </ul>
+
+                <button
+                  onClick={() => router.push('/signup')}
+                  className="w-full bg-amber-600 text-white py-4 px-8 rounded-xl font-medium text-lg hover:bg-amber-700 transition-colors shadow-lg"
+                >
+                  Begin My Journey
+                </button>
+
+                <div className="mt-6 space-y-2 text-center">
+                  <p className="text-xs text-gray-600">✓ Cancel anytime after 4 weeks</p>
+                  <p className="text-xs text-gray-600">✓ Secure payment via Stripe</p>
+                  <p className="text-xs text-gray-600">✓ No credit card for free trial</p>
+                </div>
               </div>
-              
-              <div className="bg-amber-600 rounded-2xl shadow-xl p-8 border-2 border-amber-700 transform scale-105">
-                <div className="text-center mb-6">
-                  <p className="text-sm text-amber-100 mb-2">Months 3-6</p>
-                  <p className="text-4xl font-light text-white mb-2">$9.99</p>
-                  <p className="text-amber-100">per month</p>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-start">
-                    <span className="text-white mr-2">✓</span>
-                    <span className="text-white">Everything in previous tier</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-white mr-2">✓</span>
-                    <span className="text-white">Advanced pattern analysis</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-white mr-2">✓</span>
-                    <span className="text-white">Identity alignment tracking</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-white mr-2">✓</span>
-                    <span className="text-white">Deeper transformation</span>
-                  </li>
-                </ul>
-              </div>
-              
-              <div className="bg-white rounded-2xl shadow-lg p-8 border-2 border-gray-200">
-                <div className="text-center mb-6">
-                  <p className="text-sm text-gray-600 mb-2">Month 6+</p>
-                  <p className="text-4xl font-light text-gray-900 mb-2">$14.99</p>
-                  <p className="text-gray-600">per month</p>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  <li className="flex items-start">
-                    <span className="text-amber-600 mr-2">✓</span>
-                    <span className="text-gray-700">Everything included</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-amber-600 mr-2">✓</span>
-                    <span className="text-gray-700">Embodiment mastery</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-amber-600 mr-2">✓</span>
-                    <span className="text-gray-700">Lifetime milestones</span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="text-amber-600 mr-2">✓</span>
-                    <span className="text-gray-700">Complete integration</span>
-                  </li>
-                </ul>
+
+              <div className="text-center mt-8 p-6 bg-amber-50 rounded-xl">
+                <p className="text-sm text-gray-600 italic">
+                  As you progress on your journey, deeper paths will reveal themselves.
+                </p>
               </div>
             </div>
             
+            <p className="text-center text-gray-600 mt-8">
+              All plans include a 2-day free trial. No credit card required to start.
+            </p>
             <p className="text-center text-gray-600 mt-8">
               All plans include a 2-day free trial. No credit card required to start.
             </p>
