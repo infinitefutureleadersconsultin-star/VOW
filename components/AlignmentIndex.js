@@ -21,25 +21,25 @@ export default function AlignmentIndex({ percentage = 0, activeVows = 0, reflect
           Current Alignment
         </p>
 
-        {/* Clinical Progress Ring - NO gradients */}
+        {/* Clinical Progress Ring */}
         <div className="relative inline-flex items-center justify-center mb-6">
           <svg width={size} height={size} className="transform -rotate-90">
-            {/* Background ring */}
+            {/* Background ring - uses theme variable */}
             <circle
               cx={size / 2}
               cy={size / 2}
               r={radius}
-              stroke="#1A1C1F"
+              stroke="var(--border-color)"
               strokeWidth={strokeWidth}
               fill="none"
             />
             
-            {/* Progress ring - MATTE GOLD only */}
+            {/* Progress ring - matte gold */}
             <circle
               cx={size / 2}
               cy={size / 2}
               r={radius}
-              stroke="#C6A664"
+              stroke="var(--accent-gold)"
               strokeWidth={strokeWidth}
               fill="none"
               strokeLinecap="butt"
@@ -49,7 +49,7 @@ export default function AlignmentIndex({ percentage = 0, activeVows = 0, reflect
             />
           </svg>
 
-          {/* Center percentage - clinical display */}
+          {/* Center percentage */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span 
               className="text-5xl awareness-text"
@@ -70,7 +70,7 @@ export default function AlignmentIndex({ percentage = 0, activeVows = 0, reflect
             <p className="text-xl awareness-text font-medium">{activeVows}</p>
             <p className="text-xs mt-1">Active Vows</p>
           </div>
-          <div className="w-px h-8 bg-[#3A3C41]"></div>
+          <div className="w-px h-8" style={{ backgroundColor: 'var(--border-color)' }}></div>
           <div className="text-center">
             <p className="text-xl awareness-text font-medium">{reflections}</p>
             <p className="text-xs mt-1">Reflections</p>

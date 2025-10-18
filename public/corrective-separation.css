@@ -1,7 +1,8 @@
-/* VOW - Corrective Separation Design System */
+/* VOW - Corrective Separation Design System with Light/Dark Mode */
 /* Philosophy: Precision with Presence - No Gradients, No Distractions */
 
 :root {
+  /* Dark Mode Colors (Default) */
   --onyx-black: #0A0B0D;
   --slate-shadow: #1A1C1F;
   --ash-ivory: #E7E6E3;
@@ -9,29 +10,51 @@
   --soft-charcoal: #3A3C41;
   --mist-white: #F6F5F4;
   --emergent-green: #5FD3A5;
+  
+  /* Semantic tokens - Dark Mode */
+  --bg-primary: #0A0B0D;
+  --bg-secondary: #1A1C1F;
+  --text-primary: #E7E6E3;
+  --text-secondary: #A8A5A0;
+  --border-color: #3A3C41;
+  --accent-gold: #C6A664;
+  --accent-green: #5FD3A5;
 }
 
-/* Clean background - NO gradients */
+/* Light Mode */
+[data-theme="light"] {
+  --bg-primary: #F6F5F4;
+  --bg-secondary: #FFFFFF;
+  --text-primary: #1A1C1F;
+  --text-secondary: #5A5C61;
+  --border-color: #D4D2CF;
+  --accent-gold: #B89654;
+  --accent-green: #4FB88A;
+}
+
+/* Background */
 .corrective-bg {
-  background: var(--onyx-black);
+  background: var(--bg-primary);
+  transition: background 300ms ease;
 }
 
-/* Surgical transitions only */
+/* Surgical transitions */
 .surgical-transition {
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Card surfaces - flat, structured */
+/* Card surfaces */
 .separation-card {
-  background: var(--slate-shadow);
-  border: 1px solid var(--soft-charcoal);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  transition: all 250ms ease;
 }
 
 .separation-card:hover {
-  border-color: var(--matte-gold);
+  border-color: var(--accent-gold);
 }
 
-/* Progress ring - clinical precision */
+/* Progress ring */
 @keyframes clinicalFill {
   from {
     stroke-dashoffset: 339;
@@ -46,68 +69,56 @@
   animation: clinicalFill 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Text hierarchy */
+/* Text hierarchy - FIXED FOR LEGIBILITY */
 .awareness-text {
-  color: var(--ash-ivory);
+  color: var(--text-primary);
   font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
   font-weight: 500;
 }
 
 .observation-text {
-  color: var(--soft-charcoal);
+  color: var(--text-secondary);
   font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
   font-weight: 400;
-  opacity: 0.9;
 }
 
-/* Action elements - matte gold, no glow */
+/* Action button */
 .vow-action {
-  background: var(--matte-gold);
-  color: var(--onyx-black);
+  background: var(--accent-gold);
+  color: var(--bg-primary);
   border: none;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
 .vow-action:hover {
-  background: #B89654;
+  opacity: 0.9;
 }
 
-/* Success indicators - emergent green */
+/* Success indicators */
 .integration-indicator {
-  color: var(--emergent-green);
+  color: var(--accent-green);
 }
 
-/* Alignment index - centerpiece */
+/* Alignment center */
 .alignment-center {
-  background: var(--slate-shadow);
-  border: 2px solid var(--soft-charcoal);
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
   padding: 2rem;
 }
 
-/* Action cards - clinical precision */
+/* Action cards */
 .action-card-clinical {
-  background: var(--slate-shadow);
-  border: 1px solid var(--soft-charcoal);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   padding: 2rem;
 }
 
 .action-card-clinical:hover {
-  border-color: var(--matte-gold);
-  box-shadow: 0 0 0 1px var(--matte-gold);
+  border-color: var(--accent-gold);
 }
 
-/* Remove ALL gradients, glows, pulses */
-* {
-  text-shadow: none !important;
-  box-shadow: none;
-}
-
-.action-card-clinical:hover {
-  box-shadow: 0 0 0 1px var(--matte-gold);
-}
-
-/* Lock/Unlock sequence - identity metaphor */
+/* Unlock animation */
 @keyframes unlockSequence {
   0% {
     opacity: 0;
@@ -123,16 +134,28 @@
   animation: unlockSequence 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Clean, surgical spacing */
-.corrective-grid {
-  display: grid;
-  gap: 1rem;
+/* Mode toggle button */
+.mode-toggle {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 250ms ease;
 }
 
-/* Observational states - no emotion */
-.observation-state {
-  font-style: normal;
-  font-weight: 400;
-  color: var(--soft-charcoal);
-  font-size: 0.875rem;
+.mode-toggle:hover {
+  border-color: var(--accent-gold);
+}
+
+/* Icon colors */
+.icon-gold {
+  color: var(--accent-gold);
+}
+
+.icon-green {
+  color: var(--accent-green);
 }

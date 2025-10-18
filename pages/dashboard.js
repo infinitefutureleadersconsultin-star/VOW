@@ -9,7 +9,7 @@ import { hasCelebrated, MILESTONE_KEYS } from '../utils/celebrationUtils';
 import { checkUserAccess } from '../utils/accessControl';
 import { api } from '../utils/apiClient';
 import { showToast } from '../utils/notificationUtils';
-import { ScrollText, Sparkles, Activity, User, AlertCircle } from 'lucide-react';
+import { ScrollText, Sparkles, Activity, User, AlertCircle, Sun, Moon } from 'lucide-react';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -20,6 +20,7 @@ export default function Dashboard() {
   const [accessInfo, setAccessInfo] = useState(null);
   const [upgradeModal, setUpgradeModal] = useState({ show: false, tier: null });
   const [upgrading, setUpgrading] = useState(false);
+  const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
     const token = localStorage.getItem('vow_auth_token');
@@ -29,8 +30,20 @@ export default function Dashboard() {
       return;
     }
 
+    // Load saved theme
+    const savedTheme = localStorage.getItem('vow_theme') || 'dark';
+    setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
     fetchUserData(token);
   }, [router]);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('vow_theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  };
 
   const fetchUserData = async (token) => {
     try {
@@ -157,7 +170,7 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 corrective-bg">
         <div className="separation-card rounded-xl p-8 max-w-md w-full text-center">
-          <div className="text-[#C6A664] text-4xl mb-4">⚠</div>
+          <div className="icon-gold text-4xl mb-4">⚠</div>
           <h2 className="text-xl awareness-text mb-2">
             Connection Issue
           </h2>
@@ -184,8 +197,8 @@ export default function Dashboard() {
       </Head>
 
       <div className="min-h-screen corrective-bg">
-        {/* Clean header - no gradients */}
-        <header className="border-b" style={{ borderColor: '#1A1C1F' }}>
+        {/* Header with theme toggle */}
+        <header className="border-b" style={{ borderColor: 'var(--border-color)' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <h1 
@@ -194,18 +207,40 @@ export default function Dashboard() {
               >
                 VOW
               </h1>
-              <ProfileAvatar userData={userData} onLogout={handleLogout} />
+              
+              <div className="flex items-center space-x-4">
+                {/* Theme Toggle */}
+                <button
+                  onClick={toggleTheme}
+                  className="mode-toggle flex items-center space-x-2"
+                  aria-label="Toggle theme"
+                >
+                  {theme === 'dark' ? (
+                    <>
+                      <Sun size={16} />
+                      <span>Light</span>
+                    </>
+                  ) : (
+                    <>
+                      <Moon size={16} />
+                      <span>Dark</span>
+                    </>
+                  )}
+                </button>
+                
+                <ProfileAvatar userData={userData} onLogout={handleLogout} />
+              </div>
             </div>
           </div>
         </header>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Trial Banner - clinical */}
+          {/* Trial Banner */}
           {accessInfo?.isTrial && (
-            <div className="mb-6 p-4 rounded-xl separation-card border-[#C6A664]">
+            <div className="mb-6 p-4 rounded-xl separation-card" style={{ borderColor: 'var(--accent-gold)' }}>
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <AlertCircle size={20} className="text-[#C6A664]" />
+                  <AlertCircle size={20} className="icon-gold" />
                   <div>
                     <p className="awareness-text text-sm font-medium">
                       Trial Active
@@ -225,7 +260,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          {/* Clinical greeting - observational, not motivational */}
+          {/* Greeting */}
           <div className="mb-8 unlock-fade">
             <h2 
               className="text-2xl awareness-text mb-1"
@@ -238,9 +273,9 @@ export default function Dashboard() {
             </p>
           </div>
 
-          {/* Two-column symmetrical layout */}
+          {/* Two-column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            {/* Left: Alignment Index (Centerpiece) */}
+            {/* Left: Alignment Index */}
             <div>
               <AlignmentIndex 
                 percentage={stats?.alignmentScore || 0}
@@ -249,12 +284,12 @@ export default function Dashboard() {
               />
             </div>
 
-            {/* Right: Secondary Metrics Grid */}
+            {/* Right: Metrics Grid */}
             <div className="grid grid-cols-2 gap-4">
               <div className="separation-card rounded-xl p-6 surgical-transition">
                 <div className="flex items-center justify-between mb-3">
                   <span className="observation-text text-xs uppercase tracking-wide">Active Vows</span>
-                  <ScrollText size={18} className="text-[#C6A664]" strokeWidth={2} />
+                  <ScrollText size={18} className="icon-gold" strokeWidth={2} />
                 </div>
                 <p 
                   className="text-3xl awareness-text"
@@ -267,7 +302,7 @@ export default function Dashboard() {
               <div className="separation-card rounded-xl p-6 surgical-transition">
                 <div className="flex items-center justify-between mb-3">
                   <span className="observation-text text-xs uppercase tracking-wide">Reflections</span>
-                  <Sparkles size={18} className="text-[#C6A664]" strokeWidth={2} />
+                  <Sparkles size={18} className="icon-gold" strokeWidth={2} />
                 </div>
                 <p 
                   className="text-3xl awareness-text"
@@ -280,7 +315,7 @@ export default function Dashboard() {
               <div className="separation-card rounded-xl p-6 surgical-transition">
                 <div className="flex items-center justify-between mb-3">
                   <span className="observation-text text-xs uppercase tracking-wide">Triggers</span>
-                  <Activity size={18} className="text-[#C6A664]" strokeWidth={2} />
+                  <Activity size={18} className="icon-gold" strokeWidth={2} />
                 </div>
                 <p 
                   className="text-3xl awareness-text"
@@ -293,7 +328,7 @@ export default function Dashboard() {
               <div className="separation-card rounded-xl p-6 surgical-transition">
                 <div className="flex items-center justify-between mb-3">
                   <span className="observation-text text-xs uppercase tracking-wide">Streak</span>
-                  <div className="text-[#5FD3A5]">✓</div>
+                  <div className="icon-green">✓</div>
                 </div>
                 <p 
                   className="text-3xl awareness-text"
@@ -306,13 +341,13 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Action Row - Clinical precision */}
+          {/* Action Cards - FIXED TEXT VISIBILITY */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <button
               onClick={() => router.push('/create-vow')}
               className="action-card-clinical rounded-xl surgical-transition text-left"
             >
-              <ScrollText size={24} className="text-[#C6A664] mb-4" strokeWidth={2} />
+              <ScrollText size={24} className="icon-gold mb-4" strokeWidth={2} />
               <h3 className="text-lg awareness-text font-medium mb-1">New Vow</h3>
               <p className="observation-text text-sm">Create commitment</p>
             </button>
@@ -321,7 +356,7 @@ export default function Dashboard() {
               onClick={() => router.push('/reflection')}
               className="action-card-clinical rounded-xl surgical-transition text-left"
             >
-              <Sparkles size={24} className="text-[#C6A664] mb-4" strokeWidth={2} />
+              <Sparkles size={24} className="icon-gold mb-4" strokeWidth={2} />
               <h3 className="text-lg awareness-text font-medium mb-1">Check-In</h3>
               <p className="observation-text text-sm">Observe patterns</p>
             </button>
@@ -330,7 +365,7 @@ export default function Dashboard() {
               onClick={() => router.push('/log-trigger')}
               className="action-card-clinical rounded-xl surgical-transition text-left"
             >
-              <Activity size={24} className="text-[#C6A664] mb-4" strokeWidth={2} />
+              <Activity size={24} className="icon-gold mb-4" strokeWidth={2} />
               <h3 className="text-lg awareness-text font-medium mb-1">Track Trigger</h3>
               <p className="observation-text text-sm">Log awareness</p>
             </button>
@@ -342,14 +377,17 @@ export default function Dashboard() {
             <div className="space-y-2">
               <button
                 onClick={() => router.push('/profile')}
-                className="w-full text-left p-4 rounded-lg surgical-transition hover:bg-[#1A1C1F]"
+                className="w-full text-left p-4 rounded-lg surgical-transition hover:bg-opacity-50"
+                style={{ backgroundColor: 'transparent' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--bg-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="awareness-text text-sm font-medium">Profile</p>
                     <p className="observation-text text-xs">Manage account</p>
                   </div>
-                  <User size={20} className="text-[#C6A664]" strokeWidth={2} />
+                  <User size={20} className="icon-gold" strokeWidth={2} />
                 </div>
               </button>
             </div>
