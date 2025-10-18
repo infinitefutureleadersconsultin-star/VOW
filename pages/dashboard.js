@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import LoadingSpinner from '../components/LoadingSpinner';
-import ProgressTracker from '../components/ProgressTracker';
+import ProgressRing from '../components/ProgressRing';
 import ProfileAvatar from '../components/ProfileAvatar';
 import UpgradeModal from '../components/UpgradeModal';
 import { hasCelebrated, MILESTONE_KEYS } from '../utils/celebrationUtils';
-import { checkUserAccess, getTrialDaysRemaining } from '../utils/accessControl';
+import { checkUserAccess } from '../utils/accessControl';
 import { api } from '../utils/apiClient';
 import { showToast } from '../utils/notificationUtils';
 import { ScrollText, Sparkles, Activity, User, Unlock, AlertCircle } from 'lucide-react';
@@ -61,14 +62,11 @@ export default function Dashboard() {
       setUserData(result.data);
       setStats(result.data.stats || {});
 
-      // Check user access
       const access = checkUserAccess(result.data);
       setAccessInfo(access);
 
-      // Check for upgrade milestones
       checkUpgradeMilestones(result.data);
 
-      // If no access, redirect to profile
       if (!access.hasAccess) {
         router.push('/profile');
       }
@@ -82,18 +80,15 @@ export default function Dashboard() {
   };
 
   const checkUpgradeMilestones = (user) => {
-    // Don't show upgrades to admins or users without created date
     if (!user.createdAt) return;
 
     const createdDate = new Date(user.createdAt);
     const now = new Date();
     const daysActive = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24));
 
-    // Check if already seen upgrade prompts
     const seenReflection = localStorage.getItem('upgrade_reflection_seen');
     const seenLiberation = localStorage.getItem('upgrade_liberation_seen');
 
-    // Show Reflection upgrade at 14 days (if on Initiation tier)
     if (
       daysActive >= 14 && 
       !seenReflection && 
@@ -106,7 +101,6 @@ export default function Dashboard() {
       }, 2000);
     }
 
-    // Show Liberation upgrade at 45 days (if on Reflection tier)
     if (
       daysActive >= 45 && 
       !seenLiberation && 
@@ -134,7 +128,6 @@ export default function Dashboard() {
       });
 
       if (response?.data?.success && response.data.checkoutUrl) {
-        // Mark as seen before redirect
         localStorage.setItem(`upgrade_${upgradeModal.tier}_seen`, 'true');
         window.location.href = response.data.checkoutUrl;
       } else {
@@ -149,7 +142,6 @@ export default function Dashboard() {
   };
 
   const closeUpgradeModal = () => {
-    // Mark as seen when dismissed
     localStorage.setItem(`upgrade_${upgradeModal.tier}_seen`, 'true');
     setUpgradeModal({ show: false, tier: null });
   };
@@ -165,7 +157,7 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0C1117' }}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0C0E13' }}>
         <div className="glass-card rounded-2xl p-8 max-w-md w-full text-center">
           <div className="text-[#E3C27D] text-5xl mb-4">⚠</div>
           <h2 className="text-2xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
@@ -187,178 +179,183 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0C1117 0%, #1a1f2e 100%)' }}>
-      <header className="glass-card border-b" style={{ borderColor: 'rgba(244, 241, 237, 0.08)' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <h1 className="text-2xl font-light tracking-wider text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
-              VOW
-            </h1>
-            <ProfileAvatar userData={userData} onLogout={handleLogout} />
-          </div>
-        </div>
-      </header>
+    <>
+      <Head>
+        <title>Dashboard - VOW</title>
+        <link rel="stylesheet" href="/dashboard-enhanced.css" />
+      </Head>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Trial Banner */}
-        {accessInfo?.isTrial && (
-          <div className="mb-6 p-4 rounded-xl glass-card border-2 border-[#E3C27D]/30 animate-fade-in">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <AlertCircle size={24} className="text-[#E3C27D]" />
-                <div>
-                  <p className="text-[#F4F1ED] font-medium">
-                    Free Trial Active
-                  </p>
-                  <p className="text-sm text-[#8E8A84]">
-                    {accessInfo.daysLeft} {accessInfo.daysLeft === 1 ? 'day' : 'days'} remaining
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => router.push('/pricing')}
-                className="btn-primary text-sm px-6 py-2"
-              >
-                Upgrade Now
-              </button>
+      <div className="min-h-screen dashboard-bg">
+        <header className="glass-card border-b" style={{ borderColor: 'rgba(244, 241, 237, 0.08)' }}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <h1 className="text-2xl font-light tracking-wider text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                VOW
+              </h1>
+              <ProfileAvatar userData={userData} onLogout={handleLogout} />
             </div>
           </div>
-        )}
+        </header>
 
-        <div className="mb-8">
-          <h2 className="text-3xl font-light text-[#F4F1ED] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
-            Welcome back, {userData?.name?.split(' ')[0] || 'there'}
-          </h2>
-          <p className="text-[#8E8A84]">Continue your transformation</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="md:col-span-1">
-            <ProgressTracker stats={stats} variant="card" />
-          </div>
-
-          <div className="md:col-span-2 grid grid-cols-2 gap-4">
-            <div className="glass-card rounded-2xl p-6 floating">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[#8E8A84] text-sm">Active Vows</span>
-                <ScrollText size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
-              </div>
-              <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
-                {stats?.activeVows || 0}
-              </p>
-            </div>
-
-            <div className="glass-card rounded-2xl p-6 floating">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[#8E8A84] text-sm">Current Streak</span>
-                <Activity size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
-              </div>
-              <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
-                {stats?.currentStreak || 0}
-              </p>
-              <p className="text-xs text-[#8E8A84] mt-1">days</p>
-            </div>
-
-            <div className="glass-card rounded-2xl p-6 floating">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[#8E8A84] text-sm">Reflections</span>
-                <Sparkles size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
-              </div>
-              <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
-                {stats?.totalReflections || 0}
-              </p>
-            </div>
-
-            <div className="glass-card rounded-2xl p-6 floating celebrate-complete">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[#8E8A84] text-sm">Alignment</span>
-                <div className="w-6 h-6 rounded-full border-2 border-[#E3C27D] flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-[#E3C27D]"></div>
-                </div>
-              </div>
-              <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
-                {stats?.alignmentScore || 0}%
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <button
-            onClick={() => router.push('/create-vow')}
-            className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all text-left"
-          >
-            <ScrollText size={32} className="text-[#E3C27D] mb-3" strokeWidth={1.5} />
-            <h3 className="text-lg font-medium mb-1 text-[#F4F1ED]">Create a Vow</h3>
-            <p className="text-sm text-[#8E8A84]">Begin a new commitment</p>
-          </button>
-
-          <button
-            onClick={() => router.push('/reflection')}
-            className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all text-left"
-          >
-            <Sparkles size={32} className="text-[#E3C27D] mb-3" strokeWidth={1.5} />
-            <h3 className="text-lg font-medium mb-1 text-[#F4F1ED]">Reflect</h3>
-            <p className="text-sm text-[#8E8A84]">Check in with yourself</p>
-          </button>
-
-          <button
-            onClick={() => router.push('/log-trigger')}
-            className="glass-card rounded-2xl p-6 floating hover:shadow-xl transition-all text-left"
-          >
-            <Activity size={32} className="text-[#E3C27D] mb-3" strokeWidth={1.5} />
-            <h3 className="text-lg font-medium mb-1 text-[#F4F1ED]">Log Pattern</h3>
-            <p className="text-sm text-[#8E8A84]">Track your triggers</p>
-          </button>
-        </div>
-
-        <div className="glass-card rounded-2xl p-6">
-          <h3 className="text-lg font-medium text-[#F4F1ED] mb-4">Quick Actions</h3>
-          <div className="space-y-3">
-            <button
-              onClick={() => router.push('/profile')}
-              className="w-full text-left p-4 rounded-xl glass-button floating"
-            >
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Trial Banner */}
+          {accessInfo?.isTrial && (
+            <div className="mb-6 p-4 rounded-xl glass-card border-2 border-[#E3C27D]/30 animate-fade-in">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium text-[#F4F1ED]">View Profile</p>
-                  <p className="text-sm text-[#8E8A84]">Manage your account</p>
+                <div className="flex items-center space-x-3">
+                  <AlertCircle size={24} className="text-[#E3C27D]" />
+                  <div>
+                    <p className="text-[#F4F1ED] font-medium">
+                      Free Trial Active
+                    </p>
+                    <p className="text-sm text-[#8E8A84]">
+                      {accessInfo.daysLeft} {accessInfo.daysLeft === 1 ? 'day' : 'days'} remaining
+                    </p>
+                  </div>
                 </div>
-                <User size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
+                <button
+                  onClick={() => router.push('/pricing')}
+                  className="btn-primary text-sm px-6 py-2"
+                >
+                  Upgrade Now
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Enhanced Greeting */}
+          <div className="mb-8 greeting-fade">
+            <h2 className="text-3xl font-light text-[#F4F1ED] greeting-glow mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+              Welcome back, {userData?.name?.split(' ')[0] || 'there'}. Your path continues.
+            </h2>
+            <p className="text-[#8E8A84] text-sm">Every moment you return, your vow strengthens.</p>
+          </div>
+
+          {/* Enhanced Progress + Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {/* Animated Progress Ring */}
+            <div className="glass-card rounded-2xl p-6 floating alignment-glow">
+              <div className="flex flex-col items-center">
+                <p className="text-sm text-[#8E8A84] mb-4">Alignment</p>
+                <ProgressRing percentage={stats?.alignmentScore || 0} />
+                {stats?.alignmentScore === 0 && (
+                  <p className="text-xs text-[#8E8A84] mt-4 italic">Your energy is gathering.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Stats Grid */}
+            <div className="md:col-span-2 grid grid-cols-2 gap-4">
+              <div className="glass-card rounded-2xl p-6 floating smooth-transition">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[#8E8A84] text-sm">Active Vows</span>
+                  <ScrollText size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
+                </div>
+                <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  {stats?.activeVows || 0}
+                </p>
+              </div>
+
+              <div className="glass-card rounded-2xl p-6 floating smooth-transition">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[#8E8A84] text-sm">Current Streak</span>
+                  <Activity size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
+                </div>
+                <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  {stats?.currentStreak || 0}
+                </p>
+                <p className="text-xs text-[#8E8A84] mt-1">days</p>
+              </div>
+
+              <div className="glass-card rounded-2xl p-6 floating smooth-transition col-span-2">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[#8E8A84] text-sm">Reflections</span>
+                  <Sparkles size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
+                </div>
+                <p className="text-3xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  {stats?.totalReflections || 0}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Enhanced Action Cards - Enlarged & Reordered */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <button
+              onClick={() => router.push('/create-vow')}
+              className="action-card-create rounded-2xl p-8 floating smooth-transition hover:shadow-xl text-left h-48 flex flex-col justify-between"
+            >
+              <ScrollText size={40} className="text-[#E3C27D] mb-4" strokeWidth={1.5} />
+              <div>
+                <h3 className="text-xl font-medium mb-2 text-[#F4F1ED]">Create a Vow</h3>
+                <p className="text-sm text-[#8E8A84]">Begin a new commitment</p>
               </div>
             </button>
 
-            {showUpgrade && (
+            <button
+              onClick={() => router.push('/reflection')}
+              className="action-card-reflect rounded-2xl p-8 floating smooth-transition hover:shadow-xl text-left h-48 flex flex-col justify-between"
+            >
+              <Sparkles size={40} className="text-[#93B89A] mb-4" strokeWidth={1.5} />
+              <div>
+                <h3 className="text-xl font-medium mb-2 text-[#F4F1ED]">Reflect</h3>
+                <p className="text-sm text-[#8E8A84]">Check in with yourself</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => router.push('/log-trigger')}
+              className="action-card-log rounded-2xl p-8 floating smooth-transition hover:shadow-xl text-left h-48 flex flex-col justify-between"
+            >
+              <Activity size={40} className="text-[#C6D6C0] mb-4" strokeWidth={1.5} />
+              <div>
+                <h3 className="text-xl font-medium mb-2 text-[#F4F1ED]">Log Pattern</h3>
+                <p className="text-sm text-[#8E8A84]">Track your triggers</p>
+              </div>
+            </button>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="glass-card rounded-2xl p-6">
+            <h3 className="text-lg font-medium text-[#F4F1ED] mb-4">Quick Actions</h3>
+            <div className="space-y-3">
               <button
-                onClick={() => router.push('/pricing')}
-                className="w-full text-left p-4 rounded-xl glass-button floating"
+                onClick={() => router.push('/profile')}
+                className="w-full text-left p-4 rounded-xl glass-button floating smooth-transition"
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium text-[#F4F1ED]">Unlock Path</p>
-                    <p className="text-sm text-[#8E8A84]">
-                      {userData?.subscriptionStatus === 'active' 
-                        ? 'Manage your journey' 
-                        : 'Continue your transformation'}
-                    </p>
+                    <p className="font-medium text-[#F4F1ED]">View Profile</p>
+                    <p className="text-sm text-[#8E8A84]">Manage your account</p>
                   </div>
-                  <Unlock size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
+                  <User size={24} className="text-[#E3C27D]" strokeWidth={1.5} />
                 </div>
               </button>
-            )}
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
 
-      {/* Upgrade Modal */}
-      {upgradeModal.show && (
-        <UpgradeModal
-          tier={upgradeModal.tier}
-          onClose={closeUpgradeModal}
-          onUpgrade={handleUpgrade}
-          loading={upgrading}
-        />
-      )}
-    </div>
+        {/* Floating Unlock Button */}
+        {showUpgrade && (
+          <button
+            onClick={() => router.push('/pricing')}
+            className="floating-unlock px-6 py-3 rounded-full text-[#0C0E13] font-medium flex items-center space-x-2 smooth-transition hover:scale-105"
+          >
+            <Unlock size={20} strokeWidth={2} />
+            <span>Unlock Next Path</span>
+          </button>
+        )}
+
+        {/* Upgrade Modal */}
+        {upgradeModal.show && (
+          <UpgradeModal
+            tier={upgradeModal.tier}
+            onClose={closeUpgradeModal}
+            onUpgrade={handleUpgrade}
+            loading={upgrading}
+          />
+        )}
+      </div>
+    </>
   );
 }
