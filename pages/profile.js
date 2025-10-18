@@ -8,6 +8,7 @@ export default function Profile() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [renewing, setRenewing] = useState(false);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -16,10 +17,24 @@ export default function Profile() {
     email: '',
     gender: '',
     nationality: '',
+    ethnicity: '',
     language: ''
   });
 
   const genderOptions = ['Male', 'Female', 'Non-binary', 'Prefer not to say'];
+  const nationalityOptions = ['US', 'UK', 'Canada', 'Mexico', 'Other'];
+  const ethnicityOptions = [
+    'Prefer not to say',
+    'White/Caucasian',
+    'Black/African American',
+    'Hispanic/Latino',
+    'Asian',
+    'Native American/Indigenous',
+    'Pacific Islander',
+    'Middle Eastern/North African',
+    'Mixed/Multiracial',
+    'Other'
+  ];
   const languageOptions = ['English', 'Spanish', 'French', 'German', 'Portuguese', 'Other'];
 
   useEffect(() => {
@@ -52,6 +67,7 @@ export default function Profile() {
           email: data.email || '',
           gender: data.gender || '',
           nationality: data.nationality || '',
+          ethnicity: data.ethnicity || '',
           language: data.language || 'English'
         });
       } else {
@@ -62,15 +78,8 @@ export default function Profile() {
       
       if (error.code === 'UNAUTHORIZED') {
         localStorage.removeItem('vow_auth_token');
-        localStorage.removeItem('vow_refresh_token');
         showToast('Session expired. Please log in again', 'error');
         router.push('/login');
-      } else if (error.code === 'ECONNABORTED') {
-        setError('Request timeout. Please check your connection.');
-      } else if (error.response?.status === 404) {
-        setError('Profile not found. Please contact support.');
-      } else if (error.response?.status === 500) {
-        setError('Server error. Please try again later.');
       } else {
         setError('Failed to load your profile. Please try again.');
       }
@@ -99,25 +108,11 @@ export default function Profile() {
       return false;
     }
     
-    if (formData.name.trim().length > 100) {
-      showToast('Name is too long (max 100 characters)', 'error');
-      return false;
-    }
-    
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      showToast('Please enter a valid email address', 'error');
-      return false;
-    }
-    
     return true;
   };
 
   const handleSave = async () => {
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     try {
       setSaving(true);
@@ -126,7 +121,8 @@ export default function Profile() {
       const updateData = {
         name: formData.name.trim(),
         gender: formData.gender || null,
-        nationality: formData.nationality.trim() || null,
+        nationality: formData.nationality || null,
+        ethnicity: formData.ethnicity || null,
         language: formData.language
       };
 
@@ -149,29 +145,7 @@ export default function Profile() {
       }
     } catch (error) {
       console.error('Update profile error:', error);
-      
-      if (error.code === 'UNAUTHORIZED') {
-        localStorage.removeItem('vow_auth_token');
-        showToast('Session expired. Please log in again', 'error');
-        router.push('/login');
-      } else if (error.code === 'ECONNABORTED') {
-        setError('Request timeout. Your changes may not have been saved.');
-        showToast('Timeout. Please try again', 'error');
-      } else if (error.response?.status === 400) {
-        const errorMsg = error.response?.data?.error || 'Invalid data. Please check your entries.';
-        setError(errorMsg);
-        showToast(errorMsg, 'error');
-      } else if (error.response?.status === 409) {
-        setError('Email already in use by another account.');
-        showToast('Email already in use', 'error');
-      } else if (error.response?.status === 500) {
-        setError('Server error. Please try again in a moment.');
-        showToast('Server error. Please try again', 'error');
-      } else {
-        const errorMessage = error.response?.data?.error || error.message || 'Failed to update profile';
-        setError(errorMessage);
-        showToast(errorMessage, 'error');
-      }
+      showToast(error.message || 'Failed to update profile', 'error');
     } finally {
       setSaving(false);
     }
@@ -183,10 +157,45 @@ export default function Profile() {
       email: userData.email || '',
       gender: userData.gender || '',
       nationality: userData.nationality || '',
+      ethnicity: userData.ethnicity || '',
       language: userData.language || 'English'
     });
     setIsEditing(false);
     setError(null);
+  };
+
+  const handleRenewSubscription = async () => {
+    setRenewing(true);
+
+    try {
+      const response = await api.post('/subscription', {
+        action: 'renew_subscription'
+      }, {
+        timeout: 15000
+      });
+
+      if (response?.data?.success) {
+        showToast('Subscription renewed successfully!', 'success');
+        loadUserData(); // Reload user data
+      } else {
+        throw new Error(response?.data?.error || 'Failed to renew subscription');
+      }
+    } catch (error) {
+      console.error('Renew subscription error:', error);
+      showToast(error.message || 'Failed to renew subscription', 'error');
+    } finally {
+      setRenewing(false);
+    }
+  };
+
+  const getDaysRemaining = () => {
+    if (!userData?.subscriptionEndDate) return 0;
+    
+    const endDate = new Date(userData.subscriptionEndDate);
+    const now = new Date();
+    const daysLeft = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+    
+    return Math.max(0, daysLeft);
   };
 
   const formatDate = (dateString) => {
@@ -206,7 +215,7 @@ export default function Profile() {
     const badges = {
       trial: { text: 'Trial', color: 'bg-amber-100 text-amber-700' },
       active: { text: 'Active', color: 'bg-green-100 text-green-700' },
-      canceled: { text: 'Canceled', color: 'bg-gray-100 text-gray-700' },
+      cancelled: { text: 'Cancelled', color: 'bg-gray-100 text-gray-700' },
       expired: { text: 'Expired', color: 'bg-red-100 text-red-700' }
     };
     
@@ -215,10 +224,10 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0C1117' }}>
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading profile...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#E3C27D] mx-auto mb-4"></div>
+          <p className="text-[#8E8A84]">Loading profile...</p>
         </div>
       </div>
     );
@@ -226,26 +235,29 @@ export default function Profile() {
 
   const badge = getSubscriptionBadge(userData?.subscriptionStatus);
   const stats = userData?.stats || {};
+  const daysRemaining = getDaysRemaining();
+  const isCancelled = userData?.subscriptionStatus === 'cancelled';
 
   return (
     <>
       <Head>
         <title>Profile - VOW</title>
-        <meta name="description" content="Your VOW profile" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
+      <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #0C1117 0%, #1a1f2e 100%)' }}>
         {/* Header */}
-        <nav className="bg-white border-b border-amber-100">
+        <nav className="glass-card border-b" style={{ borderColor: 'rgba(244, 241, 237, 0.08)' }}>
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <button
                 onClick={() => router.push('/dashboard')}
-                className="text-gray-600 hover:text-gray-900"
+                className="text-[#8E8A84] hover:text-[#F4F1ED]"
               >
                 ← Back to Dashboard
               </button>
-              <h1 className="text-lg font-medium text-gray-900">Profile</h1>
+              <h1 className="text-lg font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                Profile
+              </h1>
               <div className="w-32"></div>
             </div>
           </div>
@@ -254,8 +266,8 @@ export default function Profile() {
         {/* Error Message */}
         {error && (
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-red-700 text-sm">{error}</p>
+            <div className="p-4 rounded-xl" style={{ background: 'rgba(110, 59, 59, 0.2)', border: '1px solid rgba(110, 59, 59, 0.3)' }}>
+              <p className="text-[#F4F1ED] text-sm">{error}</p>
             </div>
           </div>
         )}
@@ -266,13 +278,15 @@ export default function Profile() {
             {/* Left Column - Profile Info */}
             <div className="lg:col-span-2 space-y-6">
               {/* Profile Card */}
-              <div className="bg-white rounded-xl shadow-md p-8">
+              <div className="glass-card rounded-2xl p-8">
                 <div className="flex justify-between items-start mb-6">
-                  <h2 className="text-2xl font-light text-gray-900">Personal Information</h2>
+                  <h2 className="text-2xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    Personal Information
+                  </h2>
                   {!isEditing ? (
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="text-amber-600 hover:text-amber-700 font-medium"
+                      className="text-[#E3C27D] hover:text-[#F0D9A8] font-medium"
                     >
                       Edit
                     </button>
@@ -281,18 +295,14 @@ export default function Profile() {
                       <button
                         onClick={handleCancel}
                         disabled={saving}
-                        className="text-gray-600 hover:text-gray-900 font-medium"
+                        className="btn-secondary"
                       >
                         Cancel
                       </button>
                       <button
                         onClick={handleSave}
                         disabled={saving}
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                          saving
-                            ? 'bg-gray-400 text-white cursor-not-allowed'
-                            : 'bg-amber-600 text-white hover:bg-amber-700'
-                        }`}
+                        className="btn-primary"
                       >
                         {saving ? 'Saving...' : 'Save'}
                       </button>
@@ -303,7 +313,7 @@ export default function Profile() {
                 <div className="space-y-4">
                   {/* Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
                       Name *
                     </label>
                     {isEditing ? (
@@ -311,33 +321,33 @@ export default function Profile() {
                         type="text"
                         value={formData.name}
                         onChange={(e) => handleInputChange('name', e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                        className="input-glass w-full px-4 py-2 rounded-xl"
                         maxLength={100}
                       />
                     ) : (
-                      <p className="text-gray-900">{userData?.name || 'Not provided'}</p>
+                      <p className="text-[#F4F1ED]">{userData?.name || 'Not provided'}</p>
                     )}
                   </div>
 
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
                       Email
                     </label>
-                    <p className="text-gray-900">{userData?.email || 'Not provided'}</p>
-                    <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                    <p className="text-[#F4F1ED]">{userData?.email || 'Not provided'}</p>
+                    <p className="text-xs text-[#8E8A84] mt-1">Email cannot be changed</p>
                   </div>
 
                   {/* Gender */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
                       Gender
                     </label>
                     {isEditing ? (
                       <select
                         value={formData.gender}
                         onChange={(e) => handleInputChange('gender', e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                        className="input-glass w-full px-4 py-2 rounded-xl"
                       >
                         <option value="">Select...</option>
                         {genderOptions.map((option) => (
@@ -347,39 +357,65 @@ export default function Profile() {
                         ))}
                       </select>
                     ) : (
-                      <p className="text-gray-900 capitalize">{userData?.gender || 'Not provided'}</p>
+                      <p className="text-[#F4F1ED] capitalize">{userData?.gender || 'Not provided'}</p>
                     )}
                   </div>
 
                   {/* Nationality */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
                       Nationality
                     </label>
                     {isEditing ? (
-                      <input
-                        type="text"
+                      <select
                         value={formData.nationality}
                         onChange={(e) => handleInputChange('nationality', e.target.value)}
-                        placeholder="e.g., American, British, etc."
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
-                        maxLength={50}
-                      />
+                        className="input-glass w-full px-4 py-2 rounded-xl"
+                      >
+                        <option value="">Select...</option>
+                        {nationalityOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
                     ) : (
-                      <p className="text-gray-900">{userData?.nationality || 'Not provided'}</p>
+                      <p className="text-[#F4F1ED]">{userData?.nationality || 'Not provided'}</p>
+                    )}
+                  </div>
+
+                  {/* Ethnicity */}
+                  <div>
+                    <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
+                      Ethnicity <span className="text-[#8E8A84] text-xs">(Optional)</span>
+                    </label>
+                    {isEditing ? (
+                      <select
+                        value={formData.ethnicity}
+                        onChange={(e) => handleInputChange('ethnicity', e.target.value)}
+                        className="input-glass w-full px-4 py-2 rounded-xl"
+                      >
+                        {ethnicityOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <p className="text-[#F4F1ED]">{userData?.ethnicity || 'Not specified'}</p>
                     )}
                   </div>
 
                   {/* Language */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
                       Preferred Language
                     </label>
                     {isEditing ? (
                       <select
                         value={formData.language}
                         onChange={(e) => handleInputChange('language', e.target.value)}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                        className="input-glass w-full px-4 py-2 rounded-xl"
                       >
                         {languageOptions.map((option) => (
                           <option key={option} value={option}>
@@ -388,109 +424,154 @@ export default function Profile() {
                         ))}
                       </select>
                     ) : (
-                      <p className="text-gray-900">{userData?.language || 'English'}</p>
+                      <p className="text-[#F4F1ED]">{userData?.language || 'English'}</p>
                     )}
                   </div>
                 </div>
               </div>
 
               {/* Account Activity */}
-              <div className="bg-white rounded-xl shadow-md p-8">
-                <h2 className="text-2xl font-light text-gray-900 mb-6">Account Activity</h2>
+              <div className="glass-card rounded-2xl p-8">
+                <h2 className="text-2xl font-light text-[#F4F1ED] mb-6" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  Account Activity
+                </h2>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Member Since</p>
-                    <p className="text-gray-900 font-medium">{formatDate(userData?.createdAt)}</p>
+                    <p className="text-sm text-[#8E8A84] mb-1">Member Since</p>
+                    <p className="text-[#F4F1ED] font-medium">{formatDate(userData?.createdAt)}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Last Login</p>
-                    <p className="text-gray-900 font-medium">{formatDate(userData?.lastLogin)}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600 mb-1">Email Verified</p>
-                    <p className="text-gray-900 font-medium">
-                      {userData?.emailVerified ? '✅ Yes' : '❌ No'}
+                    <p className="text-sm text-[#8E8A84] mb-1">Email Verified</p>
+                    <p className="text-[#F4F1ED] font-medium">
+                      {userData?.emailVerified ? '✓ Yes' : '✗ No'}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Data Consent</p>
-                    <p className="text-gray-900 font-medium">
-                      {userData?.consentData ? '✅ Given' : '❌ Not given'}
+                    <p className="text-sm text-[#8E8A84] mb-1">Data Consent</p>
+                    <p className="text-[#F4F1ED] font-medium">
+                      {userData?.consentData ? '✓ Given' : '✗ Not given'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-[#8E8A84] mb-1">AI Consent</p>
+                    <p className="text-[#F4F1ED] font-medium">
+                      {userData?.consentAI ? '✓ Given' : '✗ Not given'}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-
             {/* Right Column - Stats & Subscription */}
             <div className="space-y-6">
               {/* Subscription Card */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Subscription</h3>
+              <div className="glass-card rounded-2xl p-6">
+                <h3 className="text-lg font-medium text-[#F4F1ED] mb-4">Subscription</h3>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">Status</p>
+                    <p className="text-sm text-[#8E8A84] mb-1">Status</p>
                     <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${badge.color}`}>
                       {badge.text}
                     </span>
                   </div>
+
                   {userData?.subscriptionTier && (
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Plan</p>
-                      <p className="text-gray-900 font-medium capitalize">{userData.subscriptionTier}</p>
+                      <p className="text-sm text-[#8E8A84] mb-1">Plan</p>
+                      <p className="text-[#F4F1ED] font-medium capitalize">{userData.subscriptionTier}</p>
                     </div>
                   )}
+
+                  {/* Trial End Date */}
                   {userData?.trialEndDate && userData?.subscriptionStatus === 'trial' && (
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Trial Ends</p>
-                      <p className="text-gray-900 font-medium">{formatDate(userData.trialEndDate)}</p>
+                      <p className="text-sm text-[#8E8A84] mb-1">Trial Ends</p>
+                      <p className="text-[#F4F1ED] font-medium">{formatDate(userData.trialEndDate)}</p>
                     </div>
                   )}
-                  <button
-                    onClick={() => router.push('/pricing')}
-                    className="w-full mt-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
-                  >
-                    {userData?.subscriptionStatus === 'trial' ? 'Upgrade Plan' : 'Manage Subscription'}
-                  </button>
+
+                  {/* Cancelled - Show Days Remaining */}
+                  {isCancelled && daysRemaining > 0 && (
+                    <div className="p-4 rounded-xl" style={{ background: 'rgba(227, 194, 125, 0.1)' }}>
+                      <p className="text-[#E3C27D] font-medium mb-1">
+                        {daysRemaining} {daysRemaining === 1 ? 'day' : 'days'} remaining
+                      </p>
+                      <p className="text-xs text-[#8E8A84]">
+                        Access until {formatDate(userData.subscriptionEndDate)}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Renew Button for Cancelled Subscriptions */}
+                  {isCancelled && daysRemaining > 0 ? (
+                    <button
+                      onClick={handleRenewSubscription}
+                      disabled={renewing}
+                      className="w-full mt-4 btn-primary disabled:opacity-50"
+                    >
+                      {renewing ? 'Processing...' : 'Renew Subscription'}
+                    </button>
+                  ) : isCancelled && daysRemaining === 0 ? (
+                    <button
+                      onClick={() => router.push('/pricing')}
+                      className="w-full mt-4 btn-primary"
+                    >
+                      Reactivate Plan
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => router.push('/pricing')}
+                      className="w-full mt-4 btn-primary"
+                    >
+                      {userData?.subscriptionStatus === 'trial' ? 'Upgrade Plan' : 'Manage Subscription'}
+                    </button>
+                  )}
                 </div>
               </div>
 
               {/* Stats Card */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Your Journey</h3>
+              <div className="glass-card rounded-2xl p-6">
+                <h3 className="text-lg font-medium text-[#F4F1ED] mb-4">Your Journey</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Total Vows</span>
-                    <span className="text-xl font-light text-gray-900">{stats.totalVows || 0}</span>
+                    <span className="text-sm text-[#8E8A84]">Total Vows</span>
+                    <span className="text-xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      {stats.totalVows || 0}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Current Streak</span>
-                    <span className="text-xl font-light text-gray-900">{stats.currentStreak || 0} days</span>
+                    <span className="text-sm text-[#8E8A84]">Current Streak</span>
+                    <span className="text-xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      {stats.currentStreak || 0} days
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Reflections</span>
-                    <span className="text-xl font-light text-gray-900">{stats.totalReflections || 0}</span>
+                    <span className="text-sm text-[#8E8A84]">Reflections</span>
+                    <span className="text-xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      {stats.totalReflections || 0}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Alignment Score</span>
-                    <span className="text-xl font-light text-gray-900">{stats.alignmentScore || 0}%</span>
+                    <span className="text-sm text-[#8E8A84]">Alignment Score</span>
+                    <span className="text-xl font-light text-[#F4F1ED]" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      {stats.alignmentScore || 0}%
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Quick Actions */}
-              <div className="bg-white rounded-xl shadow-md p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h3>
+              <div className="glass-card rounded-2xl p-6">
+                <h3 className="text-lg font-medium text-[#F4F1ED] mb-4">Quick Actions</h3>
                 <div className="space-y-2">
                   <button
                     onClick={() => router.push('/settings')}
-                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="w-full text-left px-4 py-2 text-[#F4F1ED] hover:bg-[#1a1f2e]/50 rounded-lg transition-colors"
                   >
                     ⚙️ Settings
                   </button>
                   <button
                     onClick={() => router.push('/pricing')}
-                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="w-full text-left px-4 py-2 text-[#F4F1ED] hover:bg-[#1a1f2e]/50 rounded-lg transition-colors"
                   >
                     💳 Billing
                   </button>
@@ -502,7 +583,7 @@ export default function Profile() {
                         router.push('/login');
                       }
                     }}
-                    className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    className="w-full text-left px-4 py-2 text-[#6E3B3B] hover:bg-[#6E3B3B]/10 rounded-lg transition-colors"
                   >
                     🚪 Log Out
                   </button>
