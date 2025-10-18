@@ -113,7 +113,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const userId = decodedToken.uid;
+    const userId = decodedToken.userId;
     const { vow } = req.body;
 
     if (!vow) {
