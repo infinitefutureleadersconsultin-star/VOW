@@ -26,7 +26,7 @@ export async function sendPasswordResetEmail(email, resetToken, userName) {
   const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${resetToken}`;
   
   const mailOptions = {
-    from: `VOW <${process.env.EMAIL_USER}>`,
+    from: 'VOW <vowtheoryapp@gmail.com>',
     to: email,
     subject: 'Reset Your VOW Password',
     html: `
@@ -107,7 +107,7 @@ export async function sendVerificationEmail(email, verificationToken, userName) 
   const verifyUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verificationToken}`;
   
   const mailOptions = {
-    from: `VOW <${process.env.EMAIL_USER}>`,
+    from: 'VOW <vowtheoryapp@gmail.com>',
     to: email,
     subject: 'Verify Your VOW Account',
     html: `
