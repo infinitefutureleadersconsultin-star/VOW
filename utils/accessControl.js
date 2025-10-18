@@ -1,3 +1,6 @@
+// Admin whitelist - full access always
+const ADMIN_EMAILS = ['issiahmclean1999@gmail.com'];
+
 // Check if user has access to features
 export function checkUserAccess(userData) {
   if (!userData) {
@@ -5,6 +8,14 @@ export function checkUserAccess(userData) {
       hasAccess: false,
       reason: 'NO_USER',
       message: 'Please log in to continue',
+    };
+  }
+
+  // ADMIN: Full access always
+  if (ADMIN_EMAILS.includes(userData.email?.toLowerCase())) {
+    return {
+      hasAccess: true,
+      isAdmin: true,
     };
   }
 
@@ -24,7 +35,7 @@ export function checkUserAccess(userData) {
     const now = new Date();
     
     if (now < trialEnd) {
-      // Trial still active
+      // Trial still active - full access
       const daysLeft = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
       return {
         hasAccess: true,
@@ -33,7 +44,7 @@ export function checkUserAccess(userData) {
         trialEndDate,
       };
     } else {
-      // Trial expired
+      // Trial expired - profile only
       return {
         hasAccess: false,
         reason: 'TRIAL_EXPIRED',
@@ -42,7 +53,7 @@ export function checkUserAccess(userData) {
     }
   }
 
-  // Cancelled subscription
+  // Cancelled subscription - profile only
   if (subscriptionStatus === 'cancelled') {
     return {
       hasAccess: false,
