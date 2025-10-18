@@ -1,5 +1,5 @@
 import { db } from '../../lib/firebase';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { 
   createPasswordResetToken, 
   verifyPasswordResetToken, 
