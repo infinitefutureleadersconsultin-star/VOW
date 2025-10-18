@@ -1,0 +1,45 @@
+  const handleStartFreeTrial = async () => {
+    if (!validateStep3()) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await api.post('/auth', {
+        action: 'signup',
+        ...formData,
+        termsAccepted: true,
+        termsAcceptedAt: new Date().toISOString(),
+      });
+
+      if (response?.data?.success) {
+        showToast('Welcome! Your 2-day free trial has started.', 'success');
+        
+        if (response.data.token) {
+          localStorage.setItem('vow_auth_token', response.data.token);
+        }
+
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 1000);
+      } else {
+        throw new Error(response?.data?.error || 'Signup failed');
+      }
+    } catch (err) {
+      console.error('Free trial signup error:', err);
+      
+      // Handle specific error cases
+      if (err.response?.status === 409 || err.message?.includes('already exists')) {
+        setError('This email is already registered. Please log in instead.');
+        showToast('Account already exists. Redirecting to login...', 'info');
+        setTimeout(() => {
+          router.push(`/login?email=${encodeURIComponent(formData.email)}`);
+        }, 2000);
+      } else {
+        setError(err.message || 'Failed to start free trial. Please try again.');
+        showToast(err.message || 'Signup failed', 'error');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };

@@ -1,0 +1,98 @@
+import crypto from 'crypto';
+import { db } from '../lib/firebase-admin';
+
+/**
+ * Generate a secure password reset token
+ * @returns {string} 32-character hex token
+ */
+export function generateResetToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+/**
+ * Create a password reset token and store in database
+ * @param {string} email - User's email
+ * @returns {Promise<{token: string, expiresAt: string}>}
+ */
+export async function createPasswordResetToken(email) {
+  const token = generateResetToken();
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+  
+  // Store token in database
+  await db.collection('password_reset_tokens').add({
+    email: email.toLowerCase(),
+    token,
+    expiresAt: expiresAt.toISOString(),
+    createdAt: new Date().toISOString(),
+    used: false,
+  });
+  
+  return { token, expiresAt: expiresAt.toISOString() };
+}
+
+/**
+ * Verify a password reset token
+ * @param {string} token - Reset token
+ * @returns {Promise<{valid: boolean, email?: string, error?: string}>}
+ */
+export async function verifyPasswordResetToken(token) {
+  try {
+    const tokensRef = db.collection('password_reset_tokens');
+    const snapshot = await tokensRef
+      .where('token', '==', token)
+      .where('used', '==', false)
+      .get();
+    
+    if (snapshot.empty) {
+      return { valid: false, error: 'Invalid or expired token' };
+    }
+    
+    const tokenDoc = snapshot.docs[0];
+    const tokenData = tokenDoc.data();
+    
+    // Check if token expired
+    const expiresAt = new Date(tokenData.expiresAt);
+    const now = new Date();
+    
+    if (now > expiresAt) {
+      return { valid: false, error: 'Token has expired' };
+    }
+    
+    return { valid: true, email: tokenData.email, tokenId: tokenDoc.id };
+    
+  } catch (error) {
+    console.error('Token verification error:', error);
+    return { valid: false, error: 'Token verification failed' };
+  }
+}
+
+/**
+ * Mark a reset token as used
+ * @param {string} tokenId - Token document ID
+ */
+export async function markTokenAsUsed(tokenId) {
+  await db.collection('password_reset_tokens').doc(tokenId).update({
+    used: true,
+    usedAt: new Date().toISOString(),
+  });
+}
+
+/**
+ * Clean up expired tokens (run periodically)
+ */
+export async function cleanupExpiredTokens() {
+  const tokensRef = db.collection('password_reset_tokens');
+  const now = new Date().toISOString();
+  
+  const snapshot = await tokensRef
+    .where('expiresAt', '<', now)
+    .get();
+  
+  const batch = db.batch();
+  snapshot.docs.forEach(doc => {
+    batch.delete(doc.ref);
+  });
+  
+  await batch.commit();
+  console.log(`Cleaned up ${snapshot.size} expired tokens`);
+}
