@@ -3,8 +3,11 @@ import { useRouter } from 'next/router';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ProgressTracker from '../components/ProgressTracker';
 import ProfileAvatar from '../components/ProfileAvatar';
+import UpgradeModal from '../components/UpgradeModal';
 import { hasCelebrated, MILESTONE_KEYS } from '../utils/celebrationUtils';
 import { checkUserAccess, getTrialDaysRemaining } from '../utils/accessControl';
+import { api } from '../utils/apiClient';
+import { showToast } from '../utils/notificationUtils';
 import { ScrollText, Sparkles, Activity, User, Unlock, AlertCircle } from 'lucide-react';
 
 export default function Dashboard() {
@@ -15,6 +18,8 @@ export default function Dashboard() {
   const [error, setError] = useState(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [accessInfo, setAccessInfo] = useState(null);
+  const [upgradeModal, setUpgradeModal] = useState({ show: false, tier: null });
+  const [upgrading, setUpgrading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('vow_auth_token');
@@ -60,6 +65,9 @@ export default function Dashboard() {
       const access = checkUserAccess(result.data);
       setAccessInfo(access);
 
+      // Check for upgrade milestones
+      checkUpgradeMilestones(result.data);
+
       // If no access, redirect to profile
       if (!access.hasAccess) {
         router.push('/profile');
@@ -71,6 +79,79 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const checkUpgradeMilestones = (user) => {
+    // Don't show upgrades to admins or users without created date
+    if (!user.createdAt) return;
+
+    const createdDate = new Date(user.createdAt);
+    const now = new Date();
+    const daysActive = Math.floor((now - createdDate) / (1000 * 60 * 60 * 24));
+
+    // Check if already seen upgrade prompts
+    const seenReflection = localStorage.getItem('upgrade_reflection_seen');
+    const seenLiberation = localStorage.getItem('upgrade_liberation_seen');
+
+    // Show Reflection upgrade at 14 days (if on Initiation tier)
+    if (
+      daysActive >= 14 && 
+      !seenReflection && 
+      user.subscriptionStatus === 'active' &&
+      user.subscriptionTier !== 'reflection' &&
+      user.subscriptionTier !== 'liberation'
+    ) {
+      setTimeout(() => {
+        setUpgradeModal({ show: true, tier: 'reflection' });
+      }, 2000);
+    }
+
+    // Show Liberation upgrade at 45 days (if on Reflection tier)
+    if (
+      daysActive >= 45 && 
+      !seenLiberation && 
+      user.subscriptionStatus === 'active' &&
+      user.subscriptionTier === 'reflection'
+    ) {
+      setTimeout(() => {
+        setUpgradeModal({ show: true, tier: 'liberation' });
+      }, 2000);
+    }
+  };
+
+  const handleUpgrade = async (tierData) => {
+    setUpgrading(true);
+
+    try {
+      const response = await api.post('/subscription', {
+        action: 'create_checkout',
+        priceId: tierData.priceId,
+        planName: tierData.name,
+        successUrl: `${window.location.origin}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${window.location.origin}/dashboard`
+      }, {
+        timeout: 15000
+      });
+
+      if (response?.data?.success && response.data.checkoutUrl) {
+        // Mark as seen before redirect
+        localStorage.setItem(`upgrade_${upgradeModal.tier}_seen`, 'true');
+        window.location.href = response.data.checkoutUrl;
+      } else {
+        throw new Error(response?.data?.error || 'Failed to create checkout session');
+      }
+    } catch (err) {
+      console.error('Upgrade error:', err);
+      showToast('Failed to process upgrade. Please try again.', 'error');
+    } finally {
+      setUpgrading(false);
+    }
+  };
+
+  const closeUpgradeModal = () => {
+    // Mark as seen when dismissed
+    localStorage.setItem(`upgrade_${upgradeModal.tier}_seen`, 'true');
+    setUpgradeModal({ show: false, tier: null });
   };
 
   const handleLogout = () => {
@@ -268,6 +349,16 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
+
+      {/* Upgrade Modal */}
+      {upgradeModal.show && (
+        <UpgradeModal
+          tier={upgradeModal.tier}
+          onClose={closeUpgradeModal}
+          onUpgrade={handleUpgrade}
+          loading={upgrading}
+        />
+      )}
     </div>
   );
 }
