@@ -6,8 +6,8 @@ export default function UpgradeModal({ tier, onClose, onUpgrade, loading }) {
       name: 'Reflection',
       price: 9.99,
       priceId: 'price_monthly_9_99',
-      title: 'You've Unlocked the Path of Reflection',
-      description: 'Your consistency has opened a deeper level of clarity and peace.',
+      title: "You've Unlocked the Path of Reflection",
+      description: "Your consistency has opened a deeper level of clarity and peace.",
       features: [
         'AI-guided reflection prompts',
         'Advanced pattern analysis',
@@ -20,8 +20,8 @@ export default function UpgradeModal({ tier, onClose, onUpgrade, loading }) {
       name: 'Liberation',
       price: 14.99,
       priceId: 'price_monthly_14_99',
-      title: 'Your Journey of Liberation Awaits',
-      description: 'You've built strong foundations — now unlock full mastery of your vow.',
+      title: "Your Journey of Liberation Awaits",
+      description: "You've built strong foundations — now unlock full mastery of your vow.",
       features: [
         '1-on-1 mentor sessions',
         'Personalized healing roadmap',
