@@ -263,7 +263,7 @@ async function handleLogin(req, res) {
 
     // Validate input
     const emailValidation = validateEmail(email);
-    if (!emailValidation.success) {
+    if (!emailValidation.valid) {
       return res.status(400).json({
         success: false,
         error: 'Invalid email format',
@@ -590,7 +590,7 @@ async function handleResetPassword(req, res) {
     if (resetCode && newPassword) {
       // Validate new password
       const passwordValidation = validatePassword(newPassword);
-      if (!passwordValidation.success) {
+      if (!passwordValidation.valid) {
         return res.status(400).json({
           success: false,
           error: 'Invalid password',
@@ -704,7 +704,7 @@ async function handleChangePassword(req, res) {
     }
 
     const passwordValidation = validatePassword(newPassword);
-    if (!passwordValidation.success) {
+    if (!passwordValidation.valid) {
       return res.status(400).json({
         success: false,
         error: 'Invalid new password',

@@ -53,7 +53,7 @@ export async function sendPasswordResetEmail(email, resetToken, userName) {
             <p>Hello ${userName},</p>
             <p>You requested to reset your password for your VOW account. Click the button below to create a new password:</p>
             <div style="text-align: center;">
-              <a href="${resetUrl}" class="button">Reset Password</a>
+              <a href="${resetUrl}" style="display: inline-block; background: #C6A664; color: #0A0B0D; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 24px 0;">Reset Password</a>
             </div>
             <p>Or copy and paste this link into your browser:</p>
             <p style="word-break: break-all; color: #C6A664; font-size: 14px;">${resetUrl}</p>
