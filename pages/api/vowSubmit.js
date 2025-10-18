@@ -50,14 +50,6 @@ const validateVow = (vow) => {
     errors.push('Why this matters is required');
   }
   
-  if (!vow.beforeIdentity || typeof vow.beforeIdentity !== 'string') {
-    errors.push('Before identity is required');
-  }
-  
-  if (!vow.becomingIdentity || typeof vow.becomingIdentity !== 'string') {
-    errors.push('Becoming identity is required');
-  }
-  
   return errors;
 };
 
@@ -150,8 +142,6 @@ export default async function handler(req, res) {
       statement: vow.statement.trim(),
       duration: parseInt(vow.duration),
       whyMatters: vow.whyMatters.trim(),
-      beforeIdentity: vow.beforeIdentity.trim(),
-      becomingIdentity: vow.becomingIdentity.trim(),
       dailyReminder: vow.dailyReminder !== false,
       accountability: vow.accountability || 'solo',
       status: 'active',
