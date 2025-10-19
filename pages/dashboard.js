@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [stats, setStats] = useState(null);
-  const [error, setError] = useState(null);
+  const [vows, setVows] = useState([]);  const [error, setError] = useState(null);
   const [accessInfo, setAccessInfo] = useState(null);
   const [upgradeModal, setUpgradeModal] = useState({ show: false, tier: null });
   const [upgrading, setUpgrading] = useState(false);
@@ -73,6 +73,16 @@ export default function Dashboard() {
       setUserData(result.data);
       setStats(result.data.stats || {});
 
+      // Fetch vows
+      const vowsResponse = await fetch('/api/vows', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      if (vowsResponse.ok) {
+        const vowsData = await vowsResponse.json();
+        setVows(vowsData.vows || []);
+      }
       const access = checkUserAccess(result.data);
       setAccessInfo(access);
 
@@ -392,6 +402,24 @@ export default function Dashboard() {
               </button>
             </div>
           </div>
+          {/* Active Vows */}
+          {vows.length > 0 && (
+            <div className="mt-8 separation-card rounded-xl p-6">
+              <h3 className="awareness-text font-medium mb-4">Your Active Vows</h3>
+              <div className="space-y-4">
+                {vows.map((vow) => (
+                  <div key={vow.id} className="p-4 rounded-lg" style={{ background: 'var(--bg-primary)' }}>
+                    <p className="awareness-text font-medium mb-2">{vow.statement}</p>
+                    <div className="flex items-center space-x-4 observation-text text-sm">
+                      <span>📅 {vow.duration} days</span>
+                      <span>📂 {vow.category}</span>
+                      <span>Day {vow.currentDay || 0}/{vow.duration}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </main>
 
         {/* Upgrade Modal */}
