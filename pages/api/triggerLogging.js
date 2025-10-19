@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { db, auth } from '../../lib/firebase';
 
 // Helper function to verify JWT token
@@ -102,7 +103,7 @@ export default async function handler(req, res) {
     // Verify token with Firebase
     let decodedToken;
     try {
-      decodedToken = await auth.verifyIdToken(token);
+      decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     } catch (error) {
       console.error('Token verification failed:', error.message);
       return res.status(401).json({
@@ -112,7 +113,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const userId = decodedToken.uid;
+    const userId = decodedToken.userId;
 
     if (req.method === 'POST') {
       // POST: Log a new trigger
