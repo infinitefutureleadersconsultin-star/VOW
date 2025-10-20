@@ -208,7 +208,7 @@ function Step({ number, title, description }) {
       </div>
       <div>
         <h4 className="font-medium awareness-text mb-1">{title}</h4>
-        <p className="text-sm observation-text">{description}</p>
+        <p className="text-sm observation-text text-gray-600">{description}</p>
       </div>
     </div>
   );
@@ -219,7 +219,7 @@ function ConceptCard({ icon, title, description }) {
     <div className="separation-card rounded-xl p-6 text-center">
       <div className="text-4xl mb-3">{icon}</div>
       <h4 className="font-medium awareness-text mb-2">{title}</h4>
-      <p className="text-sm observation-text">{description}</p>
+      <p className="text-sm observation-text text-gray-600">{description}</p>
     </div>
   );
 }

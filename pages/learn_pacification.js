@@ -63,7 +63,7 @@ function PacificationContent() {
           <p className="observation-text mb-4 text-lg">
             The moment you stop fighting yourself, you begin to change.
           </p>
-          <p className="observation-text">
+          <p className="observation-text text-gray-600">
             This seems backwards. How can acceptance lead to transformation? 
             Because fighting a pattern gives it power. Observing it creates distance. 
             Distance creates choice. Choice creates freedom.

@@ -63,7 +63,7 @@ function IntegrationContent() {
           <p className="observation-text mb-4 text-lg">
             You are not choosing one self over another. You are merging both into a unified whole.
           </p>
-          <p className="observation-text">
+          <p className="observation-text text-gray-600">
             Integration is not forgetting who you became. It's recognizing that both versions—
             who you were before trauma and who you became through it—can exist as one.
           </p>
@@ -203,7 +203,7 @@ function IntegrationContent() {
             ].map((sign, i) => (
               <div key={i} className="flex items-start space-x-2 p-3 rounded-lg bg-teal-50">
                 <span className="text-teal-600">✓</span>
-                <span className="text-sm observation-text">{sign}</span>
+                <span className="text-sm observation-text text-gray-600">{sign}</span>
               </div>
             ))}
           </div>
@@ -255,7 +255,7 @@ function SelfCard({ icon, color, title, subtitle, description, example }) {
       <div className="flex items-center space-x-3 mb-3">
         <div className="text-4xl">{icon}</div>
         <div>
-          <h4 className="text-xl font-bold awareness-text">{title}</h4>
+          <h4 className="text-xl font-bold awareness-text text-gray-900">{title}</h4>
           <p className="text-sm" style={{ color }}>{subtitle}</p>
         </div>
       </div>
@@ -315,7 +315,7 @@ function PracticeCard({ icon, title, description }) {
       <div className="text-2xl">{icon}</div>
       <div>
         <h4 className="font-bold awareness-text mb-1">{title}</h4>
-        <p className="text-sm observation-text">{description}</p>
+        <p className="text-sm observation-text text-gray-600">{description}</p>
       </div>
     </div>
   );

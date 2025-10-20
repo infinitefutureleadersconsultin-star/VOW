@@ -63,7 +63,7 @@ function ConfrontationContent() {
           <p className="observation-text mb-4 text-lg">
             After observing a pattern without judgment, you're ready to ask: Why does this exist?
           </p>
-          <p className="observation-text">
+          <p className="observation-text text-gray-600">
             Confrontation is not aggressive. It's gentle investigation. You're not attacking yourself—
             you're seeking to understand the origin of behaviors that once protected you.
           </p>
@@ -236,7 +236,7 @@ function PracticeStep({ icon, title, description }) {
       <div className="text-2xl">{icon}</div>
       <div>
         <h4 className="font-bold awareness-text mb-1">{title}</h4>
-        <p className="text-sm observation-text">{description}</p>
+        <p className="text-sm observation-text text-gray-600">{description}</p>
       </div>
     </div>
   );

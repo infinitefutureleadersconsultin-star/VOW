@@ -158,7 +158,7 @@ function PrinciplesContent() {
             <Arrow />
             <JourneyStep icon="⚖️" label="Balance" color="#9370DB" />
           </div>
-          <p className="text-center observation-text">
+          <p className="text-center observation-text text-gray-600">
             This is not a linear path. You may revisit stages as you grow. 
             Each principle supports the others in your healing.
           </p>
@@ -210,7 +210,7 @@ function PrincipleSection({ principle, index, onLearnMore }) {
           {principle.keyInsights.map((insight, i) => (
             <div key={i} className="flex items-start space-x-2">
               <span style={{ color: principle.color }}>•</span>
-              <span className="text-sm observation-text">{insight}</span>
+              <span className="text-sm observation-text text-gray-600">{insight}</span>
             </div>
           ))}
         </div>
@@ -250,13 +250,13 @@ function JourneyStep({ icon, label, color }) {
       >
         {icon}
       </div>
-      <div className="text-xs font-medium observation-text">{label}</div>
+      <div className="text-xs font-medium observation-text text-gray-600">{label}</div>
     </div>
   );
 }
 
 function Arrow() {
   return (
-    <div className="text-2xl observation-text">→</div>
+    <div className="text-2xl observation-text text-gray-600">→</div>
   );
 }
