@@ -317,7 +317,7 @@ export default function LogTrigger() {
                   value={trigger.location}
                   onChange={(e) => handleInputChange('location', e.target.value)}
                   placeholder="Home, work, social event..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                  className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
                   maxLength={100}
                 />
               </div>
@@ -331,7 +331,7 @@ export default function LogTrigger() {
                   value={trigger.context}
                   onChange={(e) => handleInputChange('context', e.target.value)}
                   placeholder="I was triggered when..."
-                  className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
+                  className="w-full text-gray-900 h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
                   maxLength={500}
                   required
                 />
@@ -348,7 +348,7 @@ export default function LogTrigger() {
                 <select
                   value={trigger.emotion}
                   onChange={(e) => handleInputChange('emotion', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                  className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
                   required
                 >
                   <option value="">Select an emotion...</option>
@@ -398,7 +398,7 @@ export default function LogTrigger() {
                   value={trigger.notes}
                   onChange={(e) => handleInputChange('notes', e.target.value)}
                   placeholder="Any other observations..."
-                  className="w-full h-24 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
+                  className="w-full text-gray-900 h-24 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
                   maxLength={300}
                 />
               </div>
