@@ -119,7 +119,7 @@ function PacificationContent() {
               number="1"
               title="Notice the Pattern"
               description="When a familiar behavior arises, pause. Simply notice it."
-              example='"I notice I'm reaching for my phone when I feel anxious."'
+              example="I notice I'm reaching for my phone when I feel anxious."
             />
             <PracticeStep
               number="2"
