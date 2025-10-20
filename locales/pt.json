@@ -1,0 +1,46 @@
+{
+  "nav": {
+    "dashboard": "Painel",
+    "createVow": "Criar Voto",
+    "reflect": "Refletir",
+    "learn": "Aprender",
+    "progress": "Progresso",
+    "settings": "Configurações"
+  },
+  "dashboard": {
+    "welcome": "Bem-vindo de volta",
+    "yourVow": "Seu Voto Hoje",
+    "createFirst": "Crie seu primeiro voto",
+    "streak": "Dias Seguidos",
+    "reflection": "Reflexões",
+    "triggers": "Gatilhos Registrados"
+  },
+  "vow": {
+    "title": "Crie Seu Voto Diário",
+    "subtitle": "Lembre-se de quem você é além do que aconteceu com você",
+    "placeholder": "Eu juro lembrar...",
+    "submit": "Criar Voto",
+    "success": "Voto criado com sucesso!"
+  },
+  "reflection": {
+    "title": "Reflexão Diária",
+    "pacification": "Pacificação: Aceitar",
+    "confrontation": "Confrontação: Entender",
+    "integration": "Integração: Tornar-se Completo",
+    "submit": "Salvar Reflexão",
+    "success": "Reflexão salva com sucesso!"
+  },
+  "learn": {
+    "title": "Aprender Teoria VOW",
+    "principles": "Os Três Princípios",
+    "dailyLaw": "A Lei Diária da Lembrança"
+  },
+  "common": {
+    "back": "Voltar",
+    "next": "Próximo",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "loading": "Carregando...",
+    "logout": "Sair"
+  }
+}

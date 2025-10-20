@@ -1,4 +1,5 @@
 import '../styles/globals.css';
+import { LanguageProvider } from '../lib/translations';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import UnlockAnimation from '../components/UnlockAnimation';
@@ -36,5 +37,5 @@ export default function App({ Component, pageProps }) {
     return <UnlockAnimation onComplete={handleAnimationComplete} />;
   }
 
-  return <Component {...pageProps} />;
+  return <LanguageProvider><Component {...pageProps} /></LanguageProvider>;
 }

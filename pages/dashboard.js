@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import WelcomeVideo from '../components/WelcomeVideo';
+import { hasSeenWelcomeVideo } from '../lib/welcomeVideos';
 import LoadingSpinner from '../components/LoadingSpinner';
 import AlignmentIndex from '../components/AlignmentIndex';
 import ProfileAvatar from '../components/ProfileAvatar';
@@ -14,6 +16,7 @@ import { ScrollText, Sparkles, Activity, User, AlertCircle, Sun, Moon } from 'lu
 export default function Dashboard() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [showWelcomeVideo, setShowWelcomeVideo] = useState(false);
   const [userData, setUserData] = useState(null);
   const [stats, setStats] = useState(null);
   const [vows, setVows] = useState([]);  const [error, setError] = useState(null);

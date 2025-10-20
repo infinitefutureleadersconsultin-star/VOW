@@ -1,0 +1,46 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "createVow": "Create Vow",
+    "reflect": "Reflect",
+    "learn": "Learn",
+    "progress": "Progress",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "yourVow": "Your Vow Today",
+    "createFirst": "Create your first vow",
+    "streak": "Day Streak",
+    "reflection": "Reflections",
+    "triggers": "Triggers Logged"
+  },
+  "vow": {
+    "title": "Create Your Daily Vow",
+    "subtitle": "Remember who you are beyond what happened to you",
+    "placeholder": "I vow to remember...",
+    "submit": "Create Vow",
+    "success": "Vow created successfully!"
+  },
+  "reflection": {
+    "title": "Daily Reflection",
+    "pacification": "Pacification: Accept",
+    "confrontation": "Confrontation: Understand",
+    "integration": "Integration: Become Whole",
+    "submit": "Save Reflection",
+    "success": "Reflection saved successfully!"
+  },
+  "learn": {
+    "title": "Learn VOW Theory",
+    "principles": "The Three Principles",
+    "dailyLaw": "The Daily Law of Remembrance"
+  },
+  "common": {
+    "back": "Back",
+    "next": "Next",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "logout": "Logout"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "nav": {
+    "dashboard": "Tableau de Bord",
+    "createVow": "Créer un Vœu",
+    "reflect": "Réfléchir",
+    "learn": "Apprendre",
+    "progress": "Progrès",
+    "settings": "Paramètres"
+  },
+  "dashboard": {
+    "welcome": "Bon retour",
+    "yourVow": "Votre Vœu Aujourd'hui",
+    "createFirst": "Créez votre premier vœu",
+    "streak": "Jours Consécutifs",
+    "reflection": "Réflexions",
+    "triggers": "Déclencheurs Enregistrés"
+  },
+  "vow": {
+    "title": "Créez Votre Vœu Quotidien",
+    "subtitle": "Rappelez-vous qui vous êtes au-delà de ce qui vous est arrivé",
+    "placeholder": "Je jure de me souvenir...",
+    "submit": "Créer un Vœu",
+    "success": "Vœu créé avec succès!"
+  },
+  "reflection": {
+    "title": "Réflexion Quotidienne",
+    "pacification": "Pacification: Accepter",
+    "confrontation": "Confrontation: Comprendre",
+    "integration": "Intégration: Devenir Entier",
+    "submit": "Sauvegarder la Réflexion",
+    "success": "Réflexion sauvegardée avec succès!"
+  },
+  "learn": {
+    "title": "Apprendre la Théorie VOW",
+    "principles": "Les Trois Principes",
+    "dailyLaw": "La Loi Quotidienne du Souvenir"
+  },
+  "common": {
+    "back": "Retour",
+    "next": "Suivant",
+    "save": "Sauvegarder",
+    "cancel": "Annuler",
+    "loading": "Chargement...",
+    "logout": "Déconnexion"
+  }
+}
