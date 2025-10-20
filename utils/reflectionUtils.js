@@ -1,335 +1,224 @@
 /**
- * Reflection Utilities
- * Client-side helper functions for reflection management
+ * Reflection utility functions
+ * Maps stages to prompts and principles (VOW Theory)
  */
 
-// Validate reflection data
-export const validateReflection = (reflection) => {
-  const errors = [];
+/**
+ * VOW Theory Stages
+ */
+export const STAGES = {
+  pacification: {
+    name: 'Pacification',
+    title: 'Accept Without Fighting',
+    description: 'The first step is accepting what exists without battling it.',
+    color: '#90EE90',
+    icon: '🕊️',
+    principle: 'The Pacification Paradox™'
+  },
+  confrontation: {
+    name: 'Confrontation',
+    title: 'Face the Truth',
+    description: 'Now you stand before the why - not to fight, but to understand.',
+    color: '#C6A664',
+    icon: '🔍',
+    principle: 'The Confrontational Model™'
+  },
+  integration: {
+    name: 'Integration',
+    title: 'Become Whole',
+    description: 'Merge who you were before with who you\'ve become through awareness.',
+    color: '#5FD3A5',
+    icon: '✨',
+    principle: 'The Integration Cycle™'
+  }
+};
 
-  if (!reflection.vowAlignment || reflection.vowAlignment.trim().length < 10) {
-    errors.push('Vow alignment must be at least 10 characters');
+/**
+ * Get stage prompts
+ */
+export function getStagePrompts(stage) {
+  const prompts = {
+    pacification: [
+      'What behavior or pattern are you observing today?',
+      'Can you accept that this existed without judging yourself?',
+      'What would it feel like to sit with this without fighting it?',
+      'How has avoiding this pattern kept you safe until now?'
+    ],
+    confrontation: [
+      'When did this pattern first begin?',
+      'What emotion or experience created this coping mechanism?',
+      'Can you see the difference between the pattern and your true self?',
+      'What was this behavior protecting you from?'
+    ],
+    integration: [
+      'Who were you before this pattern took hold?',
+      'Who have you become through this awareness?',
+      'How can these two versions of you exist as one?',
+      'What truth about yourself can you now remember?'
+    ]
+  };
+
+  return prompts[stage] || [];
+}
+
+/**
+ * Get random prompt for stage
+ */
+export function getRandomPrompt(stage) {
+  const prompts = getStagePrompts(stage);
+  return prompts[Math.floor(Math.random() * prompts.length)];
+}
+
+/**
+ * Get reflection template
+ */
+export function getReflectionTemplate(stage) {
+  const templates = {
+    pacification: {
+      title: 'What am I observing today?',
+      placeholder: 'Today I noticed...',
+      guidingQuestion: 'Can you observe this without judgment?'
+    },
+    confrontation: {
+      title: 'What is this teaching me?',
+      placeholder: 'I realize that...',
+      guidingQuestion: 'What is the truth behind this pattern?'
+    },
+    integration: {
+      title: 'Who am I becoming?',
+      placeholder: 'I am remembering...',
+      guidingQuestion: 'How are you integrating this awareness?'
+    }
+  };
+
+  return templates[stage] || templates.pacification;
+}
+
+/**
+ * Analyze reflection text for stage alignment
+ */
+export function analyzeReflectionStage(text) {
+  const lowerText = text.toLowerCase();
+
+  // Keywords for each stage
+  const pacificationWords = ['observe', 'notice', 'accept', 'without judgment', 'sitting with', 'acknowledge'];
+  const confrontationWords = ['why', 'realize', 'understand', 'because', 'trauma', 'created', 'protecting'];
+  const integrationWords = ['remember', 'becoming', 'whole', 'merge', 'was before', 'who i am', 'identity'];
+
+  const pacificationScore = pacificationWords.filter(w => lowerText.includes(w)).length;
+  const confrontationScore = confrontationWords.filter(w => lowerText.includes(w)).length;
+  const integrationScore = integrationWords.filter(w => lowerText.includes(w)).length;
+
+  if (integrationScore >= confrontationScore && integrationScore >= pacificationScore) {
+    return 'integration';
+  }
+  if (confrontationScore >= pacificationScore) {
+    return 'confrontation';
+  }
+  return 'pacification';
+}
+
+/**
+ * Get next suggested stage
+ */
+export function getNextStage(currentStage) {
+  const sequence = ['pacification', 'confrontation', 'integration'];
+  const currentIndex = sequence.indexOf(currentStage);
+  
+  if (currentIndex === -1 || currentIndex === sequence.length - 1) {
+    return 'pacification'; // Loop back
+  }
+  
+  return sequence[currentIndex + 1];
+}
+
+/**
+ * Get stage progress
+ */
+export function getStageProgress(reflections) {
+  if (!reflections || reflections.length === 0) {
+    return { current: 'pacification', percentage: 0 };
   }
 
-  if (!reflection.emotionalState) {
-    errors.push('Emotional state is required');
+  const stages = reflections.map(r => r.stage || 'pacification');
+  const latestStage = stages[0];
+  
+  const stageOrder = { pacification: 1, confrontation: 2, integration: 3 };
+  const progress = (stageOrder[latestStage] / 3) * 100;
+
+  return {
+    current: latestStage,
+    percentage: Math.round(progress),
+    reflectionsCount: reflections.length
+  };
+}
+
+/**
+ * Get stage insights
+ */
+export function getStageInsights(stage, reflectionCount) {
+  const insights = {
+    pacification: {
+      beginner: 'You\'re learning to observe without judgment. This is the foundation.',
+      intermediate: 'You\'re becoming comfortable with awareness. Keep observing.',
+      advanced: 'You\'ve mastered acceptance. Ready to understand the why?'
+    },
+    confrontation: {
+      beginner: 'Facing the truth takes courage. You\'re doing important work.',
+      intermediate: 'You\'re connecting patterns to their origins. This is healing.',
+      advanced: 'You understand the why. Now you can integrate.'
+    },
+    integration: {
+      beginner: 'You\'re beginning to see yourself as whole. Keep remembering.',
+      intermediate: 'You\'re merging awareness with identity. This is transformation.',
+      advanced: 'You\'re living as your integrated self. This is mastery.'
+    }
+  };
+
+  let level = 'beginner';
+  if (reflectionCount > 20) level = 'advanced';
+  else if (reflectionCount > 10) level = 'intermediate';
+
+  return insights[stage]?.[level] || 'Keep reflecting. You\'re on the path.';
+}
+
+/**
+ * Validate reflection
+ */
+export function validateReflection(reflection) {
+  const errors = [];
+
+  if (!reflection.text || reflection.text.length < 20) {
+    errors.push('Reflection should be at least 20 characters');
+  }
+
+  if (!reflection.stage) {
+    errors.push('Stage is required');
   }
 
   return {
     valid: errors.length === 0,
     errors
   };
-};
+}
 
-// Get reflection prompt based on principle
-export const getReflectionPrompt = (principle) => {
-  const prompts = {
-    'pacification': {
-      title: 'Pacification: Accept Without Combat',
-      questions: [
-        'What urges or patterns did you observe today?',
-        'How did you respond with acceptance rather than resistance?',
-        'What emotions arose, and how did you name them?'
-      ],
-      guidance: 'Remember: Healing begins with peaceful observation, not battle.'
-    },
-    'confrontation': {
-      title: 'Confrontation: Trace the Root',
-      questions: [
-        'What triggered this pattern or behavior?',
-        'When did this pattern first begin in your life?',
-        'What were you trying to protect yourself from?'
-      ],
-      guidance: 'Awareness before avoidance. Face the origin with compassion.'
-    },
-    'integration': {
-      title: 'Integration: Becoming Whole',
-      questions: [
-        'How did you honor your vow today?',
-        'What parts of your "before" and "becoming" self merged today?',
-        'What progress did you notice in embodying your vow?'
-      ],
-      guidance: 'Integration happens naturally through remembrance and awareness.'
-    }
-  };
-
-  return prompts[principle] || prompts['integration'];
-};
-
-// Calculate reflection streak
-export const calculateReflectionStreak = (reflections) => {
-  if (!reflections || !Array.isArray(reflections) || reflections.length === 0) {
-    return 0;
+/**
+ * Get reflection statistics
+ */
+export function getReflectionStats(reflections) {
+  if (!reflections || reflections.length === 0) {
+    return { total: 0, byStage: {} };
   }
 
-  // Sort by date descending
-  const sorted = [...reflections].sort((a, b) => 
-    new Date(b.date) - new Date(a.date)
-  );
-
-  let streak = 0;
-  let currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
-
-  for (const reflection of sorted) {
-    const reflectionDate = new Date(reflection.date);
-    reflectionDate.setHours(0, 0, 0, 0);
-
-    const daysDiff = Math.floor((currentDate - reflectionDate) / (1000 * 60 * 60 * 24));
-
-    if (daysDiff === streak) {
-      streak++;
-    } else if (daysDiff > streak) {
-      break;
-    }
-  }
-
-  return streak;
-};
-
-// Get reflection frequency (reflections per week)
-export const getReflectionFrequency = (reflections, weeks = 4) => {
-  if (!reflections || !Array.isArray(reflections)) return 0;
-
-  const cutoffDate = new Date();
-  cutoffDate.setDate(cutoffDate.getDate() - (weeks * 7));
-
-  const recentReflections = reflections.filter(r => 
-    new Date(r.timestamp) >= cutoffDate
-  );
-
-  return (recentReflections.length / weeks).toFixed(1);
-};
-
-// Analyze reflection sentiment
-export const analyzeReflectionSentiment = (reflection) => {
-  if (!reflection || !reflection.emotionalState) {
-    return { sentiment: 'neutral', score: 50 };
-  }
-
-  const positiveEmotions = ['peaceful', 'strong', 'grateful', 'hopeful', 'confident', 'proud'];
-  const negativeEmotions = ['challenged', 'uncertain', 'overwhelmed', 'frustrated', 'anxious', 'sad'];
-
-  const emotion = reflection.emotionalState.toLowerCase();
-
-  if (positiveEmotions.includes(emotion)) {
-    return { sentiment: 'positive', score: 75 };
-  }
-
-  if (negativeEmotions.includes(emotion)) {
-    return { sentiment: 'negative', score: 25 };
-  }
-
-  return { sentiment: 'neutral', score: 50 };
-};
-
-// Get reflection insights
-export const getReflectionInsights = (reflections) => {
-  if (!reflections || !Array.isArray(reflections) || reflections.length === 0) {
-    return {
-      total: 0,
-      streak: 0,
-      frequency: 0,
-      avgSentiment: 50,
-      mostCommonEmotion: null,
-      growthIndicators: []
-    };
-  }
-
-  const total = reflections.length;
-  const streak = calculateReflectionStreak(reflections);
-  const frequency = getReflectionFrequency(reflections);
-
-  // Calculate average sentiment
-  const sentiments = reflections.map(r => analyzeReflectionSentiment(r).score);
-  const avgSentiment = sentiments.reduce((a, b) => a + b, 0) / sentiments.length;
-
-  // Find most common emotion
-  const emotionCounts = reflections.reduce((acc, r) => {
-    const emotion = r.emotionalState;
-    acc[emotion] = (acc[emotion] || 0) + 1;
+  const byStage = reflections.reduce((acc, r) => {
+    const stage = r.stage || 'pacification';
+    acc[stage] = (acc[stage] || 0) + 1;
     return acc;
   }, {});
 
-  const mostCommonEmotion = Object.entries(emotionCounts)
-    .sort((a, b) => b[1] - a[1])[0]?.[0] || null;
-
-  // Detect growth indicators
-  const growthIndicators = [];
-  
-  if (streak >= 7) {
-    growthIndicators.push('Consistent reflection practice');
-  }
-  
-  if (frequency >= 5) {
-    growthIndicators.push('High reflection frequency');
-  }
-  
-  if (avgSentiment > 60) {
-    growthIndicators.push('Positive emotional trajectory');
-  }
-
   return {
-    total,
-    streak,
-    frequency: parseFloat(frequency),
-    avgSentiment: Math.round(avgSentiment),
-    mostCommonEmotion,
-    growthIndicators
+    total: reflections.length,
+    byStage,
+    mostCommonStage: Object.keys(byStage).sort((a, b) => byStage[b] - byStage[a])[0]
   };
-};
-
-// Format reflection for display
-export const formatReflection = (reflection) => {
-  if (!reflection) return null;
-
-  return {
-    id: reflection.id,
-    date: reflection.date,
-    vowAlignment: reflection.vowAlignment,
-    emotionalState: reflection.emotionalState,
-    challenges: reflection.challenges || '',
-    insights: reflection.insights || '',
-    gratitude: reflection.gratitude || '',
-    tomorrowCommitment: reflection.tomorrowCommitment || '',
-    sentiment: analyzeReflectionSentiment(reflection),
-    timestamp: reflection.timestamp
-  };
-};
-
-// Get reflection summary
-export const getReflectionSummary = (reflection) => {
-  if (!reflection) return 'No reflection data';
-
-  const sentiment = analyzeReflectionSentiment(reflection);
-  const wordCount = (reflection.vowAlignment || '').split(' ').length;
-
-  return {
-    date: reflection.date,
-    emotion: reflection.emotionalState,
-    sentiment: sentiment.sentiment,
-    sentimentScore: sentiment.score,
-    wordCount,
-    hasChallenges: !!reflection.challenges,
-    hasInsights: !!reflection.insights,
-    hasGratitude: !!reflection.gratitude,
-    hasTomorrowPlan: !!reflection.tomorrowCommitment
-  };
-};
-
-// Check if reflection is complete
-export const isReflectionComplete = (reflection) => {
-  if (!reflection) return false;
-
-  return !!(
-    reflection.vowAlignment &&
-    reflection.emotionalState &&
-    reflection.vowAlignment.trim().length >= 10
-  );
-};
-
-// Get reflection completeness percentage
-export const getReflectionCompleteness = (reflection) => {
-  if (!reflection) return 0;
-
-  const fields = [
-    reflection.vowAlignment,
-    reflection.emotionalState,
-    reflection.challenges,
-    reflection.insights,
-    reflection.gratitude,
-    reflection.tomorrowCommitment
-  ];
-
-  const completed = fields.filter(f => f && f.trim().length > 0).length;
-  return Math.round((completed / fields.length) * 100);
-};
-
-// Sort reflections by date
-export const sortReflectionsByDate = (reflections, order = 'desc') => {
-  if (!reflections || !Array.isArray(reflections)) return [];
-
-  return [...reflections].sort((a, b) => {
-    const dateA = new Date(a.timestamp || a.date);
-    const dateB = new Date(b.timestamp || b.date);
-
-    return order === 'desc' ? dateB - dateA : dateA - dateB;
-  });
-};
-
-// Filter reflections by date range
-export const filterReflectionsByDateRange = (reflections, startDate, endDate) => {
-  if (!reflections || !Array.isArray(reflections)) return [];
-
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-
-  return reflections.filter(r => {
-    const reflectionDate = new Date(r.date || r.timestamp);
-    return reflectionDate >= start && reflectionDate <= end;
-  });
-};
-
-// Get reflection trends (last 30 days)
-export const getReflectionTrends = (reflections) => {
-  if (!reflections || !Array.isArray(reflections)) {
-    return { trend: 'stable', change: 0, message: 'No data available' };
-  }
-
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-  const recent = reflections.filter(r => 
-    new Date(r.timestamp) >= thirtyDaysAgo
-  );
-
-  if (recent.length < 2) {
-    return { trend: 'insufficient', change: 0, message: 'Need more reflections to show trend' };
-  }
-
-  // Split into two halves
-  const midpoint = Math.floor(recent.length / 2);
-  const firstHalf = recent.slice(0, midpoint);
-  const secondHalf = recent.slice(midpoint);
-
-  // Calculate average sentiment for each half
-  const firstAvg = firstHalf.reduce((sum, r) => 
-    sum + analyzeReflectionSentiment(r).score, 0
-  ) / firstHalf.length;
-
-  const secondAvg = secondHalf.reduce((sum, r) => 
-    sum + analyzeReflectionSentiment(r).score, 0
-  ) / secondHalf.length;
-
-  const change = secondAvg - firstAvg;
-
-  let trend = 'stable';
-  let message = 'Your emotional state is steady';
-
-  if (change > 10) {
-    trend = 'improving';
-    message = 'Your emotional state is improving! 📈';
-  } else if (change < -10) {
-    trend = 'declining';
-    message = 'Consider reaching out for support';
-  }
-
-  return { trend, change: Math.round(change), message };
-};
-
-// Export all functions
-export default {
-  validateReflection,
-  getReflectionPrompt,
-  calculateReflectionStreak,
-  getReflectionFrequency,
-  analyzeReflectionSentiment,
-  getReflectionInsights,
-  formatReflection,
-  getReflectionSummary,
-  isReflectionComplete,
-  getReflectionCompleteness,
-  sortReflectionsByDate,
-  filterReflectionsByDateRange,
-  getReflectionTrends
-};
+}

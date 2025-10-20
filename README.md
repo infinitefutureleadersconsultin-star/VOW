@@ -1,107 +1,324 @@
-# VOW - Law of Daily Remembrance
+# VOW Theory - Daily Remembrance Platform
 
-> "Remember who you said you'd be."
+A transformative web application that helps users remember their authentic selves through daily vows, reflections, and AI-powered insights.
 
-A revolutionary app that transforms healing from warfare to remembrance. Built on the VOW Theory by Issiah Deon McLean, this app helps users honor personal vows through daily conscious awareness, not combat.
+## 🌟 Overview
 
----
+VOW Theory is built on the **Law of Daily Remembrance™**: transformation happens through consistency, not intensity. Every day you remember who you are, you strengthen the neural pathways of authenticity.
 
-## 🧠 What is VOW?
+### The Three Principles
 
-VOW operationalizes the **Law of Daily Remembrance**: healing is not a battle against addiction, procrastination, or unhealthy habits—it is the restoration of identity through daily, conscious remembrance of a personal vow.
+1. **The Pacification Paradox™** - Accept without fighting
+2. **The Confrontational Model™** - Face the truth with compassion  
+3. **The Integration Cycle™** - Become whole again
 
-### The Vow Formula
-This simple structure anchors users to their identity and commitment, transforming behavior through observation and awareness rather than resistance.
-
----
-
-## ✨ Core Features
-
-### 🎯 Vow Management
-- Create personal vows using the proper structure
-- Dual identity view: "Who I Was" ↔ "Who I Am Becoming"
-- AI-powered analysis detects combat language and suggests reframing
-- Daily remembrance prompts and audio playback
-
-### 📊 Trigger Logging & Analytics
-- Log urges with emotions, intensity, location, and optional voice notes
-- Pattern detection identifies high-risk times and common triggers
-- Anticipatory notifications: gentle reminders before vulnerable moments
-- Resistance rate tracking celebrates awareness over perfection
-
-### 🧩 Memory Linking & Trauma Detection
-- Connect current triggers to past memories
-- Automatic detection of 20+ trauma markers
-- Professional support referrals when needed (SAMHSA, Crisis Text Line)
-- Pattern analysis reveals emotional themes and timeframes
-
-### 💳 Progressive Pricing & Trial Psychology
-- **2-Day "Opening Vow" Trial** (not called "trial" in UX)
-- **Progressive pricing**: $4.99 → $9.99 → $14.99 based on stage
-- Stripe integration with completion bias messaging
-- Trial countdown as "Days of Becoming"
-
-### 🔔 Anticipatory Notifications
-- Time-based alerts: "You tend to notice urges around 9pm..."
-- Compassionate check-ins after slip-ups
-- Milestone celebrations (Promise Seals)
-- No shaming, only supportive guidance
-
-### 🌐 Progressive Web App (PWA)
-- Installable on mobile and desktop
-- Offline caching for core features
-- Push notifications with interactive actions
-- Background sync for trigger logs
-
----
-
-## 🏗️ Tech Stack
-
-### Frontend
-- **Next.js 13+** - React framework with server-side rendering
-- **React 18** - UI components with hooks
-- **Tailwind CSS** - Utility-first styling
-- **TypeScript** - Type safety (optional, configured)
-
-### Backend
-- **Next.js API Routes** - Serverless functions on Vercel
-- **Firebase Auth** - User authentication
-- **Firestore** - Real-time database
-- **Stripe** - Payment processing
-
-### Infrastructure
-- **Vercel** - Hosting and deployment
-- **Service Worker** - PWA features and push notifications
-- **Zod** - Schema validation
-
----
-
-## 🚀 Quick Start
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 16+ and npm
+
+- Node.js 16+ 
 - Firebase account
-- Stripe account
-- Vercel account (for deployment)
+- OpenAI API key (optional, for AI features)
 
 ### Installation
+
+1. Clone the repository:
 ```bash
-# 1. Clone or create project directory
-mkdir vow-app && cd vow-app
+git clone https://github.com/yourusername/vow-theory.git
+cd vow-theory
+```
 
-# 2. Install dependencies
+2. Install dependencies:
+```bash
 npm install
+```
 
-# 3. Copy environment variables
+3. Set up environment variables:
+```bash
 cp .env.example .env.local
+```
 
-# 4. Add your credentials to .env.local
-# - Firebase config
-# - Stripe keys
-# - JWT secret
+Edit `.env.local` with your credentials:
+- Firebase configuration
+- JWT secret
+- OpenAI API key (optional)
 
-# 5. Run development server
+4. Run the development server:
+```bash
 npm run dev
+```
 
-# 6. Open browser
-# Navigate to http://localhost:3000
+5. Open [http://localhost:3000](http://localhost:3000)
+
+## 📁 Project Structure
+```
+vow-theory/
+├── pages/              # Next.js pages & API routes
+│   ├── api/           # Backend API endpoints
+│   ├── index.js       # Landing page
+│   ├── dashboard.js   # Main dashboard
+│   ├── vow.js         # Vow management
+│   ├── reflection.js  # Daily reflections
+│   └── learn/         # Educational content
+├── components/        # React components
+│   ├── Layout.js      # App shell
+│   ├── charts/        # Data visualizations
+│   ├── cards/         # Principle cards
+│   └── ...
+├── lib/               # Core business logic
+│   ├── firebase.js    # Firebase config
+│   ├── openai.js      # AI integration
+│   ├── storage.js     # Local storage
+│   ├── patterns.js    # Pattern analysis
+│   └── ...
+├── utils/             # Utility functions
+│   ├── dateUtils.js   # Date helpers
+│   └── validation.js  # Form validation
+├── styles/            # Global styles
+│   └── globals.css    # Tailwind + custom CSS
+└── public/            # Static assets
+```
+
+## 🔑 Key Features
+
+### Core Functionality
+- ✅ User authentication (signup/login)
+- ✅ Daily vow creation and tracking
+- ✅ Reflection journaling with stages
+- ✅ Trigger logging and analysis
+- ✅ Streak tracking and recovery
+- ✅ Progress dashboard
+
+### AI Features (Optional)
+- 🤖 AI-powered vow insights
+- 🤖 Reflection analysis
+- 🤖 Pattern recognition
+- 🤖 Weekly summaries
+
+### User Experience
+- 📱 Responsive mobile design
+- 🎨 Beautiful, calming interface
+- 📊 Visual progress tracking
+- 🏆 Achievement system
+- 📈 Analytics and insights
+
+## 🔧 Configuration
+
+### Firebase Setup
+
+1. Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
+2. Enable Firestore Database
+3. Enable Authentication (Email/Password)
+4. Copy your config to `.env.local`
+
+### OpenAI Setup (Optional)
+
+1. Get API key from [platform.openai.com](https://platform.openai.com)
+2. Add to `.env.local` as `OPENAI_API_KEY`
+3. AI features will gracefully degrade if not configured
+
+## 📚 API Endpoints
+
+### Authentication
+- `POST /api/signup` - Create new account
+- `POST /api/login` - User login
+
+### User Data
+- `GET /api/userData` - Get user profile and stats
+- `PUT /api/updateUser` - Update user information
+- `DELETE /api/deleteAccount` - Delete account
+
+### Vows
+- `POST /api/createVow` - Create new vow
+- `GET /api/vow` - Get vow details
+- `PUT /api/vow` - Update vow
+- `DELETE /api/vow` - Delete vow
+- `POST /api/completeDay` - Mark day complete
+
+### Reflections
+- `POST /api/reflection` - Create reflection
+- `GET /api/reflections` - Get user reflections
+
+### AI Features
+- `POST /api/vowReflect` - Get AI insights
+
+### Export
+- `POST /api/export` - Export user data (JSON/CSV/TXT)
+
+## 🎨 Styling
+
+VOW Theory uses **Tailwind CSS** with custom color scheme:
+```css
+/* Brand Colors */
+Awareness (Gold): #C6A664
+Observation (Teal): #5FD3A5
+Separation (Orange): #B7791F
+Pacification (Green): #90EE90
+```
+
+Custom CSS classes:
+- `.awareness-text` - Gold text for key concepts
+- `.observation-text` - Gray text for descriptions
+- `.separation-card` - White card with shadow
+
+## 🧪 Testing
+```bash
+# Run tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+```
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+1. Push to GitHub
+2. Import project to Vercel
+3. Add environment variables
+4. Deploy
+
+### Other Platforms
+
+Works with any Node.js hosting:
+- Netlify
+- Railway
+- Render
+- AWS Amplify
+
+## 📖 Documentation
+
+### Core Concepts
+
+**Vow**: A daily commitment statement (e.g., "Today I am authentic")
+
+**Reflection**: Daily journal entry in one of three stages:
+- Pacification (observation)
+- Confrontation (understanding)
+- Integration (wholeness)
+
+**Trigger**: External event that activates old patterns
+
+**Streak**: Consecutive days of practice
+
+**Alignment Index**: Overall progress metric (0-100%)
+
+### Data Model
+```javascript
+// User
+{
+  userId: string,
+  email: string,
+  firstName: string,
+  lastName: string,
+  tier: 'trial' | 'seeker' | 'master',
+  stats: {
+    currentStreak: number,
+    longestStreak: number,
+    totalVows: number,
+    completedVows: number,
+    totalReflections: number
+  },
+  createdAt: timestamp
+}
+
+// Vow
+{
+  vowId: string,
+  userId: string,
+  statement: string,
+  category: string,
+  duration: number,
+  currentDay: number,
+  status: 'active' | 'completed' | 'abandoned',
+  createdAt: timestamp,
+  completedDays: string[]
+}
+
+// Reflection
+{
+  reflectionId: string,
+  userId: string,
+  vowId?: string,
+  text: string,
+  stage: 'pacification' | 'confrontation' | 'integration',
+  emotion?: string,
+  createdAt: timestamp
+}
+```
+
+## 🔐 Security
+
+- JWT authentication with secure tokens
+- Password hashing (handled by Firebase)
+- HTTPS required in production
+- Environment variables for secrets
+- Input validation on all forms
+- SQL injection prevention
+- XSS protection
+
+## 🤝 Contributing
+
+We welcome contributions! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## 📄 License
+
+Copyright © 2025 VOW Theory. All rights reserved.
+
+## 📞 Support
+
+- Email: support@vowtheory.com
+- Documentation: docs.vowtheory.com
+- Issues: GitHub Issues
+
+## 🙏 Acknowledgments
+
+Built with:
+- Next.js - React framework
+- Firebase - Backend & auth
+- Tailwind CSS - Styling
+- OpenAI - AI features
+- Vercel - Hosting
+
+## 🗺️ Roadmap
+
+### Phase 1 (Current)
+- ✅ Core vow and reflection system
+- ✅ User authentication
+- ✅ Basic AI insights
+- ✅ Progress tracking
+
+### Phase 2 (Coming Soon)
+- 🔄 Mobile apps (iOS/Android)
+- 🔄 Community features
+- 🔄 Advanced analytics
+- 🔄 Guided programs
+
+### Phase 3 (Future)
+- 📅 Group challenges
+- 📅 Therapist integration
+- 📅 API for third-party apps
+- 📅 Multi-language support
+
+## 💡 Philosophy
+
+VOW Theory is based on the principle that **you are not broken—you adapted**. Through daily remembrance, you can:
+
+1. **See** patterns without judgment (Pacification)
+2. **Understand** where they came from (Confrontation)  
+3. **Integrate** both selves into wholeness (Integration)
+
+Every day of practice matters. Consistency creates change.
+
+---
+
+**Remember**: You were whole before. You are becoming whole again.
+
+📿 **VOW Theory** - Daily Remembrance Creates Change

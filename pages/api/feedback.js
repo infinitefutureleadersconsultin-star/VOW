@@ -1,194 +1,139 @@
-import { db, auth } from '../../lib/firebase';
+/**
+ * Feedback API
+ * Handle user feedback and suggestions
+ */
 
-// Helper function to verify JWT token (optional for feedback)
-const verifyToken = (req) => {
-  const authHeader = req.headers.authorization;
-  
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return null; // Return null instead of throwing for feedback
-  }
-  
-  const token = authHeader.substring(7);
-  return token || null;
-};
-
-// Validate feedback data
-const validateFeedback = (feedback) => {
-  const errors = [];
-  
-  if (!feedback.type || !['bug', 'feature', 'improvement', 'question', 'other'].includes(feedback.type)) {
-    errors.push('Valid feedback type is required (bug, feature, improvement, question, other)');
-  }
-  
-  if (!feedback.message || typeof feedback.message !== 'string') {
-    errors.push('Message is required');
-  }
-  
-  if (feedback.message && feedback.message.length < 10) {
-    errors.push('Message must be at least 10 characters');
-  }
-  
-  if (feedback.message && feedback.message.length > 2000) {
-    errors.push('Message must be less than 2000 characters');
-  }
-  
-  if (feedback.email && typeof feedback.email === 'string') {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(feedback.email)) {
-      errors.push('Invalid email format');
-    }
-  }
-  
-  return errors;
-};
-
-// Log error helper
-const logError = (error, context, req) => {
-  console.error('[FEEDBACK_API_ERROR]', {
-    timestamp: new Date().toISOString(),
-    context,
-    method: req.method,
-    url: req.url,
-    message: error.message,
-    stack: error.stack,
-  });
-};
+import jwt from 'jsonwebtoken';
+import { db } from '../../lib/firebase';
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
   if (req.method !== 'POST') {
-    return res.status(405).json({
-      success: false,
-      error: 'Method not allowed',
-      code: 'METHOD_NOT_ALLOWED',
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    // Try to verify token (optional for feedback)
-    let userId = null;
-    let userEmail = null;
-    
-    const token = verifyToken(req);
-    
-    if (token) {
-      try {
-        const decodedToken = await auth.verifyIdToken(token);
-        userId = decodedToken.uid;
-        userEmail = decodedToken.email;
-      } catch (error) {
-        console.warn('Token verification failed, proceeding as anonymous feedback');
-        // Continue anyway - feedback can be anonymous
-      }
+    // Verify authentication
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const { feedback } = req.body;
+    const token = authHeader.substring(7);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken.userId;
 
-    if (!feedback) {
-      return res.status(400).json({
-        success: false,
-        error: 'Feedback data is required',
-        code: 'MISSING_DATA',
+    const { type, message, rating, feature, context } = req.body;
+
+    // Validate input
+    if (!type || !message) {
+      return res.status(400).json({ 
+        error: 'Type and message are required' 
       });
     }
 
-    // Validate feedback
-    const validationErrors = validateFeedback(feedback);
-    if (validationErrors.length > 0) {
-      return res.status(400).json({
-        success: false,
-        error: 'Validation failed',
-        code: 'VALIDATION_ERROR',
-        errors: validationErrors,
+    // Valid feedback types
+    const validTypes = ['bug', 'feature', 'improvement', 'general', 'complaint', 'praise'];
+    if (!validTypes.includes(type)) {
+      return res.status(400).json({ 
+        error: 'Invalid feedback type',
+        validTypes 
       });
     }
 
-    // Prepare feedback document
+    // Create feedback document
     const feedbackData = {
-      type: feedback.type,
-      message: feedback.message.trim(),
-      email: feedback.email?.trim() || userEmail || null,
-      userId: userId || null,
-      url: feedback.url || null,
-      userAgent: req.headers['user-agent'] || null,
-      device: feedback.device || null,
-      priority: feedback.priority || 'normal',
+      userId,
+      type,
+      message: message.trim(),
+      rating: rating || null,
+      feature: feature || null,
+      context: context || null,
       status: 'new',
       createdAt: new Date().toISOString(),
+      resolved: false
     };
-
-    // Additional metadata for bugs
-    if (feedback.type === 'bug') {
-      feedbackData.severity = feedback.severity || 'medium';
-      feedbackData.reproducible = feedback.reproducible || false;
-      feedbackData.steps = feedback.steps || null;
-    }
 
     // Save to Firestore
     const feedbackRef = await db.collection('feedback').add(feedbackData);
-    const feedbackId = feedbackRef.id;
 
-    // Log success
-    console.log('[FEEDBACK_RECEIVED]', {
-      timestamp: new Date().toISOString(),
-      feedbackId,
-      type: feedbackData.type,
-      userId: userId || 'anonymous',
-    });
-
-    // Send notification for high priority feedback
-    if (feedback.priority === 'high' || feedback.type === 'bug') {
-      console.log('[HIGH_PRIORITY_FEEDBACK]', {
-        feedbackId,
-        type: feedback.type,
-        priority: feedback.priority,
-        message: feedback.message.substring(0, 100),
-      });
+    // Update user's feedback count
+    try {
+      const userRef = db.collection('users').doc(userId);
+      const userDoc = await userRef.get();
       
-      // TODO: Send email notification to support team
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        await userRef.update({
+          feedbackCount: (userData.feedbackCount || 0) + 1,
+          lastFeedbackAt: new Date().toISOString()
+        });
+      }
+    } catch (error) {
+      console.warn('[Feedback] Failed to update user feedback count:', error.message);
     }
 
-    return res.status(201).json({
+    console.log('[FEEDBACK_SUBMITTED]', {
+      timestamp: new Date().toISOString(),
+      userId,
+      feedbackId: feedbackRef.id,
+      type
+    });
+
+    return res.status(200).json({
       success: true,
-      message: 'Thank you for your feedback! We\'ll review it shortly.',
-      data: {
-        feedbackId,
-        type: feedbackData.type,
-      },
+      message: 'Thank you for your feedback!',
+      feedbackId: feedbackRef.id
     });
 
   } catch (error) {
-    logError(error, 'FEEDBACK_SUBMIT', req);
-
-    // Handle specific error types
-    if (error.code === 'permission-denied') {
-      return res.status(403).json({
-        success: false,
-        error: 'Permission denied',
-        code: 'PERMISSION_DENIED',
-      });
+    console.error('[FEEDBACK_ERROR]', error);
+    
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ error: 'Invalid token' });
     }
 
-    if (error.code === 'unavailable') {
-      return res.status(503).json({
-        success: false,
-        error: 'Service temporarily unavailable. Please try again.',
-        code: 'SERVICE_UNAVAILABLE',
-      });
+    return res.status(500).json({ 
+      error: 'Failed to submit feedback',
+      message: error.message 
+    });
+  }
+}
+
+/**
+ * Get user's feedback history
+ */
+export async function getUserFeedback(req, res) {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    return res.status(500).json({
-      success: false,
-      error: 'Failed to submit feedback. Please try again.',
-      code: 'INTERNAL_ERROR',
+    const token = authHeader.substring(7);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken.userId;
+
+    const feedbackSnapshot = await db
+      .collection('feedback')
+      .where('userId', '==', userId)
+      .orderBy('createdAt', 'desc')
+      .limit(20)
+      .get();
+
+    const feedback = feedbackSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    return res.status(200).json({
+      success: true,
+      feedback
+    });
+
+  } catch (error) {
+    console.error('[GET_FEEDBACK_ERROR]', error);
+    return res.status(500).json({ 
+      error: 'Failed to fetch feedback' 
     });
   }
 }

@@ -1,0 +1,36 @@
+Add this to pages/dashboard.js:
+
+1. Add vows state at the top (around line 20):
+const [vows, setVows] = useState([]);
+
+2. Add vow fetching to fetchUserData function (after setStats):
+// Fetch vows
+const vowsResponse = await fetch('/api/vows', {
+  headers: {
+    'Authorization': `Bearer ${token}`,
+  },
+});
+if (vowsResponse.ok) {
+  const vowsData = await vowsResponse.json();
+  setVows(vowsData.vows || []);
+}
+
+3. Add vow display section (after Quick Actions, before closing main tag):
+{/* Active Vows */}
+{vows.length > 0 && (
+  <div className="mt-8 separation-card rounded-xl p-6">
+    <h3 className="awareness-text font-medium mb-4">Your Active Vows</h3>
+    <div className="space-y-4">
+      {vows.map((vow) => (
+        <div key={vow.id} className="p-4 rounded-lg" style={{ background: 'var(--bg-primary)' }}>
+          <p className="awareness-text font-medium mb-2">{vow.statement}</p>
+          <div className="flex items-center space-x-4 observation-text text-sm">
+            <span>📅 {vow.duration} days</span>
+            <span>📂 {vow.category}</span>
+            <span>Day {vow.currentDay || 0}/{vow.duration}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}

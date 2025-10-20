@@ -1,200 +1,194 @@
-export default function ProgressTracker({ 
-  stats = {}, 
-  variant = 'card',
-  showDetails = true 
-}) {
-  const {
-    totalVows = 0,
-    currentStreak = 0,
-    longestStreak = 0,
-    totalReflections = 0,
-    alignmentScore = 0
-  } = stats;
+/**
+ * Progress Tracker Component
+ * Visual display of streaks, progress, and achievements
+ */
 
-  // Calculate progress percentage for alignment
-  const alignmentPercentage = Math.min(Math.max(alignmentScore, 0), 100);
+import { useState, useEffect } from 'react';
+import { calculateStreak, formatDate } from '../utils/dateUtils';
+import { getStreakValue } from '../lib/streakRecovery';
+import { calculateVowProgress } from '../utils/vowUtils';
 
-  // Get alignment color based on score
-  const getAlignmentColor = (score) => {
-    if (score >= 80) return 'text-green-600 bg-green-100';
-    if (score >= 60) return 'text-amber-600 bg-amber-100';
-    if (score >= 40) return 'text-orange-600 bg-orange-100';
-    return 'text-red-600 bg-red-100';
-  };
+export default function ProgressTracker({ vow, reflections = [], stats = {} }) {
+  const [progress, setProgress] = useState(0);
+  const [streak, setStreak] = useState(0);
 
-  // Get alignment message
-  const getAlignmentMessage = (score) => {
-    if (score >= 80) return 'Excellent alignment! 🌟';
-    if (score >= 60) return 'Good progress 💪';
-    if (score >= 40) return 'Keep going 🚶';
-    return 'Start your journey 🌱';
-  };
+  useEffect(() => {
+    if (vow) {
+      setProgress(calculateVowProgress(vow));
+    }
+    
+    if (reflections.length > 0) {
+      const dates = reflections.map(r => r.createdAt);
+      setStreak(calculateStreak(dates));
+    } else if (stats.currentStreak !== undefined) {
+      setStreak(stats.currentStreak);
+    }
+  }, [vow, reflections, stats]);
 
-  const alignmentColor = getAlignmentColor(alignmentScore);
-  const alignmentMessage = getAlignmentMessage(alignmentScore);
+  const streakValue = getStreakValue(streak);
+  const daysRemaining = vow ? vow.duration - vow.currentDay : 0;
 
-  if (variant === 'compact') {
-    return (
-      <div className="flex items-center space-x-6 text-sm">
-        <div className="flex items-center space-x-2">
-          <span className="text-2xl">🔥</span>
-          <div>
-            <p className="font-medium text-gray-900">{currentStreak}</p>
-            <p className="text-xs text-gray-500">Day Streak</p>
-          </div>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <span className="text-2xl">📜</span>
-          <div>
-            <p className="font-medium text-gray-900">{totalVows}</p>
-            <p className="text-xs text-gray-500">Vows</p>
-          </div>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <span className="text-2xl">✨</span>
-          <div>
-            <p className="font-medium text-gray-900">{alignmentScore}%</p>
-            <p className="text-xs text-gray-500">Aligned</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (variant === 'inline') {
-    return (
-      <div className="flex items-center space-x-4 bg-gray-50 rounded-lg p-3">
-        <div className="text-center min-w-[60px]">
-          <p className="text-2xl font-light text-gray-900">{currentStreak}</p>
-          <p className="text-xs text-gray-600">days</p>
-        </div>
-        <div className="flex-1">
-          <div className="flex items-center justify-between mb-1">
-            <span className="text-sm font-medium text-gray-700">Alignment</span>
-            <span className="text-sm font-medium text-gray-900">{alignmentScore}%</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-gradient-to-r from-amber-500 to-amber-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${alignmentPercentage}%` }}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Default: card variant
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-medium text-gray-900">Your Progress</h3>
-        <span className={`px-3 py-1 rounded-full text-xs font-medium ${alignmentColor}`}>
-          {alignmentMessage}
-        </span>
-      </div>
-
-      {/* Alignment Score Circle */}
-      <div className="flex justify-center mb-6">
-        <div className="relative w-32 h-32">
-          <svg className="w-32 h-32 transform -rotate-90">
-            <circle
-              cx="64"
-              cy="64"
-              r="56"
-              stroke="currentColor"
-              strokeWidth="8"
-              fill="none"
-              className="text-gray-200"
-            />
-            <circle
-              cx="64"
-              cy="64"
-              r="56"
-              stroke="currentColor"
-              strokeWidth="8"
-              fill="none"
-              strokeLinecap="round"
-              className="text-amber-600 transition-all duration-500"
-              style={{
-                strokeDasharray: `${2 * Math.PI * 56}`,
-                strokeDashoffset: `${2 * Math.PI * 56 * (1 - alignmentPercentage / 100)}`
-              }}
-            />
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <p className="text-3xl font-light text-gray-900">{alignmentScore}%</p>
-              <p className="text-xs text-gray-600">Alignment</p>
+    <div className="progress-tracker">
+      {/* Streak Display */}
+      <div className="streak-section mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-lg font-medium awareness-text">Current Streak</h3>
+          <span className="text-3xl">{streakValue.emoji}</span>
+        </div>
+        
+        <div className="streak-display">
+          <div className="text-center p-6 rounded-xl separation-card">
+            <div className="text-5xl font-bold" style={{ color: streakValue.color }}>
+              {streak}
+            </div>
+            <div className="text-sm observation-text mt-2">
+              {streak === 1 ? 'Day' : 'Days'}
+            </div>
+            <div className="text-xs mt-2 px-3 py-1 rounded-full inline-block"
+                 style={{ 
+                   backgroundColor: `${streakValue.color}20`,
+                   color: streakValue.color 
+                 }}>
+              {streakValue.label}
             </div>
           </div>
         </div>
       </div>
 
-      {showDetails && (
-        <>
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <p className="text-2xl font-light text-gray-900">{totalVows}</p>
-              <p className="text-xs text-gray-600">Total Vows</p>
+      {/* Vow Progress */}
+      {vow && (
+        <div className="vow-progress-section">
+          <h3 className="text-lg font-medium awareness-text mb-3">Vow Progress</h3>
+          
+          {/* Progress Bar */}
+          <div className="mb-4">
+            <div className="flex justify-between text-sm observation-text mb-2">
+              <span>Day {vow.currentDay}</span>
+              <span>{daysRemaining} days remaining</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+              <div 
+                className="h-full rounded-full transition-all duration-500"
+                style={{
+                  width: `${progress}%`,
+                  background: 'linear-gradient(90deg, #C6A664 0%, #5FD3A5 100%)'
+                }}
+              />
+            </div>
+            <div className="text-center mt-2 text-sm font-medium" style={{ color: '#C6A664' }}>
+              {progress}% Complete
+            </div>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 gap-3 mt-4">
+            <div className="p-3 rounded-lg separation-card text-center">
+              <div className="text-2xl font-bold awareness-text">
+                {vow.currentDay}
+              </div>
+              <div className="text-xs observation-text">Days Active</div>
             </div>
             
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <p className="text-2xl font-light text-gray-900">{totalReflections}</p>
-              <p className="text-xs text-gray-600">Reflections</p>
-            </div>
-          </div>
-
-          {/* Streak Info */}
-          <div className="border-t pt-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl">🔥</span>
-                <div>
-                  <p className="text-sm font-medium text-gray-900">
-                    {currentStreak} day streak
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Longest: {longestStreak} days
-                  </p>
-                </div>
+            <div className="p-3 rounded-lg separation-card text-center">
+              <div className="text-2xl font-bold awareness-text">
+                {vow.duration}
               </div>
-              
-              {currentStreak > 0 && (
-                <div className="text-right">
-                  <p className="text-xs text-gray-500">Keep it up! 💪</p>
-                </div>
-              )}
+              <div className="text-xs observation-text">Total Days</div>
             </div>
           </div>
-        </>
+        </div>
+      )}
+
+      {/* Additional Stats */}
+      {stats && Object.keys(stats).length > 0 && (
+        <div className="stats-section mt-6">
+          <h3 className="text-lg font-medium awareness-text mb-3">Your Journey</h3>
+          
+          <div className="space-y-2">
+            {stats.totalReflections !== undefined && (
+              <div className="flex items-center justify-between p-3 rounded-lg separation-card">
+                <div className="flex items-center space-x-2">
+                  <span className="text-xl">📝</span>
+                  <span className="observation-text">Reflections</span>
+                </div>
+                <span className="font-medium awareness-text">{stats.totalReflections}</span>
+              </div>
+            )}
+            
+            {stats.triggersLogged !== undefined && (
+              <div className="flex items-center justify-between p-3 rounded-lg separation-card">
+                <div className="flex items-center space-x-2">
+                  <span className="text-xl">🎯</span>
+                  <span className="observation-text">Triggers Logged</span>
+                </div>
+                <span className="font-medium awareness-text">{stats.triggersLogged}</span>
+              </div>
+            )}
+            
+            {stats.longestStreak !== undefined && (
+              <div className="flex items-center justify-between p-3 rounded-lg separation-card">
+                <div className="flex items-center space-x-2">
+                  <span className="text-xl">🔥</span>
+                  <span className="observation-text">Longest Streak</span>
+                </div>
+                <span className="font-medium awareness-text">{stats.longestStreak}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Motivational Message */}
+      {streak > 0 && (
+        <div className="mt-6 p-4 rounded-lg" style={{ background: 'linear-gradient(135deg, #C6A66420 0%, #5FD3A520 100%)' }}>
+          <p className="text-sm observation-text text-center">
+            {streak >= 30 && "You're building lasting change. Neural pathways are forming."}
+            {streak >= 7 && streak < 30 && "Consistency is the key. You're doing great."}
+            {streak < 7 && "Every day of remembrance matters. Keep going."}
+          </p>
+        </div>
       )}
     </div>
   );
 }
 
-// Mini version for headers/navbars
-export function MiniProgressTracker({ stats = {} }) {
-  const { currentStreak = 0, alignmentScore = 0 } = stats;
-
+/**
+ * Compact Progress Tracker (for dashboard)
+ */
+export function CompactProgressTracker({ streak, progress, vow }) {
+  const streakValue = getStreakValue(streak);
+  
   return (
-    <div className="flex items-center space-x-4">
-      <div className="flex items-center space-x-1">
-        <span className="text-lg">🔥</span>
-        <span className="text-sm font-medium text-gray-900">{currentStreak}</span>
+    <div className="compact-progress flex items-center justify-between p-4 rounded-xl separation-card">
+      <div className="flex items-center space-x-4">
+        <div className="text-center">
+          <div className="text-2xl">{streakValue.emoji}</div>
+          <div className="text-xs observation-text mt-1">{streak}d</div>
+        </div>
+        
+        {vow && (
+          <div className="flex-1">
+            <div className="text-sm observation-text mb-1">
+              Day {vow.currentDay}/{vow.duration}
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div 
+                className="h-full rounded-full"
+                style={{
+                  width: `${progress}%`,
+                  backgroundColor: streakValue.color
+                }}
+              />
+            </div>
+          </div>
+        )}
       </div>
       
-      <div className="w-16 bg-gray-200 rounded-full h-1.5">
-        <div
-          className="bg-amber-600 h-1.5 rounded-full transition-all"
-          style={{ width: `${Math.min(alignmentScore, 100)}%` }}
-        />
+      <div className="text-right">
+        <div className="text-xs observation-text">Progress</div>
+        <div className="text-lg font-bold awareness-text">{progress}%</div>
       </div>
-      
-      <span className="text-sm font-medium text-gray-900">{alignmentScore}%</span>
     </div>
   );
 }

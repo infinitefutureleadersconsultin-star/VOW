@@ -1,312 +1,197 @@
 /**
- * Vow Utilities
- * Client-side helper functions for vow management
+ * Vow utility functions
+ * Handles vow creation, updates, and management
  */
 
-// Validate vow statement
-export const validateVowStatement = (statement) => {
-  if (!statement || typeof statement !== 'string') {
-    return { valid: false, error: 'Vow statement is required' };
+import { getTodayDate, daysBetween, isToday } from './dateUtils';
+
+/**
+ * Create vow statement from identity and boundary
+ */
+export function createVowStatement(identityType, boundary) {
+  return `I'm the type of person that ${identityType}; therefore, I will ${boundary}.`;
+}
+
+/**
+ * Parse vow statement into components
+ */
+export function parseVowStatement(statement) {
+  const regex = /I'm the type of person that (.+); therefore, I will (.+)\./i;
+  const match = statement.match(regex);
+  
+  if (match) {
+    return {
+      identityType: match[1].trim(),
+      boundary: match[2].trim()
+    };
   }
+  
+  return null;
+}
 
-  const trimmed = statement.trim();
+/**
+ * Calculate vow progress
+ */
+export function calculateVowProgress(vow) {
+  if (!vow) return 0;
+  
+  const { duration, currentDay } = vow;
+  const progress = Math.min(Math.round((currentDay / duration) * 100), 100);
+  
+  return progress;
+}
 
-  if (trimmed.length < 10) {
-    return { valid: false, error: 'Vow statement must be at least 10 characters' };
-  }
+/**
+ * Check if vow is active
+ */
+export function isVowActive(vow) {
+  if (!vow) return false;
+  return vow.status === 'active' && vow.currentDay < vow.duration;
+}
 
-  if (trimmed.length > 300) {
-    return { valid: false, error: 'Vow statement must be less than 300 characters' };
-  }
+/**
+ * Check if vow is completed
+ */
+export function isVowCompleted(vow) {
+  if (!vow) return false;
+  return vow.status === 'completed' || vow.currentDay >= vow.duration;
+}
 
-  return { valid: true, value: trimmed };
-};
+/**
+ * Get vow status display
+ */
+export function getVowStatusDisplay(vow) {
+  if (!vow) return 'Unknown';
+  
+  if (isVowCompleted(vow)) return 'Completed';
+  if (isVowActive(vow)) return `Day ${vow.currentDay}/${vow.duration}`;
+  if (vow.status === 'paused') return 'Paused';
+  if (vow.status === 'broken') return 'Broken';
+  
+  return 'Active';
+}
 
-// Calculate vow completion percentage
-export const calculateVowCompletion = (vow) => {
-  if (!vow || !vow.duration || !vow.currentDay) {
-    return 0;
-  }
-
-  const percentage = (vow.currentDay / vow.duration) * 100;
-  return Math.min(Math.round(percentage), 100);
-};
-
-// Calculate days remaining in vow
-export const calculateDaysRemaining = (vow) => {
-  if (!vow || !vow.duration || !vow.currentDay) {
-    return vow?.duration || 0;
-  }
-
+/**
+ * Get days remaining
+ */
+export function getDaysRemaining(vow) {
+  if (!vow) return 0;
   return Math.max(vow.duration - vow.currentDay, 0);
-};
+}
 
-// Check if vow is completed
-export const isVowCompleted = (vow) => {
-  if (!vow) return false;
-  
-  return vow.status === 'completed' || 
-         (vow.currentDay >= vow.duration);
-};
+/**
+ * Check if vow can be updated today
+ */
+export function canUpdateToday(vow) {
+  if (!vow || !vow.lastUpdated) return true;
+  return !isToday(vow.lastUpdated);
+}
 
-// Check if vow is active
-export const isVowActive = (vow) => {
-  if (!vow) return false;
-  
-  return vow.status === 'active' && !isVowCompleted(vow);
-};
-
-// Format vow category for display
-export const formatVowCategory = (category) => {
-  if (!category) return 'Unknown';
-
-  const categoryMap = {
-    'addiction': 'Addiction Recovery',
-    'procrastination': 'Procrastination',
-    'self_sabotage': 'Self-Sabotage',
-    'emotional': 'Emotional Healing',
-    'habit': 'Habit Building',
-    'other': 'Other'
+/**
+ * Get vow category icon
+ */
+export function getCategoryIcon(category) {
+  const icons = {
+    health: '💪',
+    addiction: '🚫',
+    relationship: '❤️',
+    focus: '🎯',
+    character: '⭐',
+    custom: '📝',
+    other: '🔷'
   };
-
-  return categoryMap[category.toLowerCase()] || category;
-};
-
-// Get vow status color
-export const getVowStatusColor = (vow) => {
-  if (!vow) return 'gray';
-
-  if (isVowCompleted(vow)) {
-    return 'green';
-  }
-
-  if (vow.currentStreak >= 7) {
-    return 'amber';
-  }
-
-  if (vow.currentStreak >= 3) {
-    return 'blue';
-  }
-
-  return 'gray';
-};
-
-// Get vow status badge
-export const getVowStatusBadge = (vow) => {
-  if (!vow) return { text: 'Unknown', color: 'bg-gray-100 text-gray-700' };
-
-  const statusMap = {
-    'active': { text: 'Active', color: 'bg-blue-100 text-blue-700' },
-    'completed': { text: 'Completed', color: 'bg-green-100 text-green-700' },
-    'paused': { text: 'Paused', color: 'bg-yellow-100 text-yellow-700' },
-    'abandoned': { text: 'Abandoned', color: 'bg-red-100 text-red-700' }
-  };
-
-  return statusMap[vow.status] || { text: vow.status, color: 'bg-gray-100 text-gray-700' };
-};
-
-// Calculate streak health (0-100)
-export const calculateStreakHealth = (vow) => {
-  if (!vow || !vow.currentStreak) return 0;
-
-  const daysSinceStart = vow.currentDay || 1;
-  const streakPercentage = (vow.currentStreak / daysSinceStart) * 100;
-
-  return Math.min(Math.round(streakPercentage), 100);
-};
-
-// Check if user needs encouragement
-export const needsEncouragement = (vow) => {
-  if (!vow) return false;
-
-  // No streak
-  if (!vow.currentStreak || vow.currentStreak === 0) {
-    return true;
-  }
-
-  // Streak broken recently
-  if (vow.longestStreak > vow.currentStreak + 3) {
-    return true;
-  }
-
-  return false;
-};
-
-// Get encouragement message
-export const getEncouragementMessage = (vow) => {
-  if (!vow) return 'Start your journey today!';
-
-  if (!vow.currentStreak || vow.currentStreak === 0) {
-    return 'Every journey begins with a single step. 🌱';
-  }
-
-  if (vow.currentStreak === 1) {
-    return 'You\'ve taken the first step! Keep going. 💪';
-  }
-
-  if (vow.currentStreak >= 7 && vow.currentStreak < 14) {
-    return 'One week strong! You\'re building momentum. 🔥';
-  }
-
-  if (vow.currentStreak >= 14 && vow.currentStreak < 30) {
-    return 'Two weeks! This is becoming part of who you are. ✨';
-  }
-
-  if (vow.currentStreak >= 30) {
-    return 'A full month! You\'re transforming. 🌟';
-  }
-
-  return 'You\'re doing great! Keep honoring your vow. 🙏';
-};
-
-// Sort vows by priority
-export const sortVowsByPriority = (vows) => {
-  if (!vows || !Array.isArray(vows)) return [];
-
-  return [...vows].sort((a, b) => {
-    // Active vows first
-    if (a.status === 'active' && b.status !== 'active') return -1;
-    if (a.status !== 'active' && b.status === 'active') return 1;
-
-    // Then by current streak (descending)
-    if ((b.currentStreak || 0) !== (a.currentStreak || 0)) {
-      return (b.currentStreak || 0) - (a.currentStreak || 0);
-    }
-
-    // Then by creation date (newest first)
-    return new Date(b.createdAt) - new Date(a.createdAt);
-  });
-};
-
-// Filter vows by status
-export const filterVowsByStatus = (vows, status) => {
-  if (!vows || !Array.isArray(vows)) return [];
-  if (!status) return vows;
-
-  return vows.filter(vow => vow.status === status);
-};
-
-// Get active vows
-export const getActiveVows = (vows) => {
-  return filterVowsByStatus(vows, 'active');
-};
-
-// Get completed vows
-export const getCompletedVows = (vows) => {
-  return filterVowsByStatus(vows, 'completed');
-};
-
-// Calculate total days committed across all vows
-export const calculateTotalCommitment = (vows) => {
-  if (!vows || !Array.isArray(vows)) return 0;
-
-  return vows.reduce((total, vow) => {
-    return total + (vow.currentDay || 0);
-  }, 0);
-};
-
-// Get vow milestone
-export const getVowMilestone = (vow) => {
-  if (!vow || !vow.currentDay) return null;
-
-  const milestones = [
-    { day: 1, message: 'First day completed! 🎉', emoji: '🌱' },
-    { day: 3, message: '3 days strong!', emoji: '💪' },
-    { day: 7, message: 'One week milestone!', emoji: '🔥' },
-    { day: 14, message: 'Two weeks of transformation!', emoji: '✨' },
-    { day: 21, message: '21 days - habit forming!', emoji: '🌟' },
-    { day: 30, message: 'One month completed!', emoji: '🎊' },
-    { day: 60, message: 'Two months of dedication!', emoji: '🏆' },
-    { day: 90, message: '90 days - incredible!', emoji: '👑' },
-    { day: 180, message: 'Half a year of growth!', emoji: '🌈' },
-    { day: 365, message: 'One full year! Legendary!', emoji: '🎆' }
-  ];
-
-  // Find the milestone that matches current day
-  const milestone = milestones.find(m => m.day === vow.currentDay);
   
-  return milestone || null;
-};
+  return icons[category] || icons.other;
+}
 
-// Generate vow summary
-export const generateVowSummary = (vow) => {
-  if (!vow) return 'No vow data';
-
-  const completion = calculateVowCompletion(vow);
-  const daysRemaining = calculateDaysRemaining(vow);
-  const status = getVowStatusBadge(vow);
-
-  return {
-    title: vow.statement,
-    category: formatVowCategory(vow.category),
-    status: status.text,
-    statusColor: status.color,
-    completion: `${completion}%`,
-    currentDay: vow.currentDay || 0,
-    duration: vow.duration || 0,
-    daysRemaining,
-    streak: vow.currentStreak || 0,
-    longestStreak: vow.longestStreak || 0,
-    isCompleted: isVowCompleted(vow),
-    isActive: isVowActive(vow)
+/**
+ * Get vow category label
+ */
+export function getCategoryLabel(category) {
+  const labels = {
+    health: 'Health',
+    addiction: 'Breaking Addiction',
+    relationship: 'Relationships',
+    focus: 'Focus & Discipline',
+    character: 'Character Building',
+    custom: 'Custom',
+    other: 'Other'
   };
-};
+  
+  return labels[category] || 'Other';
+}
 
-// Validate vow update data
-export const validateVowUpdate = (updates) => {
+/**
+ * Validate vow data
+ */
+export function validateVowData(vow) {
   const errors = [];
-
-  if (updates.statement !== undefined) {
-    const validation = validateVowStatement(updates.statement);
-    if (!validation.valid) {
-      errors.push(validation.error);
-    }
+  
+  if (!vow.statement || vow.statement.length < 10) {
+    errors.push('Vow statement must be at least 10 characters');
   }
-
-  if (updates.status !== undefined) {
-    const validStatuses = ['active', 'completed', 'paused', 'abandoned'];
-    if (!validStatuses.includes(updates.status)) {
-      errors.push('Invalid status');
-    }
+  
+  if (!vow.category) {
+    errors.push('Category is required');
   }
-
-  if (updates.currentDay !== undefined) {
-    if (typeof updates.currentDay !== 'number' || updates.currentDay < 0) {
-      errors.push('Invalid current day');
-    }
+  
+  if (!vow.duration || vow.duration < 1 || vow.duration > 365) {
+    errors.push('Duration must be between 1 and 365 days');
   }
-
-  if (updates.currentStreak !== undefined) {
-    if (typeof updates.currentStreak !== 'number' || updates.currentStreak < 0) {
-      errors.push('Invalid streak value');
-    }
-  }
-
+  
   return {
     valid: errors.length === 0,
     errors
   };
-};
+}
 
-// Export all functions
-export default {
-  validateVowStatement,
-  calculateVowCompletion,
-  calculateDaysRemaining,
-  isVowCompleted,
-  isVowActive,
-  formatVowCategory,
-  getVowStatusColor,
-  getVowStatusBadge,
-  calculateStreakHealth,
-  needsEncouragement,
-  getEncouragementMessage,
-  sortVowsByPriority,
-  filterVowsByStatus,
-  getActiveVows,
-  getCompletedVows,
-  calculateTotalCommitment,
-  getVowMilestone,
-  generateVowSummary,
-  validateVowUpdate
-};
+/**
+ * Get vow achievement level
+ */
+export function getVowAchievementLevel(vow) {
+  if (!vow) return null;
+  
+  const progress = calculateVowProgress(vow);
+  
+  if (progress >= 100) return { level: 'Master', icon: '👑', color: '#FFD700' };
+  if (progress >= 75) return { level: 'Advanced', icon: '⭐', color: '#C0C0C0' };
+  if (progress >= 50) return { level: 'Intermediate', icon: '🌟', color: '#CD7F32' };
+  if (progress >= 25) return { level: 'Beginner', icon: '🌱', color: '#90EE90' };
+  
+  return { level: 'Starting', icon: '🌱', color: '#E0E0E0' };
+}
+
+/**
+ * Sort vows by priority
+ */
+export function sortVowsByPriority(vows) {
+  return [...vows].sort((a, b) => {
+    // Active vows first
+    if (isVowActive(a) && !isVowActive(b)) return -1;
+    if (!isVowActive(a) && isVowActive(b)) return 1;
+    
+    // Then by creation date (newest first)
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+}
+
+/**
+ * Get vow duration label
+ */
+export function getDurationLabel(days) {
+  if (days === 7) return '1 Week';
+  if (days === 30) return '1 Month';
+  if (days === 90) return '3 Months';
+  if (days === 365) return '1 Year';
+  return `${days} Days`;
+}
+
+/**
+ * Calculate completion rate
+ */
+export function calculateCompletionRate(vows) {
+  if (!vows || vows.length === 0) return 0;
+  
+  const completed = vows.filter(v => isVowCompleted(v)).length;
+  return Math.round((completed / vows.length) * 100);
+}

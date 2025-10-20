@@ -1,322 +1,315 @@
-import Head from 'next/head';
-import { useRouter } from 'next/router';
+/**
+ * Privacy Policy Page
+ * Data privacy and user information handling
+ */
 
-export default function Privacy() {
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+
+export default function PrivacyPage() {
   const router = useRouter();
 
   return (
-    <>
+    <div className="min-h-screen bg-white">
       <Head>
-        <title>Privacy Policy - VOW</title>
-        <meta name="description" content="VOW Privacy Policy" />
+        <title>Privacy Policy - VOW Theory</title>
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
-        {/* Header */}
-        <nav className="bg-white border-b border-amber-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
-              <button
-                onClick={() => router.back()}
-                className="text-gray-600 hover:text-gray-900"
-              >
-                ← Back
-              </button>
-              <img src="/logo.svg" alt="VOW" className="h-10" />
-              <div className="w-16"></div>
-            </div>
+      {/* Header */}
+      <nav className="bg-white border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <button
+              onClick={() => router.push('/')}
+              className="text-gray-600 hover:text-gray-900"
+            >
+              ← Back
+            </button>
+            <h1 className="text-lg font-medium text-gray-900">Privacy Policy</h1>
+            <div className="w-16"></div>
           </div>
-        </nav>
+        </div>
+      </nav>
 
-        {/* Content */}
-        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="bg-white rounded-xl shadow-md p-8 md:p-12">
-            <h1 className="text-4xl font-light text-gray-900 mb-4">Privacy Policy</h1>
-            <p className="text-sm text-gray-500 mb-8">Last Updated: October 14, 2025</p>
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <div className="prose prose-lg max-w-none">
+          <p className="text-sm observation-text mb-8">
+            Last Updated: October 19, 2025
+          </p>
 
-            <div className="prose prose-amber max-w-none space-y-6 text-gray-700">
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">1. Introduction</h2>
-                <p>
-                  At VOW, we take your privacy seriously. This Privacy Policy explains how we collect, use, 
-                  protect, and share your personal information when you use our Service. By using VOW, you 
-                  consent to the practices described in this policy.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">2. Information We Collect</h2>
-                
-                <h3 className="text-xl font-medium text-gray-800 mb-3">2.1 Information You Provide</h3>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Account Information:</strong> Name, email address, password, gender, nationality, language preferences</li>
-                  <li><strong>Profile Data:</strong> Optional information you choose to add to your profile</li>
-                  <li><strong>Payment Information:</strong> Processed securely by Stripe (we do not store credit card details)</li>
-                  <li><strong>User Content:</strong> Vows, reflections, journal entries, trigger logs, notes</li>
-                  <li><strong>Communications:</strong> Messages, feedback, support requests</li>
-                </ul>
-
-                <h3 className="text-xl font-medium text-gray-800 mb-3 mt-6">2.2 Automatically Collected Information</h3>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Usage Data:</strong> Pages viewed, features used, time spent, interactions</li>
-                  <li><strong>Device Information:</strong> Device type, operating system, browser type, IP address</li>
-                  <li><strong>Log Data:</strong> Error logs, performance data, crash reports</li>
-                  <li><strong>Cookies:</strong> Authentication tokens, preferences, analytics (see Cookie Policy below)</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">3. How We Use Your Information</h2>
-                <p>
-                  We use your information to:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Provide the Service:</strong> Create your account, store your vows and reflections, track progress</li>
-                  <li><strong>Personalization:</strong> Customize your experience, provide relevant insights and reminders</li>
-                  <li><strong>Communication:</strong> Send notifications, updates, newsletters (with your consent)</li>
-                  <li><strong>Payment Processing:</strong> Process subscriptions and transactions via Stripe</li>
-                  <li><strong>Service Improvement:</strong> Analyze usage patterns, fix bugs, develop new features</li>
-                  <li><strong>Security:</strong> Detect fraud, prevent abuse, protect user accounts</li>
-                  <li><strong>Legal Compliance:</strong> Comply with laws, respond to legal requests, enforce our Terms</li>
-                </ul>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">4. How We Share Your Information</h2>
-                <p className="font-medium text-amber-700 mb-4">
-                  We do not sell your personal information. We only share data in limited circumstances:
-                </p>
-                
-                <h3 className="text-xl font-medium text-gray-800 mb-3">4.1 Service Providers</h3>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Hosting:</strong> Vercel (application hosting)</li>
-                  <li><strong>Database:</strong> Firebase/Firestore (data storage)</li>
-                  <li><strong>Payment Processing:</strong> Stripe (subscription payments)</li>
-                  <li><strong>Email:</strong> Email service providers for transactional emails</li>
-                  <li><strong>Analytics:</strong> Anonymized usage analytics (if you consent)</li>
-                </ul>
-                <p className="mt-4 text-sm">
-                  All service providers are contractually obligated to protect your data and use it only for providing services to us.
-                </p>
-
-                <h3 className="text-xl font-medium text-gray-800 mb-3 mt-6">4.2 Legal Requirements</h3>
-                <p>
-                  We may disclose information if required by law, legal process, or to:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Comply with legal obligations</li>
-                  <li>Protect our rights and property</li>
-                  <li>Prevent fraud or security threats</li>
-                  <li>Protect user safety</li>
-                </ul>
-
-                <h3 className="text-xl font-medium text-gray-800 mb-3 mt-6">4.3 Business Transfers</h3>
-                <p>
-                  In the event of a merger, acquisition, or sale of assets, your information may be transferred 
-                  to the acquiring entity. We will notify you of any such change.
-                </p>
-
-                <h3 className="text-xl font-medium text-gray-800 mb-3 mt-6">4.4 With Your Consent</h3>
-                <p>
-                  We may share information with third parties when you explicitly consent (e.g., sharing progress with an accountability partner).
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">5. Data Security</h2>
-                <p>
-                  We implement industry-standard security measures to protect your information:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Encryption:</strong> All data transmitted via HTTPS/TLS encryption</li>
-                  <li><strong>Password Security:</strong> Passwords are hashed using bcrypt</li>
-                  <li><strong>Access Controls:</strong> Restricted access to personal data</li>
-                  <li><strong>Regular Audits:</strong> Security reviews and vulnerability assessments</li>
-                  <li><strong>Secure Infrastructure:</strong> Hosted on secure, compliant platforms</li>
-                </ul>
-                <p className="mt-4 text-sm text-gray-600">
-                  While we take reasonable precautions, no system is 100% secure. You are responsible for maintaining 
-                  the confidentiality of your account credentials.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">6. Data Retention</h2>
-                <p>
-                  We retain your information for as long as:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Your account is active</li>
-                  <li>Needed to provide the Service</li>
-                  <li>Required by law (e.g., tax records, legal disputes)</li>
-                  <li>Necessary for legitimate business purposes</li>
-                </ul>
-                <p className="mt-4">
-                  You can request deletion of your account and data at any time through the Settings page. 
-                  Some data may be retained in backups for up to 90 days.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">7. Your Rights and Choices</h2>
-                <p>
-                  Depending on your location, you may have the following rights:
-                </p>
-                
-                <h3 className="text-xl font-medium text-gray-800 mb-3 mt-4">7.1 Access and Portability</h3>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Request a copy of your personal data</li>
-                  <li>Export your data in machine-readable format (JSON)</li>
-                </ul>
-
-                <h3 className="text-xl font-medium text-gray-800 mb-3 mt-4">7.2 Correction and Updates</h3>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Update your profile information in Settings</li>
-                  <li>Request correction of inaccurate data</li>
-                </ul>
-
-                <h3 className="text-xl font-medium text-gray-800 mb-3 mt-4">7.3 Deletion</h3>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Delete your account and personal data</li>
-                  <li>Request erasure of specific information</li>
-                </ul>
-
-                <h3 className="text-xl font-medium text-gray-800 mb-3 mt-4">7.4 Opt-Out Rights</h3>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Unsubscribe from marketing emails (link in every email)</li>
-                  <li>Disable push notifications in Settings</li>
-                  <li>Opt out of analytics data sharing</li>
-                  <li>Manage cookie preferences</li>
-                </ul>
-
-                <h3 className="text-xl font-medium text-gray-800 mb-3 mt-4">7.5 Lodge a Complaint</h3>
-                <p>
-                  If you believe we have violated your privacy rights, you may file a complaint with us at 
-                  <a href="mailto:privacy@vowapp.com" className="text-amber-600 hover:underline"> privacy@vowapp.com</a> or 
-                  with your local data protection authority.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">8. Cookies and Tracking</h2>
-                <p>
-                  We use cookies and similar technologies for:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Essential Cookies:</strong> Authentication, security, basic functionality (required)</li>
-                  <li><strong>Analytics Cookies:</strong> Usage statistics, performance monitoring (optional, with consent)</li>
-                  <li><strong>Preference Cookies:</strong> Remember your settings and preferences</li>
-                </ul>
-                <p className="mt-4">
-                  You can control cookies through your browser settings. Disabling essential cookies may affect functionality.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">9. Children's Privacy</h2>
-                <p>
-                  VOW is not intended for users under 18 years of age. We do not knowingly collect information from 
-                  children. If we discover that a child has provided personal information, we will delete it immediately. 
-                  If you believe a child has provided information to us, please contact us at 
-                  <a href="mailto:privacy@vowapp.com" className="text-amber-600 hover:underline"> privacy@vowapp.com</a>.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">10. International Data Transfers</h2>
-                <p>
-                  Your information may be transferred to and processed in countries other than your own. 
-                  These countries may have different data protection laws. By using VOW, you consent to such transfers. 
-                  We ensure appropriate safeguards are in place to protect your data in accordance with this Privacy Policy.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">11. California Privacy Rights (CCPA)</h2>
-                <p>
-                  If you are a California resident, you have additional rights under the California Consumer Privacy Act:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Right to know what personal information is collected and how it's used</li>
-                  <li>Right to delete personal information</li>
-                  <li>Right to opt out of the sale of personal information (we do not sell data)</li>
-                  <li>Right to non-discrimination for exercising your privacy rights</li>
-                </ul>
-                <p className="mt-4">
-                  To exercise these rights, contact us at <a href="mailto:privacy@vowapp.com" className="text-amber-600 hover:underline">privacy@vowapp.com</a>.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">12. European Privacy Rights (GDPR)</h2>
-                <p>
-                  If you are in the European Economic Area (EEA), you have rights under the General Data Protection Regulation:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Right of access to your personal data</li>
-                  <li>Right to rectification of inaccurate data</li>
-                  <li>Right to erasure ("right to be forgotten")</li>
-                  <li>Right to restrict processing</li>
-                  <li>Right to data portability</li>
-                  <li>Right to object to processing</li>
-                  <li>Right to withdraw consent</li>
-                </ul>
-                <p className="mt-4">
-                  Our legal basis for processing includes: consent, contract performance, legal obligations, and legitimate interests.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">13. Changes to This Policy</h2>
-                <p>
-                  We may update this Privacy Policy from time to time. We will notify you of significant changes via:
-                </p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Email notification</li>
-                  <li>In-app notification</li>
-                  <li>Update to the "Last Updated" date at the top of this page</li>
-                </ul>
-                <p className="mt-4">
-                  Continued use of the Service after changes constitutes acceptance of the updated policy.
-                </p>
-              </section>
-
-              <section>
-                <h2 className="text-2xl font-medium text-gray-900 mb-4">14. Contact Us</h2>
-                <p>
-                  For questions, concerns, or requests regarding this Privacy Policy or your personal data:
-                </p>
-                <p className="mt-4">
-                  <strong>Privacy Team</strong><br />
-                  Email: <a href="mailto:privacy@vowapp.com" className="text-amber-600 hover:underline">privacy@vowapp.com</a><br />
-                  Support: <a href="mailto:support@vowapp.com" className="text-amber-600 hover:underline">support@vowapp.com</a><br />
-                  Website: <a href="https://vowapp.com" className="text-amber-600 hover:underline">https://vowapp.com</a>
-                </p>
-                <p className="mt-4 text-sm text-gray-600">
-                  We will respond to your request within 30 days.
-                </p>
-              </section>
-
-              <section className="border-t pt-6 mt-8">
-                <p className="text-sm text-gray-600">
-                  By using VOW, you acknowledge that you have read, understood, and agree to this Privacy Policy.
-                </p>
-              </section>
-            </div>
+          <div className="mb-8 p-6 rounded-xl bg-gradient-to-r from-amber-50 to-amber-100">
+            <p className="font-medium awareness-text mb-2">
+              Your Privacy Matters
+            </p>
+            <p className="text-sm observation-text">
+              At VOW Theory, we take your privacy seriously. Your personal reflections, vows, and journey data are private and protected. We will never sell your personal information to third parties.
+            </p>
           </div>
-        </main>
 
-        {/* Footer */}
-        <footer className="bg-white border-t border-gray-200 mt-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="flex justify-center space-x-6 text-sm text-gray-600">
-              <button onClick={() => router.push('/')} className="hover:text-gray-900">Home</button>
-              <button onClick={() => router.push('/privacy')} className="hover:text-gray-900">Privacy</button>
-              <button onClick={() => router.push('/terms')} className="hover:text-gray-900">Terms</button>
-            </div>
+          <Section
+            title="1. Information We Collect"
+            subsections={[
+              {
+                title: "Account Information",
+                content: `When you create an account, we collect:
+- Email address
+- Name (first and last)
+- Password (encrypted)
+- Profile preferences`
+              },
+              {
+                title: "Content You Create",
+                content: `We store the content you create to provide the Service:
+- Vows and their details
+- Daily reflections
+- Trigger logs
+- Notes and journal entries
+- AI conversation history`
+              },
+              {
+                title: "Usage Data",
+                content: `We collect information about how you use the Service:
+- Login dates and times
+- Feature usage statistics
+- Device information (type, OS, browser)
+- IP address
+- Streak and progress metrics`
+              },
+              {
+                title: "Optional Information",
+                content: `You may choose to provide:
+- Profile photo
+- Timezone
+- Notification preferences
+- Feedback and survey responses`
+              }
+            ]}
+          />
+
+          <Section
+            title="2. How We Use Your Information"
+            content={`We use your information to:
+
+- Provide and improve the Service
+- Personalize your experience
+- Generate AI insights based on your reflections
+- Send notifications and reminders (if enabled)
+- Communicate service updates and changes
+- Provide customer support
+- Analyze usage patterns to improve features
+- Ensure security and prevent fraud
+- Comply with legal obligations
+
+We do NOT use your personal reflections or vows for advertising purposes.`}
+          />
+
+          <Section
+            title="3. Information Sharing and Disclosure"
+            subsections={[
+              {
+                title: "We Do Not Sell Your Data",
+                content: "We will never sell your personal information to third parties. Your journey is yours alone."
+              },
+              {
+                title: "Service Providers",
+                content: `We may share information with trusted service providers who help us operate the Service:
+- Cloud hosting (Firebase/Google Cloud)
+- AI processing (OpenAI)
+- Payment processing (Stripe)
+- Email services (SendGrid)
+- Analytics (anonymized data only)
+
+All providers are bound by confidentiality agreements.`
+              },
+              {
+                title: "Legal Requirements",
+                content: "We may disclose information if required by law, court order, or to protect our rights and safety."
+              },
+              {
+                title: "Business Transfers",
+                content: "If VOW Theory is acquired or merged, your information may be transferred. We will notify you of any such change."
+              }
+            ]}
+          />
+
+          <Section
+            title="4. Data Security"
+            content={`We implement industry-standard security measures:
+
+- Encryption in transit (HTTPS/TLS)
+- Encryption at rest for sensitive data
+- Secure authentication (JWT tokens)
+- Regular security audits
+- Access controls and monitoring
+- Secure backup systems
+
+However, no method of transmission over the internet is 100% secure. We cannot guarantee absolute security.`}
+          />
+
+          <Section
+            title="5. Your Privacy Rights"
+            subsections={[
+              {
+                title: "Access Your Data",
+                content: "You can access all your data through your account dashboard or by requesting an export."
+              },
+              {
+                title: "Correct Your Data",
+                content: "You can update your account information and preferences at any time in Settings."
+              },
+              {
+                title: "Delete Your Data",
+                content: "You can delete your account and all associated data at any time. This action is permanent and cannot be undone."
+              },
+              {
+                title: "Export Your Data",
+                content: "You can export all your data in JSON, CSV, or text format at any time."
+              },
+              {
+                title: "Opt-Out of Communications",
+                content: "You can unsubscribe from marketing emails. Service-related emails cannot be disabled."
+              },
+              {
+                title: "Restrict Processing",
+                content: "You can request that we limit how we use your data in certain circumstances."
+              }
+            ]}
+          />
+
+          <Section
+            title="6. Data Retention"
+            content={`We retain your data for as long as your account is active or as needed to provide the Service. When you delete your account:
+
+- Personal data is permanently deleted within 30 days
+- Anonymized usage statistics may be retained
+- Backups are purged within 90 days
+- Legal or security data may be retained longer as required by law`}
+          />
+
+          <Section
+            title="7. AI and Machine Learning"
+            subsections={[
+              {
+                title: "How We Use AI",
+                content: "We use AI (OpenAI) to provide personalized insights, pattern analysis, and guidance based on your reflections."
+              },
+              {
+                title: "Data Processing",
+                content: "Your content is sent to OpenAI's API for processing but is not used to train their models. OpenAI's data retention policy applies."
+              },
+              {
+                title: "Opting Out",
+                content: "You can disable AI features in Settings. This will limit some functionality but your data remains secure."
+              }
+            ]}
+          />
+
+          <Section
+            title="8. Cookies and Tracking"
+            content={`We use cookies and similar technologies:
+
+- Essential cookies: Required for the Service to function
+- Preference cookies: Remember your settings
+- Analytics cookies: Understand how users interact with the Service (anonymized)
+
+You can control cookies through your browser settings. Disabling cookies may limit functionality.`}
+          />
+
+          <Section
+            title="9. Children's Privacy"
+            content={`VOW Theory is not intended for children under 13. We do not knowingly collect information from children under 13. If you believe we have collected information from a child under 13, please contact us immediately.
+
+Users aged 13-17 require parental consent to use the Service.`}
+          />
+
+          <Section
+            title="10. International Users"
+            content={`VOW Theory is based in the United States. By using the Service, you consent to the transfer of your information to the United States and other countries where we operate.
+
+For users in the European Union, we comply with GDPR requirements and provide additional rights as outlined in this policy.`}
+          />
+
+          <Section
+            title="11. California Privacy Rights (CCPA)"
+            content={`California residents have additional rights:
+
+- Right to know what personal information is collected
+- Right to know if personal information is sold or disclosed
+- Right to say no to the sale of personal information
+- Right to access personal information
+- Right to equal service and price
+
+We do not sell personal information. To exercise your rights, contact privacy@vowtheory.com.`}
+          />
+
+          <Section
+            title="12. Changes to This Policy"
+            content={`We may update this Privacy Policy from time to time. We will notify you of significant changes via:
+
+- Email notification
+- In-app notification
+- Notice on our website
+
+Your continued use of the Service after changes constitutes acceptance of the updated policy.`}
+          />
+
+          <Section
+            title="13. Contact Us"
+            content={`For privacy-related questions or to exercise your rights:
+
+Email: privacy@vowtheory.com
+Data Protection Officer: dpo@vowtheory.com
+
+For general support: support@vowtheory.com
+
+Mailing Address:
+VOW Theory Privacy Team
+[Address will be added]
+
+We will respond to your inquiry within 30 days.`}
+          />
+
+          <div className="mt-12 p-6 rounded-xl" style={{ background: 'linear-gradient(135deg, #5FD3A520 0%, #5FD3A540 100%)' }}>
+            <h3 className="font-bold awareness-text mb-2">Your Trust is Sacred</h3>
+            <p className="text-sm observation-text">
+              VOW Theory is built on the principle of remembrance and transformation. Your privacy is fundamental to that journey. We are committed to protecting your personal information and giving you control over your data.
+            </p>
           </div>
-        </footer>
+
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => router.push('/settings')}
+              className="px-6 py-3 rounded-lg font-medium text-white"
+              style={{ backgroundColor: '#C6A664' }}
+            >
+              Manage Privacy Settings
+            </button>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
+  );
+}
+
+function Section({ title, content, subsections }) {
+  return (
+    <div className="mb-8">
+      <h2 className="text-2xl font-bold awareness-text mb-4">{title}</h2>
+      
+      {content && (
+        <p className="observation-text mb-4 whitespace-pre-line">{content}</p>
+      )}
+      
+      {subsections && (
+        <div className="space-y-4">
+          {subsections.map((sub, i) => (
+            <div key={i}>
+              <h3 className="text-lg font-medium awareness-text mb-2">{sub.title}</h3>
+              <p className="observation-text whitespace-pre-line">{sub.content}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
