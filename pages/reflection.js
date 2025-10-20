@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { api } from '../utils/apiClient';
 import { canUseAI, trackAIUsage } from '../lib/aiUsageTracker';
-import { api } from '../utils/apiClient';
 import { showToast } from '../utils/notificationUtils';
 import { generateEmbodimentReminder } from '../utils/identityUtils';
 
