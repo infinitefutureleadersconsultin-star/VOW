@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { api } from '../utils/apiClient';
+import { canUseAI, trackAIUsage } from '../lib/aiUsageTracker';
+import { api } from '../utils/apiClient';
 import { showToast } from '../utils/notificationUtils';
 import { generateEmbodimentReminder } from '../utils/identityUtils';
 
@@ -127,7 +129,7 @@ export default function Reflection() {
       });
 
       if (response?.data?.success) {
-        showToast('Reflection saved successfully! 🙏', 'success');
+        showToast('Reflection saved successfully! 🙏', 'success');if(userData?.userId&&canUseAI(userData.userId,'reflection')){try{const aiResp=await api.post('/vowReflect',{type:'reflection',data:reflectionData});if(aiResp?.data?.success){trackAIUsage(userData.userId,'reflection');showToast('✨ AI insight!','success')}}catch(e){console.log(e)}}
         
         // Wait a moment before redirecting
         setTimeout(() => {
