@@ -158,7 +158,7 @@ function LearnContent() {
         <div className="text-center">
           <button
             onClick={() => router.push('/learn_principles')}
-            className="px-8 py-4 rounded-lg font-medium text-white text-lg"
+            className="px-8 py-4 rounded-lg font-medium text-gray-900 text-lg"
             style={{ backgroundColor: '#C6A664' }}
           >
             Explore All Principles →
@@ -201,14 +201,14 @@ function Step({ number, title, description }) {
   return (
     <div className="flex items-start space-x-4">
       <div 
-        className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-white"
+        className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-gray-900"
         style={{ backgroundColor: '#C6A664' }}
       >
         {number}
       </div>
       <div>
         <h4 className="font-medium awareness-text mb-1">{title}</h4>
-        <p className="text-sm observation-text">{description}</p>
+        <p className="text-sm observation-text text-gray-700">{description}</p>
       </div>
     </div>
   );
@@ -219,7 +219,7 @@ function ConceptCard({ icon, title, description }) {
     <div className="separation-card rounded-xl p-6 text-center">
       <div className="text-4xl mb-3">{icon}</div>
       <h4 className="font-medium awareness-text mb-2">{title}</h4>
-      <p className="text-sm observation-text">{description}</p>
+      <p className="text-sm observation-text text-gray-700">{description}</p>
     </div>
   );
 }

@@ -19,7 +19,7 @@ function PacificationContent() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-green-50">
+    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 bg-gradient-to-b from-white to-green-50">
       <Head>
         <title>The Pacification Paradox - VOW Theory</title>
       </Head>
@@ -63,7 +63,7 @@ function PacificationContent() {
           <p className="observation-text mb-4 text-lg">
             The moment you stop fighting yourself, you begin to change.
           </p>
-          <p className="observation-text">
+          <p className="observation-text text-gray-700">
             This seems backwards. How can acceptance lead to transformation? 
             Because fighting a pattern gives it power. Observing it creates distance. 
             Distance creates choice. Choice creates freedom.
@@ -181,7 +181,7 @@ function PacificationContent() {
           </p>
           <button
             onClick={() => router.push('/learn_confrontation')}
-            className="px-8 py-4 rounded-lg font-medium text-white text-lg"
+            className="px-8 py-4 rounded-lg font-medium text-gray-900 text-lg"
             style={{ backgroundColor: '#C6A664' }}
           >
             Next: The Confrontational Model →
@@ -218,7 +218,7 @@ function PracticeStep({ number, title, description, example }) {
     <div>
       <div className="flex items-start space-x-4 mb-2">
         <div 
-          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-white"
+          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-gray-900"
           style={{ backgroundColor: '#90EE90' }}
         >
           {number}

@@ -19,7 +19,7 @@ function IntegrationContent() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-teal-50">
+    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 bg-gradient-to-b from-white to-teal-50">
       <Head>
         <title>The Integration Cycle - VOW Theory</title>
       </Head>
@@ -63,7 +63,7 @@ function IntegrationContent() {
           <p className="observation-text mb-4 text-lg">
             You are not choosing one self over another. You are merging both into a unified whole.
           </p>
-          <p className="observation-text">
+          <p className="observation-text text-gray-700">
             Integration is not forgetting who you became. It's recognizing that both versions—
             who you were before trauma and who you became through it—can exist as one.
           </p>
@@ -203,7 +203,7 @@ function IntegrationContent() {
             ].map((sign, i) => (
               <div key={i} className="flex items-start space-x-2 p-3 rounded-lg bg-teal-50">
                 <span className="text-teal-600">✓</span>
-                <span className="text-sm observation-text">{sign}</span>
+                <span className="text-sm observation-text text-gray-700">{sign}</span>
               </div>
             ))}
           </div>
@@ -238,7 +238,7 @@ function IntegrationContent() {
           </p>
           <button
             onClick={() => router.push('/create-vow')}
-            className="px-8 py-4 rounded-lg font-medium text-white text-lg"
+            className="px-8 py-4 rounded-lg font-medium text-gray-900 text-lg"
             style={{ backgroundColor: '#5FD3A5' }}
           >
             Create Your Integration Vow
@@ -255,7 +255,7 @@ function SelfCard({ icon, color, title, subtitle, description, example }) {
       <div className="flex items-center space-x-3 mb-3">
         <div className="text-4xl">{icon}</div>
         <div>
-          <h4 className="text-xl font-bold awareness-text">{title}</h4>
+          <h4 className="text-xl font-bold awareness-text text-gray-900">{title}</h4>
           <p className="text-sm" style={{ color }}>{subtitle}</p>
         </div>
       </div>
@@ -287,7 +287,7 @@ function IntegrationStep({ number, title, description, prompt, examples }) {
     <div className="p-4 rounded-lg border-2" style={{ borderColor: '#5FD3A5' }}>
       <div className="flex items-start space-x-3 mb-3">
         <div 
-          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-white"
+          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-gray-900"
           style={{ backgroundColor: '#5FD3A5' }}
         >
           {number}
@@ -315,7 +315,7 @@ function PracticeCard({ icon, title, description }) {
       <div className="text-2xl">{icon}</div>
       <div>
         <h4 className="font-bold awareness-text mb-1">{title}</h4>
-        <p className="text-sm observation-text">{description}</p>
+        <p className="text-sm observation-text text-gray-700">{description}</p>
       </div>
     </div>
   );

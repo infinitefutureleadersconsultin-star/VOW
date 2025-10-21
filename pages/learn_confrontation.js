@@ -63,7 +63,7 @@ function ConfrontationContent() {
           <p className="observation-text mb-4 text-lg">
             After observing a pattern without judgment, you're ready to ask: Why does this exist?
           </p>
-          <p className="observation-text">
+          <p className="observation-text text-gray-700">
             Confrontation is not aggressive. It's gentle investigation. You're not attacking yourself—
             you're seeking to understand the origin of behaviors that once protected you.
           </p>
@@ -197,7 +197,7 @@ function ConfrontationContent() {
           </p>
           <button
             onClick={() => router.push('/learn_integration')}
-            className="px-8 py-4 rounded-lg font-medium text-white text-lg"
+            className="px-8 py-4 rounded-lg font-medium text-gray-900 text-lg"
             style={{ backgroundColor: '#5FD3A5' }}
           >
             Next: The Integration Cycle →
@@ -213,7 +213,7 @@ function QuestionCard({ number, question, explanation, example }) {
     <div className="p-4 rounded-lg border-2" style={{ borderColor: '#C6A664' }}>
       <div className="flex items-start space-x-3 mb-3">
         <div 
-          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-white"
+          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-gray-900"
           style={{ backgroundColor: '#C6A664' }}
         >
           {number}
@@ -236,7 +236,7 @@ function PracticeStep({ icon, title, description }) {
       <div className="text-2xl">{icon}</div>
       <div>
         <h4 className="font-bold awareness-text mb-1">{title}</h4>
-        <p className="text-sm observation-text">{description}</p>
+        <p className="text-sm observation-text text-gray-700">{description}</p>
       </div>
     </div>
   );

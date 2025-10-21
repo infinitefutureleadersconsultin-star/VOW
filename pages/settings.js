@@ -135,7 +135,7 @@ function SettingsContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="text-4xl mb-4">⚙️</div>
           <p className="observation-text">Loading settings...</p>
@@ -145,7 +145,7 @@ function SettingsContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-gray-50 bg-gradient-to-b from-white to-gray-50">
       <Head>
         <title>Settings - VOW</title>
       </Head>
@@ -329,7 +329,7 @@ function SettingsContent() {
         <button
           onClick={saveSettings}
           disabled={saving}
-          className="w-full py-4 rounded-lg font-medium text-white disabled:opacity-50"
+          className="w-full py-4 rounded-lg font-medium text-gray-900 disabled:opacity-50"
           style={{ backgroundColor: '#C6A664' }}
         >
           {saving ? 'Saving...' : 'Save Settings'}
