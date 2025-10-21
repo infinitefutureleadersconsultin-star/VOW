@@ -135,7 +135,7 @@ function SettingsContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-[#1A1C1F] flex items-center justify-center">
         <div className="text-center">
           <div className="text-4xl mb-4">⚙️</div>
           <p className="observation-text">Loading settings...</p>
@@ -145,22 +145,22 @@ function SettingsContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-[#1A1C1F] bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
       <Head>
         <title>Settings - VOW</title>
       </Head>
 
       {/* Header */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="corrective-bg border-b border-[#E3C27D]/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
               onClick={() => router.push('/dashboard')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               ← Back
             </button>
-            <h1 className="text-lg font-medium text-gray-900">Settings</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">Settings</h1>
             <div className="w-16"></div>
           </div>
         </div>
@@ -168,7 +168,7 @@ function SettingsContent() {
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Account Section */}
-        <section className="separation-card rounded-xl p-6 mb-6">
+        <section className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 mb-6">
           <h2 className="text-xl font-bold awareness-text mb-4">Account</h2>
           
           <div className="space-y-4">
@@ -194,7 +194,7 @@ function SettingsContent() {
         </section>
 
         {/* Appearance */}
-        <section className="separation-card rounded-xl p-6 mb-6">
+        <section className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 mb-6">
           <h2 className="text-xl font-bold awareness-text mb-4">Appearance</h2>
           
           <div>
@@ -222,7 +222,7 @@ function SettingsContent() {
 
         {/* Notifications */}
         {isNotificationSupported() && (
-          <section className="separation-card rounded-xl p-6 mb-6">
+          <section className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 mb-6">
             <h2 className="text-xl font-bold awareness-text mb-4">Notifications</h2>
             
             <div className="space-y-4">
@@ -277,7 +277,7 @@ function SettingsContent() {
         )}
 
         {/* Privacy */}
-        <section className="separation-card rounded-xl p-6 mb-6">
+        <section className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 mb-6">
           <h2 className="text-xl font-bold awareness-text mb-4">Privacy</h2>
           
           <div className="space-y-4">
@@ -291,13 +291,13 @@ function SettingsContent() {
         </section>
 
         {/* Data & Export */}
-        <section className="separation-card rounded-xl p-6 mb-6">
+        <section className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 mb-6">
           <h2 className="text-xl font-bold awareness-text mb-4">Data & Export</h2>
           
           <div className="space-y-3">
             <button
               onClick={() => router.push('/api/export')}
-              className="w-full text-left px-4 py-3 rounded-lg border-2 border-gray-200 hover:border-amber-400 transition-all"
+              className="w-full text-left px-4 py-3 rounded-lg border-2 border-[#E3C27D]/20 hover:border-amber-400 transition-all"
             >
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">📥</span>
@@ -311,7 +311,7 @@ function SettingsContent() {
         </section>
 
         {/* Danger Zone */}
-        <section className="separation-card rounded-xl p-6 mb-6 border-2 border-red-200">
+        <section className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 mb-6 border-2 border-red-200">
           <h2 className="text-xl font-bold text-red-600 mb-4">Danger Zone</h2>
           
           <button
@@ -329,7 +329,7 @@ function SettingsContent() {
         <button
           onClick={saveSettings}
           disabled={saving}
-          className="w-full py-4 rounded-lg font-medium text-gray-900 disabled:opacity-50"
+          className="w-full py-4 rounded-lg font-medium text-[#F4F1ED] disabled:opacity-50"
           style={{ backgroundColor: '#C6A664' }}
         >
           {saving ? 'Saving...' : 'Save Settings'}
@@ -344,7 +344,7 @@ function ThemeOption({ value, icon, label, selected, onClick }) {
     <button
       onClick={onClick}
       className={`flex-1 p-4 rounded-lg border-2 transition-all ${
-        selected ? 'border-amber-400 bg-amber-50' : 'border-gray-200 hover:border-gray-300'
+        selected ? 'border-amber-400 bg-amber-50' : 'border-[#E3C27D]/20 hover:border-[#E3C27D]/30'
       }`}
     >
       <div className="text-3xl mb-2">{icon}</div>
@@ -367,7 +367,7 @@ function ToggleSetting({ label, description, checked, onChange }) {
         }`}
       >
         <div
-          className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${
+          className={`absolute top-1 left-1 w-4 h-4 rounded-full corrective-bg transition-transform ${
             checked ? 'transform translate-x-6' : ''
           }`}
         />

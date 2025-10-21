@@ -19,22 +19,22 @@ function IntegrationContent() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 bg-gradient-to-b from-white to-teal-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F] bg-gradient-to-b from-white to-[#1A1C1F]">
       <Head>
         <title>The Integration Cycle - VOW Theory</title>
       </Head>
 
       {/* Header */}
-      <nav className="bg-white border-b border-teal-100">
+      <nav className="corrective-bg border-b border-teal-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
               onClick={() => router.push('/learn_principles')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               ← All Principles
             </button>
-            <h1 className="text-lg font-medium text-gray-900">The Integration Cycle™</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">The Integration Cycle™</h1>
             <div className="w-16"></div>
           </div>
         </div>
@@ -50,7 +50,7 @@ function IntegrationContent() {
           <p className="text-xl observation-text max-w-2xl mx-auto mb-6">
             Principle 3: Become Whole Again
           </p>
-          <div className="inline-block px-6 py-3 rounded-lg bg-gradient-to-r from-teal-100 to-teal-50">
+          <div className="inline-block px-6 py-3 rounded-lg bg-gradient-to-r from-teal-100 to-[#1A1C1F]">
             <p className="text-lg font-medium" style={{ color: '#5FD3A5' }}>
               "You were whole before. You are becoming whole again."
             </p>
@@ -58,19 +58,19 @@ function IntegrationContent() {
         </div>
 
         {/* The Cycle */}
-        <div className="separation-card rounded-xl p-8 mb-8" style={{ borderLeft: '6px solid #5FD3A5' }}>
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8" style={{ borderLeft: '6px solid #5FD3A5' }}>
           <h3 className="text-2xl font-bold awareness-text mb-4">The Integration Cycle</h3>
           <p className="observation-text mb-4 text-lg">
             You are not choosing one self over another. You are merging both into a unified whole.
           </p>
-          <p className="observation-text text-gray-700">
+          <p className="observation-text text-[#E8E6E3]">
             Integration is not forgetting who you became. It's recognizing that both versions—
             who you were before trauma and who you became through it—can exist as one.
           </p>
         </div>
 
         {/* The Three Selves */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">The Three Selves</h3>
           <div className="space-y-6">
             <SelfCard
@@ -114,7 +114,7 @@ function IntegrationContent() {
         </div>
 
         {/* What Integration Is Not */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">What Integration Is NOT</h3>
           <div className="space-y-3">
             <NotCard
@@ -133,7 +133,7 @@ function IntegrationContent() {
         </div>
 
         {/* How to Practice */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">How to Practice Integration</h3>
           <div className="space-y-6">
             <IntegrationStep
@@ -161,7 +161,7 @@ function IntegrationContent() {
         </div>
 
         {/* Daily Practice */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">Daily Integration Practice</h3>
           <div className="space-y-4">
             <PracticeCard
@@ -188,7 +188,7 @@ function IntegrationContent() {
         </div>
 
         {/* Signs of Integration */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">Signs You're Integrating</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {[
@@ -203,14 +203,14 @@ function IntegrationContent() {
             ].map((sign, i) => (
               <div key={i} className="flex items-start space-x-2 p-3 rounded-lg bg-teal-50">
                 <span className="text-teal-600">✓</span>
-                <span className="text-sm observation-text text-gray-700">{sign}</span>
+                <span className="text-sm observation-text text-[#E8E6E3]">{sign}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Reflection Prompts */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">Integration Reflection Prompts</h3>
           <div className="space-y-3">
             {[
@@ -238,7 +238,7 @@ function IntegrationContent() {
           </p>
           <button
             onClick={() => router.push('/create-vow')}
-            className="px-8 py-4 rounded-lg font-medium text-gray-900 text-lg"
+            className="px-8 py-4 rounded-lg font-medium text-[#F4F1ED] text-lg"
             style={{ backgroundColor: '#5FD3A5' }}
           >
             Create Your Integration Vow
@@ -255,7 +255,7 @@ function SelfCard({ icon, color, title, subtitle, description, example }) {
       <div className="flex items-center space-x-3 mb-3">
         <div className="text-4xl">{icon}</div>
         <div>
-          <h4 className="text-xl font-bold awareness-text text-gray-900">{title}</h4>
+          <h4 className="text-xl font-bold awareness-text text-[#F4F1ED]">{title}</h4>
           <p className="text-sm" style={{ color }}>{subtitle}</p>
         </div>
       </div>
@@ -287,7 +287,7 @@ function IntegrationStep({ number, title, description, prompt, examples }) {
     <div className="p-4 rounded-lg border-2" style={{ borderColor: '#5FD3A5' }}>
       <div className="flex items-start space-x-3 mb-3">
         <div 
-          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-gray-900"
+          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[#F4F1ED]"
           style={{ backgroundColor: '#5FD3A5' }}
         >
           {number}
@@ -315,7 +315,7 @@ function PracticeCard({ icon, title, description }) {
       <div className="text-2xl">{icon}</div>
       <div>
         <h4 className="font-bold awareness-text mb-1">{title}</h4>
-        <p className="text-sm observation-text text-gray-700">{description}</p>
+        <p className="text-sm observation-text text-[#E8E6E3]">{description}</p>
       </div>
     </div>
   );

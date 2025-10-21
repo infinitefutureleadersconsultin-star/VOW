@@ -8,7 +8,7 @@ export default function WelcomeVideo({ user, onClose }) {
   const handleBegin = () => { markVideoAsSeen(user.userId); onClose(); };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-4xl w-full overflow-hidden shadow-2xl">
+      <div className="corrective-bg rounded-2xl max-w-4xl w-full overflow-hidden shadow-2xl">
         <div className="bg-gradient-to-r from-amber-500 to-amber-600 p-6 text-white relative">
           <button onClick={handleBegin} className="absolute top-4 right-4 text-white hover:text-amber-200 text-sm font-medium">Skip</button>
           <div className="text-center">
@@ -22,7 +22,7 @@ export default function WelcomeVideo({ user, onClose }) {
             <source src={videoUrl} type="video/mp4" />
           </video>
         </div>
-        <div className="p-6 bg-gray-50">
+        <div className="p-6 bg-[#1A1C1F]">
           <button onClick={handleBegin} className="w-full px-8 py-4 rounded-lg font-medium text-lg bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:shadow-lg">
             {hasWatched ? 'Begin Your Journey' : 'Skip Video & Begin'}
           </button>

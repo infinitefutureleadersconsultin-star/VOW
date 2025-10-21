@@ -182,7 +182,7 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 corrective-bg">
-        <div className="separation-card rounded-xl p-8 max-w-md w-full text-center">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 max-w-md w-full text-center">
           <div className="icon-gold text-4xl mb-4">⚠</div>
           <h2 className="text-xl awareness-text mb-2">
             Connection Issue
@@ -299,7 +299,7 @@ export default function Dashboard() {
 
             {/* Right: Metrics Grid */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="separation-card rounded-xl p-6 surgical-transition">
+              <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 surgical-transition">
                 <div className="flex items-center justify-between mb-3">
                   <span className="observation-text text-xs uppercase tracking-wide">Active Vows</span>
                   <ScrollText size={18} className="icon-gold" strokeWidth={2} />
@@ -312,7 +312,7 @@ export default function Dashboard() {
                 </p>
               </div>
 
-              <div className="separation-card rounded-xl p-6 surgical-transition">
+              <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 surgical-transition">
                 <div className="flex items-center justify-between mb-3">
                   <span className="observation-text text-xs uppercase tracking-wide">Reflections</span>
                   <Sparkles size={18} className="icon-gold" strokeWidth={2} />
@@ -325,7 +325,7 @@ export default function Dashboard() {
                 </p>
               </div>
 
-              <div className="separation-card rounded-xl p-6 surgical-transition">
+              <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 surgical-transition">
                 <div className="flex items-center justify-between mb-3">
                   <span className="observation-text text-xs uppercase tracking-wide">Triggers</span>
                   <Activity size={18} className="icon-gold" strokeWidth={2} />
@@ -338,7 +338,7 @@ export default function Dashboard() {
                 </p>
               </div>
 
-              <div className="separation-card rounded-xl p-6 surgical-transition">
+              <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 surgical-transition">
                 <div className="flex items-center justify-between mb-3">
                   <span className="observation-text text-xs uppercase tracking-wide">Streak</span>
                   <div className="icon-green">✓</div>
@@ -385,7 +385,7 @@ export default function Dashboard() {
           </div>
 
           {/* Quick Actions */}
-          <div className="separation-card rounded-xl p-6">
+          <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
             <h3 className="awareness-text font-medium mb-4">Quick Actions</h3>
             <div className="space-y-2">
               <button

@@ -203,10 +203,10 @@ export default function LogTrigger() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-[#8E8A84]">Loading...</p>
         </div>
       </div>
     );
@@ -219,18 +219,18 @@ export default function LogTrigger() {
         <meta name="description" content="Log an urge without judgment" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
+      <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
         {/* Header */}
-        <nav className="bg-white border-b border-amber-100">
+        <nav className="corrective-bg border-b border-[#E3C27D]/30">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <button
                 onClick={() => router.push('/dashboard')}
-                className="text-gray-600 hover:text-gray-900"
+                className="text-[#8E8A84] hover:text-[#F4F1ED]"
               >
                 ← Back
               </button>
-              <h1 className="text-lg font-medium text-gray-900">Log a Trigger</h1>
+              <h1 className="text-lg font-medium text-[#F4F1ED]">Log a Trigger</h1>
               <div className="w-16"></div>
             </div>
           </div>
@@ -247,12 +247,12 @@ export default function LogTrigger() {
 
         {/* Main Content */}
         <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="bg-white rounded-xl shadow-md p-8">
+          <div className="corrective-bg rounded-xl shadow-md p-8">
             <div className="mb-8">
-              <h2 className="text-2xl font-light text-gray-900 mb-2">
+              <h2 className="text-2xl font-light text-[#F4F1ED] mb-2">
                 Awareness without judgment
               </h2>
-              <p className="text-gray-600">
+              <p className="text-[#8E8A84]">
                 Logging your triggers helps you understand patterns. You are not your urges — you are the one observing them.
               </p>
             </div>
@@ -260,7 +260,7 @@ export default function LogTrigger() {
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Trigger Type */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-4">
+                <label className="block text-sm font-medium text-[#E8E6E3] mb-4">
                   What triggered you? *
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -272,11 +272,11 @@ export default function LogTrigger() {
                       className={`p-4 border-2 rounded-lg transition-all ${
                         trigger.type === type.value
                           ? 'border-amber-600 bg-amber-50'
-                          : 'border-gray-200 hover:border-amber-300'
+                          : 'border-[#E3C27D]/20 hover:border-amber-300'
                       }`}
                     >
                       <div className="text-3xl mb-1">{type.emoji}</div>
-                      <div className="text-xs font-medium text-gray-900">{type.name}</div>
+                      <div className="text-xs font-medium text-[#F4F1ED]">{type.name}</div>
                     </button>
                   ))}
                 </div>
@@ -284,7 +284,7 @@ export default function LogTrigger() {
 
               {/* Intensity */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[#E8E6E3] mb-2">
                   Intensity (1-10) *
                 </label>
                 <div className="flex items-center space-x-4">
@@ -296,11 +296,11 @@ export default function LogTrigger() {
                     onChange={(e) => handleInputChange('intensity', parseInt(e.target.value))}
                     className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                   />
-                  <span className="text-2xl font-light text-gray-900 w-12 text-center">
+                  <span className="text-2xl font-light text-[#F4F1ED] w-12 text-center">
                     {trigger.intensity}
                   </span>
                 </div>
-                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <div className="flex justify-between text-xs text-[#8E8A84] mt-1">
                   <span>Mild</span>
                   <span>Moderate</span>
                   <span>Intense</span>
@@ -309,7 +309,7 @@ export default function LogTrigger() {
 
               {/* Location */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[#E8E6E3] mb-2">
                   Where were you?
                 </label>
                 <input
@@ -317,38 +317,38 @@ export default function LogTrigger() {
                   value={trigger.location}
                   onChange={(e) => handleInputChange('location', e.target.value)}
                   placeholder="Home, work, social event..."
-                  className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                  className="w-full text-[#F4F1ED] px-4 py-3 border border-[#E3C27D]/30 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
                   maxLength={100}
                 />
               </div>
 
               {/* Context */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[#E8E6E3] mb-2">
                   What happened? *
                 </label>
                 <textarea
                   value={trigger.context}
                   onChange={(e) => handleInputChange('context', e.target.value)}
                   placeholder="I was triggered when..."
-                  className="w-full text-gray-900 h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
+                  className="w-full text-[#F4F1ED] h-32 px-4 py-3 border border-[#E3C27D]/30 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
                   maxLength={500}
                   required
                 />
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-[#8E8A84] mt-1">
                   {trigger.context.length}/500 characters
                 </p>
               </div>
 
               {/* Emotion */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[#E8E6E3] mb-2">
                   What emotion was beneath it? *
                 </label>
                 <select
                   value={trigger.emotion}
                   onChange={(e) => handleInputChange('emotion', e.target.value)}
-                  className="w-full text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
+                  className="w-full text-[#F4F1ED] px-4 py-3 border border-[#E3C27D]/30 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent"
                   required
                 >
                   <option value="">Select an emotion...</option>
@@ -362,7 +362,7 @@ export default function LogTrigger() {
 
               {/* Response */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[#E8E6E3] mb-2">
                   How did you respond? *
                 </label>
                 <div className="space-y-2">
@@ -372,7 +372,7 @@ export default function LogTrigger() {
                       className={`flex items-center p-4 border-2 rounded-lg cursor-pointer transition-all ${
                         trigger.response === response.value
                           ? 'border-amber-600 bg-amber-50'
-                          : 'border-gray-200 hover:border-amber-300'
+                          : 'border-[#E3C27D]/20 hover:border-amber-300'
                       }`}
                     >
                       <input
@@ -383,7 +383,7 @@ export default function LogTrigger() {
                         onChange={(e) => handleInputChange('response', e.target.value)}
                         className="mr-3"
                       />
-                      <span className="text-sm text-gray-900">{response.label}</span>
+                      <span className="text-sm text-[#F4F1ED]">{response.label}</span>
                     </label>
                   ))}
                 </div>
@@ -391,14 +391,14 @@ export default function LogTrigger() {
 
               {/* Notes */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-[#E8E6E3] mb-2">
                   Additional notes (optional)
                 </label>
                 <textarea
                   value={trigger.notes}
                   onChange={(e) => handleInputChange('notes', e.target.value)}
                   placeholder="Any other observations..."
-                  className="w-full text-gray-900 h-24 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
+                  className="w-full text-[#F4F1ED] h-24 px-4 py-3 border border-[#E3C27D]/30 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
                   maxLength={300}
                 />
               </div>
@@ -408,7 +408,7 @@ export default function LogTrigger() {
                 <button
                   type="button"
                   onClick={() => router.push('/dashboard')}
-                  className="px-6 py-3 text-gray-700 hover:text-gray-900 font-medium"
+                  className="px-6 py-3 text-[#E8E6E3] hover:text-[#F4F1ED] font-medium"
                   disabled={submitting}
                 >
                   Cancel

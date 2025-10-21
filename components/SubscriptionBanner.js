@@ -236,7 +236,7 @@ export function UpgradeSuccessModal({ tier, onClose }) {
       onClick={onClose}
     >
       <div 
-        className="separation-card rounded-2xl p-8 text-center max-w-sm"
+        className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-2xl p-8 text-center max-w-sm"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="text-6xl mb-4">{badge.icon}</div>

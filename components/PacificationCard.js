@@ -75,7 +75,7 @@ function FrontCard() {
         </div>
       </div>
 
-      <div className="p-3 rounded-lg bg-white/50">
+      <div className="p-3 rounded-lg corrective-bg/50">
         <p className="text-xs italic" style={{ color: '#2F855A' }}>
           "The pattern existed before you saw it. Seeing it is the first step to freedom."
         </p>
@@ -144,7 +144,7 @@ function StaticCard({ onLearnMore }) {
         <PracticePoint text="Peace comes before change" />
       </div>
 
-      <div className="p-3 rounded-lg bg-white/50 mb-4">
+      <div className="p-3 rounded-lg corrective-bg/50 mb-4">
         <p className="text-sm italic" style={{ color: '#2F855A' }}>
           "The pattern existed before you saw it. Seeing it is the first step to freedom."
         </p>
@@ -278,7 +278,7 @@ export function PacificationCheckIn({ onComplete }) {
             className={`w-full p-3 rounded-lg text-left transition-all ${
               selected === option.id
                 ? 'bg-green-100 border-2 border-green-400'
-                : 'bg-white/50 hover:bg-white/70'
+                : 'corrective-bg/50 hover:corrective-bg/70'
             }`}
           >
             <div className="flex items-center space-x-3">

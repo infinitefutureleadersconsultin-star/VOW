@@ -114,22 +114,22 @@ export default function PricingPage() {
   const savings = billingCycle === 'yearly' ? '17% off' : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
       <Head>
         <title>Pricing - VOW Theory</title>
       </Head>
 
       {/* Header */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="corrective-bg border-b border-[#E3C27D]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
               onClick={() => router.push(isAuthenticated ? '/dashboard' : '/')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               ← Back
             </button>
-            <h1 className="text-lg font-medium text-gray-900">Pricing</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">Pricing</h1>
             <div className="w-16"></div>
           </div>
         </div>
@@ -146,13 +146,13 @@ export default function PricingPage() {
           </p>
 
           {/* Billing Toggle */}
-          <div className="inline-flex items-center space-x-4 p-2 rounded-lg bg-white shadow-sm">
+          <div className="inline-flex items-center space-x-4 p-2 rounded-lg corrective-bg shadow-sm">
             <button
               onClick={() => setBillingCycle('monthly')}
               className={`px-6 py-2 rounded-lg font-medium transition-all ${
                 billingCycle === 'monthly'
-                  ? 'bg-gradient-to-r from-amber-100 to-amber-50 text-gray-900'
-                  : 'text-gray-600'
+                  ? 'bg-gradient-to-r from-amber-100 to-amber-50 text-[#F4F1ED]'
+                  : 'text-[#8E8A84]'
               }`}
             >
               Monthly
@@ -161,8 +161,8 @@ export default function PricingPage() {
               onClick={() => setBillingCycle('yearly')}
               className={`px-6 py-2 rounded-lg font-medium transition-all ${
                 billingCycle === 'yearly'
-                  ? 'bg-gradient-to-r from-amber-100 to-amber-50 text-gray-900'
-                  : 'text-gray-600'
+                  ? 'bg-gradient-to-r from-amber-100 to-amber-50 text-[#F4F1ED]'
+                  : 'text-[#8E8A84]'
               }`}
             >
               Yearly
@@ -188,7 +188,7 @@ export default function PricingPage() {
         </div>
 
         {/* Features Comparison */}
-        <div className="separation-card rounded-xl p-8 mb-12">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-12">
           <h3 className="text-2xl font-bold awareness-text mb-6 text-center">
             Feature Comparison
           </h3>
@@ -306,10 +306,10 @@ function PricingCard({ tier, isAuthenticated, onSelect }) {
         disabled={tier.disabled}
         className={`w-full py-3 rounded-lg font-medium transition-all ${
           tier.disabled
-            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+            ? 'bg-gray-200 text-[#8E8A84] cursor-not-allowed'
             : tier.popular
             ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700'
-            : 'bg-white border-2 border-gray-300 hover:border-amber-400'
+            : 'corrective-bg border-2 border-[#E3C27D]/30 hover:border-amber-400'
         }`}
       >
         {tier.cta}
@@ -334,7 +334,7 @@ function FeatureComparison({ tiers }) {
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b-2 border-gray-200">
+          <tr className="border-b-2 border-[#E3C27D]/20">
             <th className="text-left py-3 px-4 font-medium awareness-text">Feature</th>
             <th className="text-center py-3 px-4 font-medium awareness-text">Free</th>
             <th className="text-center py-3 px-4 font-medium awareness-text">Seeker</th>
@@ -360,7 +360,7 @@ function FAQItem({ question, answer }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="separation-card rounded-lg">
+    <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-lg">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-4 text-left"

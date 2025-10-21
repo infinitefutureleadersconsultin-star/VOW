@@ -74,25 +74,25 @@ function ProfileContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
       <Head>
         <title>Profile - VOW</title>
       </Head>
 
       {/* Header */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="corrective-bg border-b border-[#E3C27D]/20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
               onClick={() => router.push('/dashboard')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               ← Back
             </button>
-            <h1 className="text-lg font-medium text-gray-900">Profile</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">Profile</h1>
             <button
               onClick={() => router.push('/settings')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               Settings →
             </button>
@@ -111,13 +111,13 @@ function ProfileContent() {
             />
 
             {/* Streak Display */}
-            <div className="separation-card rounded-xl p-6">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
               <h3 className="font-bold awareness-text mb-4">Current Streak</h3>
               <StreakMeter streak={stats?.currentStreak || 0} size="large" />
             </div>
 
             {/* Level Display */}
-            <div className="separation-card rounded-xl p-6 text-center">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 text-center">
               <div className="text-5xl mb-3">⭐</div>
               <div className="text-3xl font-bold awareness-text mb-1">
                 Level {userData?.level || 1}
@@ -143,7 +143,7 @@ function ProfileContent() {
           {/* Right Column */}
           <div className="lg:col-span-2 space-y-6">
             {/* Stats Overview */}
-            <div className="separation-card rounded-xl p-6">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
               <h3 className="text-xl font-bold awareness-text mb-4">Your Journey</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <StatCard
@@ -174,7 +174,7 @@ function ProfileContent() {
             </div>
 
             {/* Achievements */}
-            <div className="separation-card rounded-xl p-6">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
               <h3 className="text-xl font-bold awareness-text mb-4">
                 Achievements ({achievements.length})
               </h3>
@@ -199,7 +199,7 @@ function ProfileContent() {
             </div>
 
             {/* Milestones */}
-            <div className="separation-card rounded-xl p-6">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
               <h3 className="text-xl font-bold awareness-text mb-4">Streak Milestones</h3>
               <StreakMilestones
                 currentStreak={stats?.currentStreak || 0}
@@ -208,7 +208,7 @@ function ProfileContent() {
             </div>
 
             {/* Activity Summary */}
-            <div className="separation-card rounded-xl p-6">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
               <h3 className="text-xl font-bold awareness-text mb-4">Recent Activity</h3>
               
               <div className="space-y-3">
@@ -232,7 +232,7 @@ function ProfileContent() {
 
 function StatCard({ icon, label, value, color }) {
   return (
-    <div className="text-center p-4 rounded-lg bg-gradient-to-br from-gray-50 to-white border border-gray-200">
+    <div className="text-center p-4 rounded-lg bg-gradient-to-br from-gray-50 to-white border border-[#E3C27D]/20">
       <div className="text-3xl mb-2">{icon}</div>
       <div className="text-2xl font-bold awareness-text mb-1">{value}</div>
       <div className="text-xs observation-text">{label}</div>
@@ -279,7 +279,7 @@ function ActivityItem({ activity }) {
   };
 
   return (
-    <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-50">
+    <div className="flex items-center space-x-3 p-3 rounded-lg bg-[#1A1C1F]">
       <div className="text-2xl">{activityIcons[activity.type] || '📌'}</div>
       <div className="flex-1">
         <div className="text-sm font-medium awareness-text">{activity.title}</div>

@@ -50,23 +50,23 @@ function LearnContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
       <Head>
         <title>Learn - VOW Theory</title>
         <meta name="description" content="Learn the principles of VOW Theory and the Law of Daily Remembrance" />
       </Head>
 
       {/* Header */}
-      <nav className="bg-white border-b border-amber-100">
+      <nav className="corrective-bg border-b border-[#E3C27D]/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
               onClick={() => router.push('/dashboard')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               ← Back
             </button>
-            <h1 className="text-lg font-medium text-gray-900">Learn VOW Theory</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">Learn VOW Theory</h1>
             <div className="w-16"></div>
           </div>
         </div>
@@ -107,7 +107,7 @@ function LearnContent() {
         </div>
 
         {/* How It Works */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-xl font-bold awareness-text mb-4">
             How VOW Theory Works
           </h3>
@@ -158,7 +158,7 @@ function LearnContent() {
         <div className="text-center">
           <button
             onClick={() => router.push('/learn_principles')}
-            className="px-8 py-4 rounded-lg font-medium text-gray-900 text-lg"
+            className="px-8 py-4 rounded-lg font-medium text-[#F4F1ED] text-lg"
             style={{ backgroundColor: '#C6A664' }}
           >
             Explore All Principles →
@@ -201,14 +201,14 @@ function Step({ number, title, description }) {
   return (
     <div className="flex items-start space-x-4">
       <div 
-        className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-gray-900"
+        className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[#F4F1ED]"
         style={{ backgroundColor: '#C6A664' }}
       >
         {number}
       </div>
       <div>
         <h4 className="font-medium awareness-text mb-1">{title}</h4>
-        <p className="text-sm observation-text text-gray-700">{description}</p>
+        <p className="text-sm observation-text text-[#E8E6E3]">{description}</p>
       </div>
     </div>
   );
@@ -216,10 +216,10 @@ function Step({ number, title, description }) {
 
 function ConceptCard({ icon, title, description }) {
   return (
-    <div className="separation-card rounded-xl p-6 text-center">
+    <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 text-center">
       <div className="text-4xl mb-3">{icon}</div>
       <h4 className="font-medium awareness-text mb-2">{title}</h4>
-      <p className="text-sm observation-text text-gray-700">{description}</p>
+      <p className="text-sm observation-text text-[#E8E6E3]">{description}</p>
     </div>
   );
 }

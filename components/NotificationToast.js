@@ -82,7 +82,7 @@ function Toast({ message, type, onClose }) {
       </div>
       <button
         onClick={onClose}
-        className="flex-shrink-0 hover:bg-white hover:bg-opacity-20 rounded-full p-1 transition-colors"
+        className="flex-shrink-0 hover:corrective-bg hover:bg-opacity-20 rounded-full p-1 transition-colors"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

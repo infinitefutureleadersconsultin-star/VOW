@@ -143,7 +143,7 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Vow Statement */}
       <div>
-        <label htmlFor="statement" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="statement" className="block text-sm font-medium text-[#E8E6E3] mb-2">
           Your Vow Statement *
         </label>
         <textarea
@@ -154,12 +154,12 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
           placeholder="I vow to remember..."
           disabled={isLoading}
           className={`w-full h-32 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none disabled:opacity-50 disabled:cursor-not-allowed ${
-            getFieldError('statement') ? 'border-red-300' : 'border-gray-300'
+            getFieldError('statement') ? 'border-red-300' : 'border-[#E3C27D]/30'
           }`}
           maxLength={300}
         />
         <div className="flex justify-between items-center mt-1">
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-[#8E8A84]">
             {formData.statement.length}/300 characters
           </span>
           {getFieldError('statement') && (
@@ -170,7 +170,7 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
 
       {/* Category */}
       <div>
-        <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="category" className="block text-sm font-medium text-[#E8E6E3] mb-2">
           Category *
         </label>
         <select
@@ -180,7 +180,7 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
           onBlur={() => handleBlur('category')}
           disabled={isLoading}
           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed ${
-            getFieldError('category') ? 'border-red-300' : 'border-gray-300'
+            getFieldError('category') ? 'border-red-300' : 'border-[#E3C27D]/30'
           }`}
         >
           <option value="">Select a category...</option>
@@ -197,7 +197,7 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
 
       {/* Duration */}
       <div>
-        <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="duration" className="block text-sm font-medium text-[#E8E6E3] mb-2">
           Duration *
         </label>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -210,10 +210,10 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
               className={`p-4 border-2 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
                 formData.duration === dur.value
                   ? 'border-amber-600 bg-amber-50'
-                  : 'border-gray-200 hover:border-amber-300'
+                  : 'border-[#E3C27D]/20 hover:border-amber-300'
               }`}
             >
-              <div className="text-sm font-medium text-gray-900">{dur.label}</div>
+              <div className="text-sm font-medium text-[#F4F1ED]">{dur.label}</div>
             </button>
           ))}
         </div>
@@ -221,7 +221,7 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
 
       {/* Why It Matters */}
       <div>
-        <label htmlFor="whyMatters" className="block text-sm font-medium text-gray-700 mb-2">
+        <label htmlFor="whyMatters" className="block text-sm font-medium text-[#E8E6E3] mb-2">
           Why does this matter to you? *
         </label>
         <textarea
@@ -232,7 +232,7 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
           placeholder="This matters because..."
           disabled={isLoading}
           className={`w-full h-32 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none disabled:opacity-50 disabled:cursor-not-allowed ${
-            getFieldError('whyMatters') ? 'border-red-300' : 'border-gray-300'
+            getFieldError('whyMatters') ? 'border-red-300' : 'border-[#E3C27D]/30'
           }`}
           maxLength={500}
         />
@@ -243,12 +243,12 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
 
       {/* Identity Transformation */}
       <div className="border-t pt-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Identity Transformation</h3>
+        <h3 className="text-lg font-medium text-[#F4F1ED] mb-4">Identity Transformation</h3>
         
         <div className="space-y-4">
           {/* Before Identity */}
           <div>
-            <label htmlFor="beforeIdentity" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="beforeIdentity" className="block text-sm font-medium text-[#E8E6E3] mb-2">
               Who I was (before) *
             </label>
             <textarea
@@ -259,7 +259,7 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
               placeholder="Before, I was someone who..."
               disabled={isLoading}
               className={`w-full h-24 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none disabled:opacity-50 disabled:cursor-not-allowed ${
-                getFieldError('beforeIdentity') ? 'border-red-300' : 'border-gray-300'
+                getFieldError('beforeIdentity') ? 'border-red-300' : 'border-[#E3C27D]/30'
               }`}
               maxLength={300}
             />
@@ -274,7 +274,7 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
 
           {/* Becoming Identity */}
           <div>
-            <label htmlFor="becomingIdentity" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="becomingIdentity" className="block text-sm font-medium text-[#E8E6E3] mb-2">
               Who I am becoming *
             </label>
             <textarea
@@ -285,7 +285,7 @@ export default function VowForm({ onSubmit, initialData = null, isLoading = fals
               placeholder="Now, I am becoming someone who..."
               disabled={isLoading}
               className={`w-full h-24 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none disabled:opacity-50 disabled:cursor-not-allowed ${
-                getFieldError('becomingIdentity') ? 'border-red-300' : 'border-gray-300'
+                getFieldError('becomingIdentity') ? 'border-red-300' : 'border-[#E3C27D]/30'
               }`}
               maxLength={300}
             />

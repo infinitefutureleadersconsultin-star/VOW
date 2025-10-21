@@ -159,10 +159,10 @@ export default function Reflection() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading reflection...</p>
+          <p className="text-[#8E8A84]">Loading reflection...</p>
         </div>
       </div>
     );
@@ -177,29 +177,29 @@ export default function Reflection() {
         <meta name="description" content="Reflect on your journey" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
+      <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
         {/* Header */}
-        <nav className="bg-white border-b border-amber-100">
+        <nav className="corrective-bg border-b border-[#E3C27D]/30">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               <button
                 onClick={() => router.push('/dashboard')}
-                className="text-gray-600 hover:text-gray-900"
+                className="text-[#8E8A84] hover:text-[#F4F1ED]"
               >
                 ← Back
               </button>
-              <h1 className="text-lg font-medium text-gray-900">Daily Reflection</h1>
+              <h1 className="text-lg font-medium text-[#F4F1ED]">Daily Reflection</h1>
               <div className="w-16"></div>
             </div>
           </div>
         </nav>
 
         {/* Progress Bar */}
-        <div className="bg-white border-b border-gray-200">
+        <div className="corrective-bg border-b border-[#E3C27D]/20">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-600">Step {step} of 4</span>
-              <span className="text-sm text-gray-600">{Math.round(progressPercent)}%</span>
+              <span className="text-sm text-[#8E8A84]">Step {step} of 4</span>
+              <span className="text-sm text-[#8E8A84]">{Math.round(progressPercent)}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
@@ -221,24 +221,24 @@ export default function Reflection() {
 
         {/* Main Content */}
         <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="bg-white rounded-xl shadow-md p-8">
+          <div className="corrective-bg rounded-xl shadow-md p-8">
             {/* Step 1: Vow Alignment */}
             {step === 1 && (
               <div>
-                <h2 className="text-2xl font-light text-gray-900 mb-2">
+                <h2 className="text-2xl font-light text-[#F4F1ED] mb-2">
                   How did you honor your vow today?
                 </h2>
-                <p className="text-gray-600 mb-6">
+                <p className="text-[#8E8A84] mb-6">
                   Reflect on the moments you stayed aligned with who you're becoming.
                 </p>
                 <textarea
                   value={reflection.vowAlignment}
                   onChange={(e) => handleInputChange('vowAlignment', e.target.value)}
                   placeholder="I honored my vow by..."
-                  className="w-full h-40 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
+                  className="w-full h-40 px-4 py-3 border border-[#E3C27D]/30 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
                   maxLength={500}
                 />
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-[#8E8A84] mt-2">
                   {reflection.vowAlignment.length}/500 characters
                 </p>
               </div>
@@ -247,10 +247,10 @@ export default function Reflection() {
             {/* Step 2: Emotional State */}
             {step === 2 && (
               <div>
-                <h2 className="text-2xl font-light text-gray-900 mb-2">
+                <h2 className="text-2xl font-light text-[#F4F1ED] mb-2">
                   How are you feeling right now?
                 </h2>
-                <p className="text-gray-600 mb-6">
+                <p className="text-[#8E8A84] mb-6">
                   Name your emotion without judgment. Awareness is transformation.
                 </p>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -261,11 +261,11 @@ export default function Reflection() {
                       className={`p-6 border-2 rounded-lg transition-all ${
                         selectedEmotion === emotion.value
                           ? 'border-amber-600 bg-amber-50'
-                          : 'border-gray-200 hover:border-amber-300'
+                          : 'border-[#E3C27D]/20 hover:border-amber-300'
                       }`}
                     >
                       <div className="text-4xl mb-2">{emotion.emoji}</div>
-                      <div className="text-sm font-medium text-gray-900">{emotion.name}</div>
+                      <div className="text-sm font-medium text-[#F4F1ED]">{emotion.name}</div>
                     </button>
                   ))}
                 </div>
@@ -275,28 +275,28 @@ export default function Reflection() {
             {/* Step 3: Challenges & Insights */}
             {step === 3 && (
               <div>
-                <h2 className="text-2xl font-light text-gray-900 mb-2">
+                <h2 className="text-2xl font-light text-[#F4F1ED] mb-2">
                   What challenged you today?
                 </h2>
-                <p className="text-gray-600 mb-6">
+                <p className="text-[#8E8A84] mb-6">
                   Identify the moments that tested you. What did they teach you?
                 </p>
                 <textarea
                   value={reflection.challenges}
                   onChange={(e) => handleInputChange('challenges', e.target.value)}
                   placeholder="Today I was challenged by..."
-                  className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none mb-4"
+                  className="w-full h-32 px-4 py-3 border border-[#E3C27D]/30 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none mb-4"
                   maxLength={500}
                 />
                 
-                <h3 className="text-lg font-medium text-gray-900 mb-2 mt-6">
+                <h3 className="text-lg font-medium text-[#F4F1ED] mb-2 mt-6">
                   What insight did you gain?
                 </h3>
                 <textarea
                   value={reflection.insights}
                   onChange={(e) => handleInputChange('insights', e.target.value)}
                   placeholder="I learned that..."
-                  className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
+                  className="w-full h-32 px-4 py-3 border border-[#E3C27D]/30 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
                   maxLength={500}
                 />
               </div>
@@ -305,28 +305,28 @@ export default function Reflection() {
             {/* Step 4: Gratitude & Tomorrow */}
             {step === 4 && (
               <div>
-                <h2 className="text-2xl font-light text-gray-900 mb-2">
+                <h2 className="text-2xl font-light text-[#F4F1ED] mb-2">
                   What are you grateful for today?
                 </h2>
-                <p className="text-gray-600 mb-6">
+                <p className="text-[#8E8A84] mb-6">
                   Even in difficulty, there is always something to honor.
                 </p>
                 <textarea
                   value={reflection.gratitude}
                   onChange={(e) => handleInputChange('gratitude', e.target.value)}
                   placeholder="I am grateful for..."
-                  className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none mb-4"
+                  className="w-full h-32 px-4 py-3 border border-[#E3C27D]/30 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none mb-4"
                   maxLength={500}
                 />
                 
-                <h3 className="text-lg font-medium text-gray-900 mb-2 mt-6">
+                <h3 className="text-lg font-medium text-[#F4F1ED] mb-2 mt-6">
                   How will you honor your vow tomorrow?
                 </h3>
                 <textarea
                   value={reflection.tomorrowCommitment}
                   onChange={(e) => handleInputChange('tomorrowCommitment', e.target.value)}
                   placeholder="Tomorrow, I will..."
-                  className="w-full h-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
+                  className="w-full h-32 px-4 py-3 border border-[#E3C27D]/30 rounded-lg focus:ring-2 focus:ring-amber-600 focus:border-transparent resize-none"
                   maxLength={500}
                 />
               </div>
@@ -339,8 +339,8 @@ export default function Reflection() {
                 disabled={step === 1 || submitting}
                 className={`px-6 py-3 rounded-lg font-medium transition-colors ${
                   step === 1 || submitting
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    ? 'bg-[#2A2C2F] text-gray-400 cursor-not-allowed'
+                    : 'bg-gray-200 text-[#E8E6E3] hover:bg-gray-300'
                 }`}
               >
                 Back

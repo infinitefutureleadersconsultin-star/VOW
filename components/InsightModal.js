@@ -25,7 +25,7 @@ export default function InsightModal({ insight, isOpen, onClose, type = 'reflect
       onClick={onClose}
     >
       <div
-        className={`bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transition-all duration-300 ${
+        className={`corrective-bg rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transition-all duration-300 ${
           isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
         }`}
         onClick={(e) => e.stopPropagation()}
@@ -62,7 +62,7 @@ function ReflectionInsight({ insight, onClose }) {
       </div>
 
       {insight.suggestedStage && (
-        <div className="mb-6 p-4 rounded-lg bg-gray-50">
+        <div className="mb-6 p-4 rounded-lg bg-[#1A1C1F]">
           <h4 className="font-medium awareness-text mb-2">Suggested Next Stage</h4>
           <p className="text-sm observation-text capitalize">
             {insight.suggestedStage}
@@ -239,7 +239,7 @@ function PatternInsight({ insight, onClose }) {
       </div>
 
       {insight.frequency && (
-        <div className="mb-6 p-4 rounded-lg bg-gray-50">
+        <div className="mb-6 p-4 rounded-lg bg-[#1A1C1F]">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm observation-text">Frequency</span>
             <span className="font-bold awareness-text">{insight.frequency} times</span>
@@ -297,7 +297,7 @@ export function InsightLoadingModal({ isOpen, message = 'Generating insight...' 
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
     >
-      <div className="bg-white rounded-2xl p-8 text-center max-w-sm">
+      <div className="corrective-bg rounded-2xl p-8 text-center max-w-sm">
         <div className="text-6xl mb-4 animate-pulse">🤔</div>
         <h3 className="text-lg font-bold awareness-text mb-2">
           {message}
@@ -325,7 +325,7 @@ export function CelebrationModal({ achievement, isOpen, onClose }) {
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl p-8 text-center max-w-md animate-bounce"
+        className="corrective-bg rounded-2xl p-8 text-center max-w-md animate-bounce"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="text-8xl mb-4">{achievement.icon || '🎉'}</div>

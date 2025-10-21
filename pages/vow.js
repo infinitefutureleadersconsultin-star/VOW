@@ -68,7 +68,7 @@ function VowContent() {
 
   if (vows.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
+      <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
         <Head>
           <title>Your Vows - VOW</title>
         </Head>
@@ -97,22 +97,22 @@ function VowContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
       <Head>
         <title>Your Vows - VOW</title>
       </Head>
 
       {/* Header */}
-      <nav className="bg-white border-b border-amber-100">
+      <nav className="corrective-bg border-b border-[#E3C27D]/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
               onClick={() => router.push('/dashboard')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               ← Dashboard
             </button>
-            <h1 className="text-lg font-medium text-gray-900">Your Vows</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">Your Vows</h1>
             <button
               onClick={() => router.push('/create-vow')}
               className="px-4 py-2 rounded-lg text-sm font-medium text-white"
@@ -128,7 +128,7 @@ function VowContent() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Vow List Sidebar */}
           <div className="lg:col-span-1">
-            <div className="separation-card rounded-xl p-4">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-4">
               <h3 className="font-medium awareness-text mb-3">All Vows</h3>
               <div className="space-y-2">
                 {vows.map((vow) => (
@@ -138,7 +138,7 @@ function VowContent() {
                     className={`w-full text-left p-3 rounded-lg transition-all ${
                       selectedVow?.id === vow.id
                         ? 'bg-gradient-to-r from-amber-100 to-amber-50'
-                        : 'hover:bg-gray-50'
+                        : 'hover:bg-[#1A1C1F]'
                     }`}
                   >
                     <div className="font-medium text-sm awareness-text mb-1 truncate">
@@ -167,7 +167,7 @@ function VowContent() {
             {selectedVow ? (
               <VowDetail vow={selectedVow} onUpdate={fetchVows} />
             ) : (
-              <div className="separation-card rounded-xl p-12 text-center">
+              <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-12 text-center">
                 <div className="text-4xl mb-4">👈</div>
                 <p className="observation-text">Select a vow to view details</p>
               </div>
@@ -184,7 +184,7 @@ function VowDetail({ vow, onUpdate }) {
   const progress = calculateVowProgress(vow);
 
   return (
-    <div className="separation-card rounded-xl p-6">
+    <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
       {/* Progress Ring */}
       <div className="text-center mb-6">
         <div className="inline-block relative">

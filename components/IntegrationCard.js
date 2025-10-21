@@ -75,7 +75,7 @@ function FrontCard() {
         </div>
       </div>
 
-      <div className="p-3 rounded-lg bg-white/50">
+      <div className="p-3 rounded-lg corrective-bg/50">
         <p className="text-xs italic" style={{ color: '#047857' }}>
           "You were whole before. You are becoming whole again."
         </p>
@@ -144,7 +144,7 @@ function StaticCard({ onLearnMore }) {
         <InsightPoint text="You were never broken" />
       </div>
 
-      <div className="p-3 rounded-lg bg-white/50 mb-4">
+      <div className="p-3 rounded-lg corrective-bg/50 mb-4">
         <p className="text-sm italic" style={{ color: '#047857' }}>
           "The healed self and the original self are one."
         </p>
@@ -287,7 +287,7 @@ export function ThreeSelvesVisualizer() {
         />
       </div>
 
-      <div className="mt-4 p-4 rounded-lg bg-white/50 text-center">
+      <div className="mt-4 p-4 rounded-lg corrective-bg/50 text-center">
         <p className="text-sm font-medium" style={{ color: '#5FD3A5' }}>
           Original + Adaptive = Integrated
         </p>
@@ -298,7 +298,7 @@ export function ThreeSelvesVisualizer() {
 
 function SelfBox({ icon, color, title, subtitle, description }) {
   return (
-    <div className="p-4 rounded-lg bg-white/70 border-2" style={{ borderColor: color }}>
+    <div className="p-4 rounded-lg corrective-bg/70 border-2" style={{ borderColor: color }}>
       <div className="flex items-center space-x-3 mb-2">
         <span className="text-3xl">{icon}</span>
         <div>
@@ -354,7 +354,7 @@ export function IntegrationCheckIn({ onComplete }) {
             className={`w-full p-3 rounded-lg text-left transition-all ${
               selected === option.id
                 ? 'bg-teal-100 border-2 border-teal-400'
-                : 'bg-white/50 hover:bg-white/70'
+                : 'corrective-bg/50 hover:corrective-bg/70'
             }`}
           >
             <div className="flex items-center space-x-3">

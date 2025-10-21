@@ -53,7 +53,7 @@ function Header({ userData, mobileMenuOpen, setMobileMenuOpen, userMenuOpen, set
   ];
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <header className="corrective-bg border-b border-[#E3C27D]/20 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -74,7 +74,7 @@ function Header({ userData, mobileMenuOpen, setMobileMenuOpen, userMenuOpen, set
                 className={`flex items-center space-x-2 px-3 py-2 rounded-lg transition-all ${
                   router.pathname === item.path
                     ? 'bg-gradient-to-r from-amber-100 to-amber-50'
-                    : 'hover:bg-gray-100'
+                    : 'hover:bg-[#2A2C2F]'
                 }`}
               >
                 <span>{item.icon}</span>
@@ -99,7 +99,7 @@ function Header({ userData, mobileMenuOpen, setMobileMenuOpen, userMenuOpen, set
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100"
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-[#2A2C2F]"
               >
                 <div className="w-8 h-8 rounded-full flex items-center justify-center text-white" 
                      style={{ backgroundColor: tierBadge.color }}>
@@ -112,13 +112,13 @@ function Header({ userData, mobileMenuOpen, setMobileMenuOpen, userMenuOpen, set
 
               {/* Dropdown */}
               {userMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
+                <div className="absolute right-0 mt-2 w-48 corrective-bg rounded-lg shadow-lg border border-[#E3C27D]/20 py-2">
                   <button
                     onClick={() => {
                       router.push('/profile');
                       setUserMenuOpen(false);
                     }}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-[#2A2C2F]"
                   >
                     Profile
                   </button>
@@ -127,7 +127,7 @@ function Header({ userData, mobileMenuOpen, setMobileMenuOpen, userMenuOpen, set
                       router.push('/settings');
                       setUserMenuOpen(false);
                     }}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-[#2A2C2F]"
                   >
                     Settings
                   </button>
@@ -136,11 +136,11 @@ function Header({ userData, mobileMenuOpen, setMobileMenuOpen, userMenuOpen, set
                       router.push('/pricing');
                       setUserMenuOpen(false);
                     }}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-[#2A2C2F]"
                   >
                     Upgrade
                   </button>
-                  <div className="border-t border-gray-200 my-2"></div>
+                  <div className="border-t border-[#E3C27D]/20 my-2"></div>
                   <button
                     onClick={() => {
                       onLogout();
@@ -157,7 +157,7 @@ function Header({ userData, mobileMenuOpen, setMobileMenuOpen, userMenuOpen, set
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+              className="md:hidden p-2 rounded-lg hover:bg-[#2A2C2F]"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mobileMenuOpen ? (
@@ -184,7 +184,7 @@ function Header({ userData, mobileMenuOpen, setMobileMenuOpen, userMenuOpen, set
                   className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg ${
                     router.pathname === item.path
                       ? 'bg-gradient-to-r from-amber-100 to-amber-50'
-                      : 'hover:bg-gray-100'
+                      : 'hover:bg-[#2A2C2F]'
                   }`}
                 >
                   <span className="text-xl">{item.icon}</span>
@@ -214,7 +214,7 @@ function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-white border-t border-gray-200 mt-auto">
+    <footer className="corrective-bg border-t border-[#E3C27D]/20 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
@@ -234,25 +234,25 @@ function Footer() {
             <div className="space-y-2">
               <button
                 onClick={() => router.push('/learn')}
-                className="block text-sm observation-text hover:text-gray-900"
+                className="block text-sm observation-text hover:text-[#F4F1ED]"
               >
                 Learn VOW Theory
               </button>
               <button
                 onClick={() => router.push('/pricing')}
-                className="block text-sm observation-text hover:text-gray-900"
+                className="block text-sm observation-text hover:text-[#F4F1ED]"
               >
                 Pricing
               </button>
               <button
                 onClick={() => router.push('/terms')}
-                className="block text-sm observation-text hover:text-gray-900"
+                className="block text-sm observation-text hover:text-[#F4F1ED]"
               >
                 Terms
               </button>
               <button
                 onClick={() => router.push('/privacy')}
-                className="block text-sm observation-text hover:text-gray-900"
+                className="block text-sm observation-text hover:text-[#F4F1ED]"
               >
                 Privacy
               </button>
@@ -275,7 +275,7 @@ function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-200 mt-8 pt-6 text-center">
+        <div className="border-t border-[#E3C27D]/20 mt-8 pt-6 text-center">
           <p className="text-sm observation-text">
             © {currentYear} VOW Theory. All rights reserved.
           </p>

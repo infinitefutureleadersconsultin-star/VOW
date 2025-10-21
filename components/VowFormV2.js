@@ -117,10 +117,10 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
   const renderStep1 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+        <h3 className="text-2xl font-semibold text-[#F4F1ED] mb-2">
           What chain are you breaking?
         </h3>
-        <p className="text-gray-600">
+        <p className="text-[#8E8A84]">
           Every vow begins with recognizing the pattern
         </p>
       </div>
@@ -138,7 +138,7 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
             }`}
           >
             <div className="text-4xl mb-3">{cat.icon}</div>
-            <div className="font-medium text-gray-900">{cat.label}</div>
+            <div className="font-medium text-[#F4F1ED]">{cat.label}</div>
           </button>
         ))}
       </div>
@@ -152,10 +152,10 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
   const renderStep2 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+        <h3 className="text-2xl font-semibold text-[#F4F1ED] mb-2">
           Fill the void with intention
         </h3>
-        <p className="text-gray-600">
+        <p className="text-[#8E8A84]">
           Define yourself apart from the pattern
         </p>
       </div>
@@ -163,7 +163,7 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
       {/* The Void Structure */}
       <div className="glass-card rounded-2xl p-8 space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-sm font-medium text-[#E8E6E3] mb-3">
             I'm the type of person that...
           </label>
           <input
@@ -177,7 +177,7 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
           {errors.identityType && (
             <p className="text-sm text-red-600 mt-2">{errors.identityType}</p>
           )}
-          <p className="text-xs text-gray-500 mt-2 italic">
+          <p className="text-xs text-[#8E8A84] mt-2 italic">
             Example: "honors time" or "values my peace" or "seeks clarity"
           </p>
         </div>
@@ -187,7 +187,7 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-sm font-medium text-[#E8E6E3] mb-3">
             I will never (or always)...
           </label>
           <input
@@ -201,7 +201,7 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
           {errors.boundary && (
             <p className="text-sm text-red-600 mt-2">{errors.boundary}</p>
           )}
-          <p className="text-xs text-gray-500 mt-2 italic">
+          <p className="text-xs text-[#8E8A84] mt-2 italic">
             Example: "never delay my purpose again" or "never abandon myself again"
           </p>
         </div>
@@ -211,7 +211,7 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
       {formData.identityType && formData.boundary && (
         <div className="glass-card rounded-2xl p-6 bg-amber-50/50">
           <div className="text-sm font-medium text-amber-900 mb-2">Your Vow:</div>
-          <p className="text-lg text-gray-900 leading-relaxed">
+          <p className="text-lg text-[#F4F1ED] leading-relaxed">
             "I'm the type of person that <span className="font-semibold text-amber-700">{formData.identityType}</span>; therefore, I will <span className="font-semibold text-amber-700">{formData.boundary}</span>."
           </p>
         </div>
@@ -222,10 +222,10 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
   const renderStep3 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+        <h3 className="text-2xl font-semibold text-[#F4F1ED] mb-2">
           Why does this matter?
         </h3>
-        <p className="text-gray-600">
+        <p className="text-[#8E8A84]">
           Anchor your vow in meaning
         </p>
       </div>
@@ -242,7 +242,7 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
         {errors.whyMatters && (
           <p className="text-sm text-red-600 mt-2">{errors.whyMatters}</p>
         )}
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-[#8E8A84] mt-2">
           {formData.whyMatters.length}/500 characters
         </p>
       </div>
@@ -252,10 +252,10 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
   const renderStep4 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+        <h3 className="text-2xl font-semibold text-[#F4F1ED] mb-2">
           How long will you honor this?
         </h3>
-        <p className="text-gray-600">
+        <p className="text-[#8E8A84]">
           Choose your commitment period
         </p>
       </div>
@@ -273,10 +273,10 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
             }`}
             disabled={isLoading}
           >
-            <div className="text-3xl font-light text-gray-900 mb-1">
+            <div className="text-3xl font-light text-[#F4F1ED] mb-1">
               {dur.label}
             </div>
-            <div className="text-sm text-gray-600">{dur.desc}</div>
+            <div className="text-sm text-[#8E8A84]">{dur.desc}</div>
           </button>
         ))}
       </div>
@@ -297,7 +297,7 @@ export default function VowFormV2({ onSubmit, initialData = null, isLoading = fa
             />
           ))}
         </div>
-        <p className="text-sm text-center text-gray-600">
+        <p className="text-sm text-center text-[#8E8A84]">
           Step {step} of 4
         </p>
       </div>

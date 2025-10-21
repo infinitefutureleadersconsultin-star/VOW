@@ -57,14 +57,14 @@ function ExpandedCard({ quote, onCollapse }) {
         </div>
         <button
           onClick={onCollapse}
-          className="text-xl observation-text hover:text-gray-900"
+          className="text-xl observation-text hover:text-[#F4F1ED]"
         >
           ×
         </button>
       </div>
 
       {/* Core Principle */}
-      <div className="mb-4 p-4 rounded-lg bg-white/50">
+      <div className="mb-4 p-4 rounded-lg corrective-bg/50">
         <p className="text-lg font-medium awareness-text mb-2">
           Daily remembrance creates permanent change.
         </p>
@@ -75,7 +75,7 @@ function ExpandedCard({ quote, onCollapse }) {
       </div>
 
       {/* Quote of the Day */}
-      <div className="mb-4 p-4 rounded-lg bg-white/30 border-l-4" style={{ borderColor: '#C6A664' }}>
+      <div className="mb-4 p-4 rounded-lg corrective-bg/30 border-l-4" style={{ borderColor: '#C6A664' }}>
         <p className="text-sm italic observation-text mb-1">
           "{quote.text}"
         </p>

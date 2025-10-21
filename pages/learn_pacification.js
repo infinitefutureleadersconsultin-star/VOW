@@ -19,22 +19,22 @@ function PacificationContent() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50 bg-gradient-to-b from-white to-green-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F] bg-gradient-to-b from-white to-[#1A1C1F]">
       <Head>
         <title>The Pacification Paradox - VOW Theory</title>
       </Head>
 
       {/* Header */}
-      <nav className="bg-white border-b border-green-100">
+      <nav className="corrective-bg border-b border-green-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
               onClick={() => router.push('/learn_principles')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               ← All Principles
             </button>
-            <h1 className="text-lg font-medium text-gray-900">The Pacification Paradox™</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">The Pacification Paradox™</h1>
             <div className="w-16"></div>
           </div>
         </div>
@@ -50,7 +50,7 @@ function PacificationContent() {
           <p className="text-xl observation-text max-w-2xl mx-auto mb-6">
             Principle 1: Accept Without Fighting
           </p>
-          <div className="inline-block px-6 py-3 rounded-lg bg-gradient-to-r from-green-100 to-green-50">
+          <div className="inline-block px-6 py-3 rounded-lg bg-gradient-to-r from-green-100 to-[#1A1C1F]">
             <p className="text-lg font-medium" style={{ color: '#90EE90' }}>
               "You cannot fight what you refuse to acknowledge."
             </p>
@@ -58,12 +58,12 @@ function PacificationContent() {
         </div>
 
         {/* The Paradox */}
-        <div className="separation-card rounded-xl p-8 mb-8" style={{ borderLeft: '6px solid #90EE90' }}>
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8" style={{ borderLeft: '6px solid #90EE90' }}>
           <h3 className="text-2xl font-bold awareness-text mb-4">The Paradox</h3>
           <p className="observation-text mb-4 text-lg">
             The moment you stop fighting yourself, you begin to change.
           </p>
-          <p className="observation-text text-gray-700">
+          <p className="observation-text text-[#E8E6E3]">
             This seems backwards. How can acceptance lead to transformation? 
             Because fighting a pattern gives it power. Observing it creates distance. 
             Distance creates choice. Choice creates freedom.
@@ -71,7 +71,7 @@ function PacificationContent() {
         </div>
 
         {/* What Pacification Is Not */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">What Pacification Is NOT</h3>
           <div className="space-y-4">
             <NotCard
@@ -90,7 +90,7 @@ function PacificationContent() {
         </div>
 
         {/* What Pacification IS */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">What Pacification IS</h3>
           <div className="space-y-4">
             <IsCard
@@ -112,7 +112,7 @@ function PacificationContent() {
         </div>
 
         {/* How to Practice */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">How to Practice Pacification</h3>
           <div className="space-y-6">
             <PracticeStep
@@ -137,7 +137,7 @@ function PacificationContent() {
         </div>
 
         {/* Common Mistakes */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">Common Mistakes</h3>
           <div className="space-y-3">
             <MistakeCard
@@ -156,7 +156,7 @@ function PacificationContent() {
         </div>
 
         {/* Reflection Prompts */}
-        <div className="separation-card rounded-xl p-8 mb-8">
+        <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 mb-8">
           <h3 className="text-2xl font-bold awareness-text mb-4">Reflection Prompts</h3>
           <p className="observation-text mb-4">Use these to deepen your pacification practice:</p>
           <div className="space-y-3">
@@ -181,7 +181,7 @@ function PacificationContent() {
           </p>
           <button
             onClick={() => router.push('/learn_confrontation')}
-            className="px-8 py-4 rounded-lg font-medium text-gray-900 text-lg"
+            className="px-8 py-4 rounded-lg font-medium text-[#F4F1ED] text-lg"
             style={{ backgroundColor: '#C6A664' }}
           >
             Next: The Confrontational Model →
@@ -218,7 +218,7 @@ function PracticeStep({ number, title, description, example }) {
     <div>
       <div className="flex items-start space-x-4 mb-2">
         <div 
-          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-gray-900"
+          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-bold text-[#F4F1ED]"
           style={{ backgroundColor: '#90EE90' }}
         >
           {number}

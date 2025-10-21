@@ -10,22 +10,22 @@ export default function PrivacyPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen corrective-bg">
       <Head>
         <title>Privacy Policy - VOW Theory</title>
       </Head>
 
       {/* Header */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="corrective-bg border-b border-[#E3C27D]/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
               onClick={() => router.push('/')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               ← Back
             </button>
-            <h1 className="text-lg font-medium text-gray-900">Privacy Policy</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">Privacy Policy</h1>
             <div className="w-16"></div>
           </div>
         </div>

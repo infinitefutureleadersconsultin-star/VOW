@@ -10,22 +10,22 @@ export default function AboutPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
       <Head>
         <title>About - VOW Theory</title>
       </Head>
 
       {/* Header */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="corrective-bg border-b border-[#E3C27D]/20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
               onClick={() => router.push('/')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               ← Back
             </button>
-            <h1 className="text-lg font-medium text-gray-900">About VOW Theory</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">About VOW Theory</h1>
             <div className="w-16"></div>
           </div>
         </div>
@@ -45,7 +45,7 @@ export default function AboutPage() {
 
         {/* Mission */}
         <section className="mb-16">
-          <div className="separation-card rounded-xl p-8 text-center">
+          <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 text-center">
             <h3 className="text-3xl font-bold awareness-text mb-4">Our Mission</h3>
             <p className="text-xl observation-text max-w-3xl mx-auto">
               To help people remember their authentic selves through the power of daily remembrance, 
@@ -58,7 +58,7 @@ export default function AboutPage() {
         <section className="mb-16">
           <h3 className="text-3xl font-bold awareness-text mb-8 text-center">The Story</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="separation-card rounded-xl p-6">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
               <div className="text-4xl mb-4">💡</div>
               <h4 className="text-xl font-bold awareness-text mb-3">The Insight</h4>
               <p className="observation-text">
@@ -68,7 +68,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="separation-card rounded-xl p-6">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
               <div className="text-4xl mb-4">🔄</div>
               <h4 className="text-xl font-bold awareness-text mb-3">The Method</h4>
               <p className="observation-text">
@@ -78,7 +78,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="separation-card rounded-xl p-6">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
               <div className="text-4xl mb-4">⏰</div>
               <h4 className="text-xl font-bold awareness-text mb-3">The Law</h4>
               <p className="observation-text">
@@ -87,7 +87,7 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="separation-card rounded-xl p-6">
+            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
               <div className="text-4xl mb-4">✨</div>
               <h4 className="text-xl font-bold awareness-text mb-3">The Goal</h4>
               <p className="observation-text">
@@ -154,7 +154,7 @@ export default function AboutPage() {
 
         {/* Technology & Science */}
         <section className="mb-16">
-          <div className="separation-card rounded-xl p-8">
+          <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8">
             <h3 className="text-2xl font-bold awareness-text mb-4 text-center">
               Grounded in Science, Powered by Technology
             </h3>
@@ -192,7 +192,7 @@ export default function AboutPage() {
           <h3 className="text-3xl font-bold awareness-text mb-8 text-center">
             Built with Care
           </h3>
-          <div className="separation-card rounded-xl p-8 text-center">
+          <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-8 text-center">
             <p className="observation-text max-w-2xl mx-auto mb-6">
               VOW Theory is built by a small team dedicated to creating tools for genuine 
               transformation. We believe technology should serve healing, not exploit vulnerability.
@@ -231,7 +231,7 @@ export default function AboutPage() {
 function PrincipleCard({ icon, number, title, subtitle, description, color }) {
   return (
     <div 
-      className="separation-card rounded-xl p-6 border-l-4"
+      className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 border-l-4"
       style={{ borderColor: color }}
     >
       <div className="flex items-start space-x-4">
@@ -256,7 +256,7 @@ function PrincipleCard({ icon, number, title, subtitle, description, color }) {
 
 function BeliefCard({ text }) {
   return (
-    <div className="flex items-center space-x-3 p-4 rounded-lg bg-white border-2 border-gray-200">
+    <div className="flex items-center space-x-3 p-4 rounded-lg corrective-bg border-2 border-[#E3C27D]/20">
       <span className="text-2xl">✓</span>
       <span className="font-medium awareness-text">{text}</span>
     </div>

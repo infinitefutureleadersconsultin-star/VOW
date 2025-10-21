@@ -75,7 +75,7 @@ function FrontCard() {
         </div>
       </div>
 
-      <div className="p-3 rounded-lg bg-white/50">
+      <div className="p-3 rounded-lg corrective-bg/50">
         <p className="text-xs italic" style={{ color: '#B7791F' }}>
           "You are not your trauma. You are who you became to survive it."
         </p>
@@ -144,7 +144,7 @@ function StaticCard({ onLearnMore }) {
         <InsightPoint text="Understanding replaces shame" />
       </div>
 
-      <div className="p-3 rounded-lg bg-white/50 mb-4">
+      <div className="p-3 rounded-lg corrective-bg/50 mb-4">
         <p className="text-sm italic" style={{ color: '#B7791F' }}>
           "What hurt you once cannot hurt you again—unless you refuse to see it."
         </p>
@@ -299,7 +299,7 @@ export function OriginStoryBuilder({ onComplete }) {
               value={answers[q.key]}
               onChange={(e) => setAnswers({ ...answers, [q.key]: e.target.value })}
               placeholder={q.placeholder}
-              className="w-full p-3 rounded-lg border border-gray-300 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm"
+              className="w-full p-3 rounded-lg border border-[#E3C27D]/30 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 text-sm"
               rows={2}
             />
           </div>
@@ -362,7 +362,7 @@ export function ConfrontationCheckIn({ onComplete }) {
             className={`w-full p-3 rounded-lg text-left transition-all ${
               selected === option.id
                 ? 'bg-amber-100 border-2 border-amber-400'
-                : 'bg-white/50 hover:bg-white/70'
+                : 'corrective-bg/50 hover:corrective-bg/70'
             }`}
           >
             <div className="flex items-center space-x-3">

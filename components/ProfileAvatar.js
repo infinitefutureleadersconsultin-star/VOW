@@ -56,7 +56,7 @@ export default function ProfileAvatar({ userData, compact = false }) {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-all"
+        className="flex items-center space-x-3 p-2 rounded-lg hover:bg-[#2A2C2F] transition-all"
       >
         <Avatar userData={userData} tierBadge={tierBadge} size="md" />
         <div className="hidden md:block text-left">
@@ -123,7 +123,7 @@ function CompactAvatar({ userData, tierBadge, onClick }) {
       className="relative group"
     >
       <Avatar userData={userData} tierBadge={tierBadge} size="sm" />
-      <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-white flex items-center justify-center text-xs">
+      <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full corrective-bg flex items-center justify-center text-xs">
         {tierBadge.icon}
       </div>
     </button>
@@ -132,9 +132,9 @@ function CompactAvatar({ userData, tierBadge, onClick }) {
 
 function Dropdown({ userData, currentTier, tierBadge, theme, onToggleTheme, onLogout, onNavigate }) {
   return (
-    <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50">
+    <div className="absolute right-0 mt-2 w-72 corrective-bg rounded-xl shadow-xl border border-[#E3C27D]/20 py-2 z-50">
       {/* User Info */}
-      <div className="px-4 py-3 border-b border-gray-200">
+      <div className="px-4 py-3 border-b border-[#E3C27D]/20">
         <div className="flex items-center space-x-3">
           <Avatar userData={userData} tierBadge={tierBadge} size="lg" />
           <div className="flex-1">
@@ -162,7 +162,7 @@ function Dropdown({ userData, currentTier, tierBadge, theme, onToggleTheme, onLo
 
       {/* Quick Stats */}
       {userData?.stats && (
-        <div className="px-4 py-3 border-b border-gray-200">
+        <div className="px-4 py-3 border-b border-[#E3C27D]/20">
           <div className="grid grid-cols-3 gap-2 text-center">
             <QuickStat label="Vows" value={userData.stats.totalVows || 0} />
             <QuickStat label="Streak" value={userData.stats.currentStreak || 0} icon="🔥" />
@@ -197,7 +197,7 @@ function Dropdown({ userData, currentTier, tierBadge, theme, onToggleTheme, onLo
         {/* Theme Toggle */}
         <button
           onClick={onToggleTheme}
-          className="w-full flex items-center justify-between px-4 py-2 hover:bg-gray-100 transition-all"
+          className="w-full flex items-center justify-between px-4 py-2 hover:bg-[#2A2C2F] transition-all"
         >
           <div className="flex items-center space-x-3">
             <span className="text-lg">{theme === 'light' ? '🌙' : '☀️'}</span>
@@ -208,7 +208,7 @@ function Dropdown({ userData, currentTier, tierBadge, theme, onToggleTheme, onLo
           <div className={`w-10 h-6 rounded-full p-1 transition-all ${
             theme === 'dark' ? 'bg-amber-500' : 'bg-gray-300'
           }`}>
-            <div className={`w-4 h-4 rounded-full bg-white transition-transform ${
+            <div className={`w-4 h-4 rounded-full corrective-bg transition-transform ${
               theme === 'dark' ? 'transform translate-x-4' : ''
             }`} />
           </div>
@@ -225,7 +225,7 @@ function Dropdown({ userData, currentTier, tierBadge, theme, onToggleTheme, onLo
       </div>
 
       {/* Logout */}
-      <div className="border-t border-gray-200 pt-2">
+      <div className="border-t border-[#E3C27D]/20 pt-2">
         <MenuItem
           icon="🚪"
           label="Logout"
@@ -257,7 +257,7 @@ function MenuItem({ icon, label, onClick, highlight = false, danger = false }) {
           ? 'bg-gradient-to-r from-amber-50 to-amber-100 hover:from-amber-100 hover:to-amber-200'
           : danger
           ? 'hover:bg-red-50'
-          : 'hover:bg-gray-100'
+          : 'hover:bg-[#2A2C2F]'
       }`}
     >
       <span className="text-lg">{icon}</span>
@@ -301,7 +301,7 @@ export function ProfileCard({ userData, onEdit }) {
   const tierBadge = getTierBadge(currentTier);
 
   return (
-    <div className="separation-card rounded-xl p-6">
+    <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-4">
           <Avatar userData={userData} tierBadge={tierBadge} size="lg" />
@@ -356,7 +356,7 @@ export function ProfileCard({ userData, onEdit }) {
 
 function InfoBox({ label, value }) {
   return (
-    <div className="p-3 rounded-lg bg-gray-50">
+    <div className="p-3 rounded-lg bg-[#1A1C1F]">
       <div className="text-xs observation-text mb-1">{label}</div>
       <div className="font-medium awareness-text">{value}</div>
     </div>

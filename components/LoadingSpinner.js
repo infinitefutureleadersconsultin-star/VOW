@@ -12,7 +12,7 @@ export default function LoadingSpinner({ size = 'medium', text = 'Loading...', f
 
   const Spinner = () => (
     <div className={`${sizeClasses[size]} relative`}>
-      <div className="absolute inset-0 rounded-full border-4 border-gray-200" />
+      <div className="absolute inset-0 rounded-full border-4 border-[#E3C27D]/20" />
       <div 
         className="absolute inset-0 rounded-full border-4 border-transparent animate-spin"
         style={{
@@ -25,7 +25,7 @@ export default function LoadingSpinner({ size = 'medium', text = 'Loading...', f
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-white/90 z-50">
+      <div className="fixed inset-0 flex items-center justify-center corrective-bg/90 z-50">
         <div className="text-center">
           <Spinner />
           {text && <p className="mt-4 observation-text">{text}</p>}
@@ -108,7 +108,7 @@ export function SkeletonLoader({ lines = 3, className = '' }) {
  */
 export function CardSkeleton() {
   return (
-    <div className="separation-card rounded-xl p-6 animate-pulse">
+    <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 animate-pulse">
       <div className="flex items-center space-x-4 mb-4">
         <div className="w-12 h-12 bg-gray-200 rounded-full" />
         <div className="flex-1">

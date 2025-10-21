@@ -97,22 +97,22 @@ function PrinciplesContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
+    <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
       <Head>
         <title>The 5 Principles - VOW Theory</title>
       </Head>
 
       {/* Header */}
-      <nav className="bg-white border-b border-amber-100">
+      <nav className="corrective-bg border-b border-[#E3C27D]/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <button
               onClick={() => router.push('/learn')}
-              className="text-gray-600 hover:text-gray-900"
+              className="text-[#8E8A84] hover:text-[#F4F1ED]"
             >
               ← Back to Learn
             </button>
-            <h1 className="text-lg font-medium text-gray-900">The 5 Principles</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">The 5 Principles</h1>
             <div className="w-16"></div>
           </div>
         </div>
@@ -158,7 +158,7 @@ function PrinciplesContent() {
             <Arrow />
             <JourneyStep icon="⚖️" label="Balance" color="#9370DB" />
           </div>
-          <p className="text-center observation-text text-gray-700">
+          <p className="text-center observation-text text-[#E8E6E3]">
             This is not a linear path. You may revisit stages as you grow. 
             Each principle supports the others in your healing.
           </p>
@@ -171,7 +171,7 @@ function PrinciplesContent() {
           </p>
           <button
             onClick={() => router.push('/create-vow')}
-            className="px-8 py-4 rounded-lg font-medium text-gray-900 text-lg"
+            className="px-8 py-4 rounded-lg font-medium text-[#F4F1ED] text-lg"
             style={{ backgroundColor: '#C6A664' }}
           >
             Create Your Vow
@@ -185,7 +185,7 @@ function PrinciplesContent() {
 function PrincipleSection({ principle, index, onLearnMore }) {
   return (
     <div 
-      className="separation-card rounded-xl p-6"
+      className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6"
       style={{ borderLeft: `6px solid ${principle.color}` }}
     >
       <div className="flex items-start space-x-4 mb-4">
@@ -210,7 +210,7 @@ function PrincipleSection({ principle, index, onLearnMore }) {
           {principle.keyInsights.map((insight, i) => (
             <div key={i} className="flex items-start space-x-2">
               <span style={{ color: principle.color }}>•</span>
-              <span className="text-sm observation-text text-gray-700">{insight}</span>
+              <span className="text-sm observation-text text-[#E8E6E3]">{insight}</span>
             </div>
           ))}
         </div>
@@ -250,13 +250,13 @@ function JourneyStep({ icon, label, color }) {
       >
         {icon}
       </div>
-      <div className="text-xs font-medium observation-text text-gray-700">{label}</div>
+      <div className="text-xs font-medium observation-text text-[#E8E6E3]">{label}</div>
     </div>
   );
 }
 
 function Arrow() {
   return (
-    <div className="text-2xl observation-text text-gray-700">→</div>
+    <div className="text-2xl observation-text text-[#E8E6E3]">→</div>
   );
 }
