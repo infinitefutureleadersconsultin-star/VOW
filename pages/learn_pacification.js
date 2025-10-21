@@ -119,19 +119,19 @@ function PacificationContent() {
               number="1"
               title="Notice the Pattern"
               description="When a familiar behavior arises, pause. Simply notice it."
-              example='"I notice I'm reaching for my phone when I feel anxious."'
+              example="I notice I'm reaching for my phone when I feel anxious."
             />
             <PracticeStep
               number="2"
               title="Name It Without Judgment"
               description="Label what you see, but don't add 'good' or 'bad.'"
-              example='"This is my avoidance pattern. It exists."'
+              example="This is my avoidance pattern. It exists."
             />
             <PracticeStep
               number="3"
               title="Sit With It"
               description="Don't immediately try to change it. Just observe."
-              example='"I'm going to watch this feeling without acting on it."'
+              example="I'm going to watch this feeling without acting on it."
             />
           </div>
         </div>
