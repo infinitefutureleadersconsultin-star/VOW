@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function Login() {
   const router = useRouter();
-  const { redirect, email: prefilledEmail } = router.query;
+  const { redirect, plan } = router.query;
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,23 +13,16 @@ export default function Login() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (prefilledEmail) {
-      setEmail(prefilledEmail);
-    }
-
-    const token = localStorage.getItem('vow_auth_token');
-    if (token) {
-      console.log('[LOGIN] Already logged in, redirecting...');
-      router.push(redirect || '/dashboard');
-    }
-  }, [router, redirect, prefilledEmail]);
+    // Don't check for existing auth - let user login fresh
+    // This prevents redirect loops
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    console.log('[LOGIN] Attempting login for:', email);
+    console.log('[LOGIN] Starting login for:', email);
 
     try {
       const response = await fetch('/api/auth', {
@@ -43,61 +36,49 @@ export default function Login() {
       });
 
       const result = await response.json();
-      console.log('[LOGIN] Response:', { 
-        success: result.success, 
-        hasData: !!result.data,
-        hasToken: !!result.data?.token 
-      });
+      console.log('[LOGIN] Response:', { success: result.success });
 
       if (!response.ok) {
         throw new Error(result.error || 'Login failed');
       }
 
-      // ✅ Auth API returns: result.data.token (not result.data.user.token)
       if (result.success && result.data?.token) {
         const { token, trialEndDate, subscriptionStatus } = result.data;
         
-        console.log('[LOGIN] Token received, saving...');
+        // ✅ Save token
         localStorage.setItem('vow_auth_token', token);
+        console.log('[LOGIN] Token saved');
         
-        console.log('[LOGIN] User status:', {
-          trialEndDate,
-          subscriptionStatus,
-          email: result.data.email
-        });
+        // ✅ Simple trial check
+        const now = new Date();
+        const trialEnd = trialEndDate ? new Date(trialEndDate) : null;
+        const trialExpired = trialEnd && now > trialEnd;
+        const hasActiveSub = subscriptionStatus === 'active';
         
-        // ✅ Check if trial ended (using data directly from response)
-        let shouldGoToPricing = false;
+        console.log('[LOGIN] Status:', { trialExpired, hasActiveSub });
         
-        if (trialEndDate) {
-          const trialEnd = new Date(trialEndDate);
-          const now = new Date();
-          const hasActiveSubscription = subscriptionStatus === 'active';
-          
-          console.log('[LOGIN] Trial check:', {
-            trialEnd: trialEnd.toISOString(),
-            now: now.toISOString(),
-            trialEnded: now > trialEnd,
-            hasActiveSubscription
-          });
-          
-          // Trial ended and no active subscription = go to pricing
-          if (now > trialEnd && !hasActiveSubscription) {
-            shouldGoToPricing = true;
-            console.log('[LOGIN] ✅ Trial ended, redirecting to pricing');
-          }
+        // ✅ Determine destination
+        let destination;
+        
+        if (trialExpired && !hasActiveSub) {
+          // Trial expired, no subscription → pricing
+          destination = '/pricing';
+          console.log('[LOGIN] Trial expired → Pricing');
+        } else if (redirect) {
+          // Has valid access and there's a redirect → go there
+          destination = redirect;
+          console.log('[LOGIN] Valid access → Redirect:', redirect);
+        } else {
+          // Has valid access, no redirect → dashboard
+          destination = '/dashboard';
+          console.log('[LOGIN] Valid access → Dashboard');
         }
         
-        // ✅ Redirect with window.location for reliability
-        const destination = shouldGoToPricing ? '/pricing' : (redirect || '/dashboard');
-        console.log('[LOGIN] Redirecting to:', destination);
+        // ✅ Single redirect, no loops
+        console.log('[LOGIN] Final destination:', destination);
+        window.location.href = destination;
         
-        // Small delay to ensure token is saved
-        setTimeout(() => {
-          window.location.href = destination;
-        }, 100);
-        
-        return;
+        return; // Don't set loading false, we're redirecting
       } else {
         throw new Error('No token in response');
       }
@@ -112,7 +93,7 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>Login - VOW</title>
+        <title>Sign In - VOW</title>
       </Head>
 
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -164,7 +145,7 @@ export default function Login() {
                 />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-end">
                 <div className="text-sm">
                   <button 
                     type="button" 

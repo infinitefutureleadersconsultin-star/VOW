@@ -1,44 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { loadAuthToken } from '../lib/storage';
-import { getTierFeatures, getUserTier } from '../lib/featureAccess';
 
 export default function PricingPage() {
   const router = useRouter();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentTier, setCurrentTier] = useState('trial');
-  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    const token = loadAuthToken();
-    if (token) {
-      setIsAuthenticated(true);
-      loadUserTier();
-    } else {
-      // Not logged in - redirect to login
-      router.push('/login?redirect=/pricing');
-    }
-  }, []);
-
-  const loadUserTier = async () => {
-    try {
-      const token = loadAuthToken();
-      const response = await fetch('/api/userData', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setUserData(data.data);
-        setCurrentTier(getUserTier(data.data));
-      }
-    } catch (error) {
-      console.error('Failed to load user tier:', error);
-    }
-  };
+  // ✅ NO AUTH CHECKS - Anyone can view pricing
+  // If they try to subscribe without auth, API will handle it
 
   const tiers = [
     {
@@ -47,7 +18,7 @@ export default function PricingPage() {
       icon: '🔍',
       price: 4.99,
       dailyPrice: '0.16',
-      description: 'For committed practitioners',
+      description: 'Perfect for getting started',
       popular: true,
       features: [
         'Unlimited vows',
@@ -98,17 +69,20 @@ export default function PricingPage() {
   ];
 
   const handleSelectPlan = async (plan) => {
-    if (!isAuthenticated) {
-      router.push('/login?redirect=/pricing');
+    // Check if user is logged in
+    const token = localStorage.getItem('vow_auth_token');
+    
+    if (!token) {
+      // Not logged in - redirect to login with return URL
+      router.push(`/login?redirect=/pricing&plan=${plan.id}`);
       return;
     }
 
     setLoading(true);
     setSelectedPlan(plan.id);
+    setError('');
 
     try {
-      const token = loadAuthToken();
-      
       // ✅ Go DIRECTLY to Stripe checkout
       const response = await fetch('/api/subscribe', {
         method: 'POST',
@@ -126,16 +100,14 @@ export default function PricingPage() {
       const data = await response.json();
 
       if (data.success && data.checkoutUrl) {
-        // Redirect to Stripe
+        console.log('[PRICING] Redirecting to Stripe:', data.checkoutUrl);
         window.location.href = data.checkoutUrl;
       } else {
-        alert(data.message || 'Failed to start checkout');
-        setLoading(false);
-        setSelectedPlan(null);
+        throw new Error(data.message || 'Failed to start checkout');
       }
     } catch (error) {
-      console.error('Checkout error:', error);
-      alert('An error occurred. Please try again.');
+      console.error('[PRICING] Checkout error:', error);
+      setError(error.message || 'An error occurred. Please try again.');
       setLoading(false);
       setSelectedPlan(null);
     }
@@ -144,19 +116,14 @@ export default function PricingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
       <Head>
-        <title>Pricing - VOW Theory</title>
+        <title>Upgrade - VOW Theory</title>
       </Head>
 
       <nav className="corrective-bg border-b border-[#E3C27D]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="text-[#8E8A84] hover:text-[#F4F1ED]"
-            >
-              ← Back
-            </button>
-            <h1 className="text-lg font-medium text-[#F4F1ED]">Pricing</h1>
+            <div className="w-16"></div>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">Upgrade Your Access</h1>
             <div className="w-16"></div>
           </div>
         </div>
@@ -167,10 +134,19 @@ export default function PricingPage() {
           <h2 className="text-4xl font-bold awareness-text mb-4">
             Continue Your Journey
           </h2>
-          <p className="text-xl observation-text">
+          <p className="text-xl observation-text mb-2">
             Your free trial has ended. Choose a plan to keep transforming.
           </p>
+          <p className="text-sm text-[#8E8A84]">
+            Select a plan below to restore full access
+          </p>
         </div>
+
+        {error && (
+          <div className="max-w-md mx-auto mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20">
+            <p className="text-red-400 text-center text-sm">{error}</p>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {tiers.map((tier) => (

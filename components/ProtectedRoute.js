@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import LoadingSpinner from './LoadingSpinner';
-import { checkUserAccess } from '../utils/accessControl';
+import { checkSubscriptionStatus } from '../utils/subscriptionCheck';
 
 export default function ProtectedRoute({ children }) {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
-  const [accessDenied, setAccessDenied] = useState(false);
-  const [accessMessage, setAccessMessage] = useState('');
 
   useEffect(() => {
     checkAccess();
@@ -18,6 +16,7 @@ export default function ProtectedRoute({ children }) {
       const token = localStorage.getItem('vow_auth_token');
       
       if (!token) {
+        console.log('[PROTECTED] No token, redirect to login');
         router.push('/login');
         return;
       }
@@ -32,6 +31,7 @@ export default function ProtectedRoute({ children }) {
 
       if (!response.ok) {
         if (response.status === 401) {
+          console.log('[PROTECTED] Invalid token, redirect to login');
           localStorage.removeItem('vow_auth_token');
           router.push('/login');
           return;
@@ -40,45 +40,28 @@ export default function ProtectedRoute({ children }) {
       }
 
       const result = await response.json();
-      const access = checkUserAccess(result.data);
+      const accessCheck = checkSubscriptionStatus(result.data);
+      
+      console.log('[PROTECTED] Access check:', accessCheck);
 
-      if (!access.hasAccess) {
-        setAccessDenied(true);
-        setAccessMessage(access.message);
-        
-        // ✅ Redirect to PRICING for existing users (not signup)
-        setTimeout(() => {
-          router.push('/pricing');
-        }, 1500);
+      if (!accessCheck.hasAccess) {
+        // ✅ Trial expired - redirect to pricing
+        console.log('[PROTECTED] No access, redirect to:', accessCheck.shouldRedirect);
+        router.push(accessCheck.shouldRedirect);
       } else {
+        // ✅ Has access - show content
+        console.log('[PROTECTED] Access granted');
         setChecking(false);
       }
 
     } catch (error) {
-      console.error('Access check failed:', error);
+      console.error('[PROTECTED] Error:', error);
       router.push('/login');
     }
   };
 
-  if (checking && !accessDenied) {
+  if (checking) {
     return <LoadingSpinner fullScreen text="Verifying access..." />;
-  }
-
-  if (accessDenied) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0C1117' }}>
-        <div className="glass-card rounded-2xl p-8 max-w-md w-full text-center animate-fade-in">
-          <div className="text-[#E3C27D] text-5xl mb-4">🔒</div>
-          <h2 className="text-2xl font-light text-[#F4F1ED] mb-3">
-            Free Trial Ended
-          </h2>
-          <p className="text-[#8E8A84] mb-4">{accessMessage}</p>
-          <p className="text-sm text-[#8E8A84]">
-            Redirecting to plans...
-          </p>
-        </div>
-      </div>
-    );
   }
 
   return <>{children}</>;
