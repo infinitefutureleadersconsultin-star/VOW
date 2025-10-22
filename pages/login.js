@@ -13,15 +13,13 @@ export default function Login() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Prefill email if provided
     if (prefilledEmail) {
       setEmail(prefilledEmail);
     }
 
-    // Check if already logged in
     const token = localStorage.getItem('vow_auth_token');
     if (token) {
-      console.log('[LOGIN] Already has token, redirecting...');
+      console.log('[LOGIN] Already logged in, redirecting...');
       router.push(redirect || '/dashboard');
     }
   }, [router, redirect, prefilledEmail]);
@@ -31,7 +29,7 @@ export default function Login() {
     setError('');
     setLoading(true);
 
-    console.log('[LOGIN] Starting login for:', email);
+    console.log('[LOGIN] Attempting login for:', email);
 
     try {
       const response = await fetch('/api/auth', {
@@ -45,36 +43,36 @@ export default function Login() {
       });
 
       const result = await response.json();
-      console.log('[LOGIN] Response received:', { 
+      console.log('[LOGIN] Response:', { 
         success: result.success, 
-        hasToken: !!result.data?.token,
-        hasUser: !!result.data?.user 
+        hasData: !!result.data,
+        hasToken: !!result.data?.token 
       });
 
       if (!response.ok) {
         throw new Error(result.error || 'Login failed');
       }
 
-      // ✅ CRITICAL: Handle token from result.data.token
+      // ✅ Auth API returns: result.data.token (not result.data.user.token)
       if (result.success && result.data?.token) {
-        console.log('[LOGIN] Token found, saving to localStorage');
-        localStorage.setItem('vow_auth_token', result.data.token);
+        const { token, trialEndDate, subscriptionStatus } = result.data;
         
-        // Get user data
-        const userData = result.data.user || result.data;
-        console.log('[LOGIN] User data:', {
-          hasTrialEnd: !!userData.trialEndDate,
-          subscriptionStatus: userData.subscriptionStatus,
-          email: userData.email
+        console.log('[LOGIN] Token received, saving...');
+        localStorage.setItem('vow_auth_token', token);
+        
+        console.log('[LOGIN] User status:', {
+          trialEndDate,
+          subscriptionStatus,
+          email: result.data.email
         });
         
-        // ✅ Check if trial ended
+        // ✅ Check if trial ended (using data directly from response)
         let shouldGoToPricing = false;
         
-        if (userData.trialEndDate) {
-          const trialEnd = new Date(userData.trialEndDate);
+        if (trialEndDate) {
+          const trialEnd = new Date(trialEndDate);
           const now = new Date();
-          const hasActiveSubscription = userData.subscriptionStatus === 'active';
+          const hasActiveSubscription = subscriptionStatus === 'active';
           
           console.log('[LOGIN] Trial check:', {
             trialEnd: trialEnd.toISOString(),
@@ -83,26 +81,25 @@ export default function Login() {
             hasActiveSubscription
           });
           
+          // Trial ended and no active subscription = go to pricing
           if (now > trialEnd && !hasActiveSubscription) {
             shouldGoToPricing = true;
-            console.log('[LOGIN] Trial ended, redirecting to pricing');
+            console.log('[LOGIN] ✅ Trial ended, redirecting to pricing');
           }
         }
         
-        // ✅ Force redirect with window.location.href (more reliable than router.push)
-        if (shouldGoToPricing) {
-          console.log('[LOGIN] Redirecting to: /pricing');
-          window.location.href = '/pricing';
-        } else {
-          const destination = redirect || '/dashboard';
-          console.log('[LOGIN] Redirecting to:', destination);
-          window.location.href = destination;
-        }
+        // ✅ Redirect with window.location for reliability
+        const destination = shouldGoToPricing ? '/pricing' : (redirect || '/dashboard');
+        console.log('[LOGIN] Redirecting to:', destination);
         
-        // Don't set loading to false - we're redirecting
+        // Small delay to ensure token is saved
+        setTimeout(() => {
+          window.location.href = destination;
+        }, 100);
+        
         return;
       } else {
-        throw new Error('Invalid response: no token received');
+        throw new Error('No token in response');
       }
 
     } catch (err) {
@@ -147,6 +144,7 @@ export default function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
                   className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-amber-600 focus:border-amber-600 disabled:opacity-50"
+                  autoComplete="email"
                 />
               </div>
 
@@ -162,6 +160,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
                   className="mt-1 appearance-none block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-amber-600 focus:border-amber-600 disabled:opacity-50"
+                  autoComplete="current-password"
                 />
               </div>
 
