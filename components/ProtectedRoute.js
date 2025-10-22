@@ -49,7 +49,7 @@ export default function ProtectedRoute({ children }) {
         
         // Redirect to profile after 2 seconds
         setTimeout(() => {
-          router.push('/profile');
+          router.push('/pricing');
         }, 2000);
       } else {
         setChecking(false);
@@ -73,9 +73,19 @@ export default function ProtectedRoute({ children }) {
           <h2 className="text-2xl font-light text-[#F4F1ED] mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
             Access Required
           </h2>
-          <p className="text-[#8E8A84] mb-6">{accessMessage}</p>
+          <p className="text-[#8E8A84] mb-2">{accessMessage}</p>
+          <p className="text-[#E3C27D] text-sm mb-6">
+            Continue your transformation journey with full access
+          </p>
+          <button
+            onClick={() => router.push('/pricing')}
+            className="w-full mt-4 mb-6 px-8 py-4 rounded-xl font-medium text-lg transition-all"
+            style={{ background: '#E3C27D', color: '#0C1117' }}
+          >
+            Upgrade Now
+          </button>
           <p className="text-sm text-[#8E8A84]">
-            Redirecting to your profile...
+            Redirecting to upgrade options...
           </p>
         </div>
       </div>
