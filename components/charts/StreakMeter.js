@@ -272,7 +272,7 @@ export function StreakMilestones({ currentStreak = 0, longestStreak = 0 }) {
                 ? 'border-green-400 bg-green-50'
                 : current
                 ? 'border-amber-400 bg-amber-50'
-                : 'border-gray-200 bg-gray-50'
+                : 'border-[#E3C27D]/20 bg-[#1A1C1F]'
             }`}
           >
             <div className="flex items-center justify-between">

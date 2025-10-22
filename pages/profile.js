@@ -232,7 +232,7 @@ function ProfileContent() {
 
 function StatCard({ icon, label, value, color }) {
   return (
-    <div className="text-center p-4 rounded-lg bg-gradient-to-br from-gray-50 to-white border border-[#E3C27D]/20">
+    <div className="text-center p-4 rounded-lg bg-[#1A1C1F] border border-[#E3C27D]/20">
       <div className="text-3xl mb-2">{icon}</div>
       <div className="text-2xl font-bold awareness-text mb-1">{value}</div>
       <div className="text-xs observation-text">{label}</div>
