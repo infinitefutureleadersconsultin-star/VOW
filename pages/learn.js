@@ -46,6 +46,15 @@ function LearnContent() {
       description: 'Become whole. Merge who you were with who you are becoming.',
       preview: 'Remembering who you were means becoming who you truly are.',
       available: true
+    },
+    {
+      id: 'balance',
+      name: 'The Balance Integration™',
+      icon: '⚖️',
+      color: '#9370DB',
+      description: 'Find harmony between who you were and who you became.',
+      preview: 'True healing is not choosing one self over another—it is finding balance between both.',
+      available: true
     }
   ];
 
@@ -93,7 +102,7 @@ function LearnContent() {
         {/* Core Principles */}
         <div className="mb-12">
           <h3 className="text-2xl font-bold awareness-text mb-6 text-center">
-            The Three Principles
+            The Four Principles
           </h3>
           <div className="space-y-6">
             {principles.map((principle) => (

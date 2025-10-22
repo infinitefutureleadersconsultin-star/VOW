@@ -64,25 +64,11 @@ function PrinciplesContent() {
       ],
       quote: 'The healed self and the original self are one.'
     },
-    {
-      id: 'remembrance',
-      name: 'The Law of Daily Remembrance™',
-      subtitle: 'Principle 4: Consistency',
-      icon: '⏰',
-      color: '#4169E1',
-      summary: 'Daily remembrance rewires neural pathways. Consistency, not perfection, creates lasting change.',
-      keyInsights: [
-        'Daily practice builds new neural pathways',
-        'Your vow is not a rule—it\'s a reminder',
-        'Every day you remember, you return to yourself',
-        'Consistency compounds into transformation'
-      ],
-      quote: 'Every day you remember is a day you return to yourself.'
-    },
+
     {
       id: 'balance',
       name: 'The Balance Integration™',
-      subtitle: 'Principle 5: Unity',
+      subtitle: 'Principle 4: Unity',
       icon: '⚖️',
       color: '#9370DB',
       summary: 'True healing is not choosing one self over another—it is finding balance between both.',
@@ -99,7 +85,7 @@ function PrinciplesContent() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
       <Head>
-        <title>The 5 Principles - VOW Theory</title>
+        <title>The 4 Principles - VOW Theory</title>
       </Head>
 
       {/* Header */}
@@ -112,7 +98,7 @@ function PrinciplesContent() {
             >
               ← Back to Learn
             </button>
-            <h1 className="text-lg font-medium text-[#F4F1ED]">The 5 Principles</h1>
+            <h1 className="text-lg font-medium text-[#F4F1ED]">The 4 Principles</h1>
             <div className="w-16"></div>
           </div>
         </div>
@@ -122,7 +108,7 @@ function PrinciplesContent() {
         {/* Intro */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold awareness-text mb-4">
-            The Five Principles of VOW Theory
+            The Four Principles of VOW Theory
           </h2>
           <p className="text-lg observation-text max-w-2xl mx-auto">
             These principles form the foundation of healing through daily remembrance. 
@@ -153,8 +139,6 @@ function PrinciplesContent() {
             <JourneyStep icon="🔍" label="Understand" color="#C6A664" />
             <Arrow />
             <JourneyStep icon="✨" label="Integrate" color="#5FD3A5" />
-            <Arrow />
-            <JourneyStep icon="⏰" label="Remember" color="#4169E1" />
             <Arrow />
             <JourneyStep icon="⚖️" label="Balance" color="#9370DB" />
           </div>
