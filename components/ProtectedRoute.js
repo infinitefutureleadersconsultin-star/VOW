@@ -22,7 +22,6 @@ export default function ProtectedRoute({ children }) {
         return;
       }
 
-      // Fetch user data
       const response = await fetch('/api/userData', {
         method: 'GET',
         headers: {
@@ -47,10 +46,10 @@ export default function ProtectedRoute({ children }) {
         setAccessDenied(true);
         setAccessMessage(access.message);
         
-        // Redirect to profile after 2 seconds
+        // ✅ Redirect to PRICING for existing users (not signup)
         setTimeout(() => {
           router.push('/pricing');
-        }, 2000);
+        }, 1500);
       } else {
         setChecking(false);
       }
@@ -70,22 +69,12 @@ export default function ProtectedRoute({ children }) {
       <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0C1117' }}>
         <div className="glass-card rounded-2xl p-8 max-w-md w-full text-center animate-fade-in">
           <div className="text-[#E3C27D] text-5xl mb-4">🔒</div>
-          <h2 className="text-2xl font-light text-[#F4F1ED] mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
-            Access Required
+          <h2 className="text-2xl font-light text-[#F4F1ED] mb-3">
+            Free Trial Ended
           </h2>
-          <p className="text-[#8E8A84] mb-2">{accessMessage}</p>
-          <p className="text-[#E3C27D] text-sm mb-6">
-            Continue your transformation journey with full access
-          </p>
-          <button
-            onClick={() => router.push('/pricing')}
-            className="w-full mt-4 mb-6 px-8 py-4 rounded-xl font-medium text-lg transition-all"
-            style={{ background: '#E3C27D', color: '#0C1117' }}
-          >
-            Upgrade Now
-          </button>
+          <p className="text-[#8E8A84] mb-4">{accessMessage}</p>
           <p className="text-sm text-[#8E8A84]">
-            Redirecting to upgrade options...
+            Redirecting to plans...
           </p>
         </div>
       </div>
