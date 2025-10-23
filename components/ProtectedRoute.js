@@ -40,16 +40,22 @@ export default function ProtectedRoute({ children }) {
       }
 
       const result = await response.json();
+      
+      // 👑 ADMIN BYPASS - Never block admin
+      if (result.data?.email === 'issiahmclean1999@gmail.com') {
+        console.log('[PROTECTED] 👑 ADMIN ACCESS GRANTED');
+        setChecking(false);
+        return;
+      }
+
       const accessCheck = checkSubscriptionStatus(result.data);
       
       console.log('[PROTECTED] Access check:', accessCheck);
 
       if (!accessCheck.hasAccess) {
-        // ✅ Trial expired - redirect to pricing
         console.log('[PROTECTED] No access, redirect to:', accessCheck.shouldRedirect);
         router.push(accessCheck.shouldRedirect);
       } else {
-        // ✅ Has access - show content
         console.log('[PROTECTED] Access granted');
         setChecking(false);
       }

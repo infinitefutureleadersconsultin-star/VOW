@@ -1,96 +1,71 @@
-// Admin whitelist - full access always
-const ADMIN_EMAILS = ['issiahmclean1999@gmail.com'];
-
-// Check if user has access to features
+/**
+ * Check if user has access to premium features
+ */
 export function checkUserAccess(userData) {
-  if (!userData) {
-    return {
-      hasAccess: false,
-      reason: 'NO_USER',
-      message: 'Please log in to continue',
-    };
-  }
-
-  // ADMIN: Full access always
-  if (ADMIN_EMAILS.includes(userData.email?.toLowerCase())) {
+  // 👑 ADMIN BYPASS - Full access to everything
+  if (userData?.email === 'issiahmclean1999@gmail.com') {
     return {
       hasAccess: true,
       isAdmin: true,
+      isPremium: true,
+      tier: 'master',
+      reason: 'admin',
     };
   }
 
-  const { subscriptionStatus, trialEndDate } = userData;
-
-  // Active paid subscription - full access
-  if (subscriptionStatus === 'active') {
+  // Active paid subscription
+  if (userData?.subscriptionStatus === 'active') {
     return {
       hasAccess: true,
-      isPaid: true,
+      isPremium: true,
+      tier: userData.subscriptionTier || 'seeker',
+      reason: 'subscription',
     };
   }
 
-  // Trial - check if expired
-  if (subscriptionStatus === 'trial') {
-    const trialEnd = new Date(trialEndDate);
+  // Active trial
+  if (userData?.trialStartDate) {
+    const trialStart = new Date(userData.trialStartDate);
     const now = new Date();
-    
-    if (now < trialEnd) {
-      // Trial still active - full access
-      const daysLeft = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
+    const daysSinceStart = Math.floor((now - trialStart) / (1000 * 60 * 60 * 24));
+    const daysRemaining = 3 - daysSinceStart;
+
+    if (daysRemaining > 0) {
       return {
         hasAccess: true,
-        isTrial: true,
-        daysLeft,
-        trialEndDate,
-      };
-    } else {
-      // Trial expired - profile only
-      return {
-        hasAccess: false,
-        reason: 'TRIAL_EXPIRED',
-        message: 'Your 2-day trial has ended. Upgrade to continue your journey.',
+        isPremium: false,
+        tier: 'trial',
+        daysRemaining,
+        reason: 'trial',
       };
     }
   }
 
-  // Cancelled subscription - profile only
-  if (subscriptionStatus === 'cancelled') {
-    return {
-      hasAccess: false,
-      reason: 'SUBSCRIPTION_CANCELLED',
-      message: 'Your subscription was cancelled. Reactivate to continue.',
-    };
-  }
-
-  // Unknown status - deny access
+  // No access
   return {
     hasAccess: false,
-    reason: 'UNKNOWN_STATUS',
-    message: 'Please contact support.',
+    isPremium: false,
+    tier: null,
+    reason: 'no_subscription',
   };
 }
 
-// Get days remaining in trial
-export function getTrialDaysRemaining(trialEndDate) {
-  if (!trialEndDate) return 0;
-  
-  const trialEnd = new Date(trialEndDate);
-  const now = new Date();
-  const daysLeft = Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24));
-  
-  return Math.max(0, daysLeft);
-}
+export function canAccessFeature(userData, featureTier = 'seeker') {
+  // Admin can access everything
+  if (userData?.email === 'issiahmclean1999@gmail.com') {
+    return true;
+  }
 
-// Check if trial is active
-export function isTrialActive(userData) {
-  if (!userData || userData.subscriptionStatus !== 'trial') return false;
-  
-  const daysLeft = getTrialDaysRemaining(userData.trialEndDate);
-  return daysLeft > 0;
-}
-
-// Check if user needs to upgrade
-export function needsUpgrade(userData) {
   const access = checkUserAccess(userData);
-  return !access.hasAccess;
+  
+  if (!access.hasAccess) return false;
+  if (access.tier === 'trial') return true;
+  
+  const tierLevels = {
+    seeker: 1,
+    explorer: 2,
+    master: 3,
+  };
+  
+  return tierLevels[access.tier] >= tierLevels[featureTier];
 }
