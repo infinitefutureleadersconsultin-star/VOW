@@ -254,7 +254,7 @@ function MenuItem({ icon, label, onClick, highlight = false, danger = false }) {
       onClick={onClick}
       className={`w-full flex items-center space-x-3 px-4 py-2 transition-all ${
         highlight
-          ? 'bg-gradient-to-r from-amber-50 to-amber-100 hover:from-amber-100 hover:to-amber-200'
+          ? 'bg-[#2A2C2F] hover:bg-[#3A3C3F]'
           : danger
           ? 'hover:bg-red-50'
           : 'hover:bg-[#2A2C2F]'
@@ -262,7 +262,7 @@ function MenuItem({ icon, label, onClick, highlight = false, danger = false }) {
     >
       <span className="text-lg">{icon}</span>
       <span className={`text-sm ${
-        danger ? 'text-red-600' : highlight ? 'font-medium' : 'observation-text'
+        danger ? 'text-red-600' : highlight ? 'text-white font-medium' : 'observation-text'
       }`}>
         {label}
       </span>
