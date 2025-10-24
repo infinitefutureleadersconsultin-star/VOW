@@ -76,7 +76,7 @@ function LearnContent() {
               ← Back
             </button>
             <h1 className="text-lg font-medium text-[#F4F1ED]">Learn VOW Theory</h1>
-            <div className="w-16"></div><Link href="/learn_neuroscience" className="block p-6 bg-white rounded-xl shadow hover:shadow-lg transition-shadow border-l-4 border-purple-500"><div className="flex items-center mb-2"><span className="text-3xl mr-3">🧠</span><h3 className="text-xl font-bold text-gray-900">The Neuroscience</h3></div><p className="text-gray-600">How VOW Theory creates identity reconsolidation</p></Link>
+            <div className="w-16"></div>
           </div>
         </div>
       </nav>
