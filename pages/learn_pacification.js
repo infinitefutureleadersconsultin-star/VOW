@@ -19,7 +19,7 @@ function PacificationContent() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F] bg-gradient-to-b from-white to-[#1A1C1F]">
+    <div className="min-h-screen bg-gradient-to-b from-white to-[#1A1C1F]">
       <Head>
         <title>The Pacification Paradox - VOW Theory</title>
       </Head>

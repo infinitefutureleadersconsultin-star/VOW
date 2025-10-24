@@ -48,6 +48,15 @@ function LearnContent() {
       available: true
     },
     {
+      id: 'neuroscience',
+      name: 'The Neuroscience',
+      icon: '🧠',
+      color: '#9370DB',
+      description: 'Understand how VOW Theory creates identity reconsolidation.',
+      preview: 'The science of remembering who you are.',
+      available: true
+    },
+    {
       id: 'balance',
       name: 'The Balance Integration™',
       icon: '⚖️',
