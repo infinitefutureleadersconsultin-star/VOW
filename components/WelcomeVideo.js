@@ -1,6 +1,20 @@
 import { useState, useEffect } from 'react';
 import { getWelcomeVideo, markVideoAsSeen } from '../lib/welcomeVideos';
 export default function WelcomeVideo({ user, onClose }) {
+  const behaviorMessages = {
+  addiction: 'VOW Theory helps you remember who you were before addiction became a companion.',
+  anxiety: 'VOW Theory helps you remember who you were before anxiety took hold.',
+  'self-sabotage': 'VOW Theory helps you understand patterns that no longer serve you.',
+  isolation: 'VOW Theory helps you reconnect with the self that existed before withdrawal.',
+  shutdown: 'VOW Theory helps you understand your protective responses with compassion.',
+  avoidance: 'VOW Theory helps you face what you have been avoiding with awareness.',
+  procrastination: 'VOW Theory helps you separate behavior from identity.',
+  perfectionism: 'VOW Theory helps you remember wholeness does not require perfection.',
+  'people-pleasing': 'VOW Theory helps you reclaim your authentic self.',
+  other: 'VOW Theory helps you remember who you are beyond what happened to you.'
+};
+const behaviorMessage = user?.behavior ? behaviorMessages[user.behavior] : behaviorMessages.other;
+
   const [videoUrl, setVideoUrl] = useState('');
   const [hasWatched, setHasWatched] = useState(false);
   useEffect(() => { if (user) setVideoUrl(getWelcomeVideo(user)); }, [user]);
@@ -13,8 +27,9 @@ export default function WelcomeVideo({ user, onClose }) {
           <button onClick={handleBegin} className="absolute top-4 right-4 text-white hover:text-amber-200 text-sm font-medium">Skip</button>
           <div className="text-center">
             <div className="text-4xl mb-2">🕊️</div>
-            <h2 className="text-3xl font-bold mb-2">Welcome to The Vow Theory</h2>
-            <p className="text-amber-100">Understanding the framework that will guide your journey</p>
+            <h2 className="text-3xl font-bold mb-2">Welcome to VOW Theory</h2>
+            <p className="text-amber-100 mb-2">I see you are here for {user?.behavior?.replace("-", " ")}.</p>
+            <p className="text-amber-50 text-sm">{behaviorMessage}</p>
           </div>
         </div>
         <div className="relative aspect-video bg-gray-900">

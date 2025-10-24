@@ -28,6 +28,7 @@ function SignupForm() {
     nationality: '',
     ethnicity: '',
     language: 'en',
+    behavior: '',
     consentData: false,
     consentAI: false,
   });
@@ -87,6 +88,10 @@ function SignupForm() {
     }
     if (!formData.gender) {
       setError('Please select your gender');
+      return false;
+    }
+    if (!formData.behavior) {
+      setError('Please select what brings you here');
       return false;
     }
     return true;
