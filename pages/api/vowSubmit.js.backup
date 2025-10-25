@@ -1,45 +1,59 @@
 import jwt from 'jsonwebtoken';
 import { db, auth } from '../../lib/firebase';
-import { generateVowInsight } from '../../lib/openai';
 
+// Helper function to verify JWT token
 const verifyToken = (req) => {
   const authHeader = req.headers.authorization;
+  
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     throw new Error('UNAUTHORIZED');
   }
+  
   const token = authHeader.substring(7);
+  
   if (!token) {
     throw new Error('UNAUTHORIZED');
   }
+  
   return token;
 };
 
+// Helper function to validate vow data
 const validateVow = (vow) => {
   const errors = [];
+  
   if (!vow.statement || typeof vow.statement !== 'string') {
     errors.push('Vow statement is required');
   }
+  
   if (vow.statement && vow.statement.length < 10) {
     errors.push('Vow statement must be at least 10 characters');
   }
+  
   if (vow.statement && vow.statement.length > 300) {
     errors.push('Vow statement must be less than 300 characters');
   }
+  
   if (!vow.category || typeof vow.category !== 'string') {
     errors.push('Category is required');
   }
+  
   if (!vow.duration || typeof vow.duration !== 'number') {
     errors.push('Duration is required');
   }
+  
   if (vow.duration < 1 || vow.duration > 365) {
     errors.push('Duration must be between 1 and 365 days');
   }
+  
   if (!vow.whyMatters || typeof vow.whyMatters !== 'string') {
     errors.push('Why this matters is required');
   }
+  
   return errors;
 };
 
+// Log error helper
 const logError = (error, context, req) => {
   console.error('[VOW_SUBMIT_ERROR]', {
     timestamp: new Date().toISOString(),
@@ -56,6 +70,7 @@ const logError = (error, context, req) => {
 };
 
 export default async function handler(req, res) {
+  // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -73,6 +88,7 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Verify authentication
     let token;
     try {
       token = verifyToken(req);
@@ -84,6 +100,7 @@ export default async function handler(req, res) {
       });
     }
 
+    // Verify token with Firebase
     let decodedToken;
     try {
       decodedToken = jwt.verify(token, process.env.JWT_SECRET);
@@ -97,7 +114,7 @@ export default async function handler(req, res) {
     }
 
     const userId = decodedToken.userId;
-    const { vow, language = 'en' } = req.body;
+    const { vow } = req.body;
 
     if (!vow) {
       return res.status(400).json({
@@ -107,6 +124,7 @@ export default async function handler(req, res) {
       });
     }
 
+    // Validate vow data
     const validationErrors = validateVow(vow);
     if (validationErrors.length > 0) {
       return res.status(400).json({
@@ -117,6 +135,7 @@ export default async function handler(req, res) {
       });
     }
 
+    // Prepare vow document
     const vowData = {
       userId,
       category: vow.category.trim(),
@@ -133,26 +152,13 @@ export default async function handler(req, res) {
       completedDays: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-      language: language || 'en',
     };
 
+    // Save to Firestore
     const vowRef = await db.collection('vows').add(vowData);
     const vowId = vowRef.id;
 
-    // Generate AI insight in user's language (async, don't wait)
-    if (process.env.OPENAI_API_KEY) {
-      generateVowInsight(vowData, language)
-        .then(result => {
-          if (result.success) {
-            db.collection('vows').doc(vowId).update({
-              aiInsight: result.content,
-              insightGeneratedAt: new Date().toISOString(),
-            });
-          }
-        })
-        .catch(err => console.warn('[AI_INSIGHT_ERROR]', err.message));
-    }
-
+    // Update user's vow count
     try {
       const userRef = db.collection('users').doc(userId);
       const userDoc = await userRef.get();
@@ -168,14 +174,15 @@ export default async function handler(req, res) {
       }
     } catch (error) {
       console.warn('Failed to update user vow count:', error.message);
+      // Don't fail the request if this update fails
     }
 
+    // Log success
     console.log('[VOW_CREATED]', {
       timestamp: new Date().toISOString(),
       userId,
       vowId,
       category: vowData.category,
-      language,
     });
 
     return res.status(201).json({
@@ -193,6 +200,7 @@ export default async function handler(req, res) {
   } catch (error) {
     logError(error, 'VOW_SUBMIT', req);
 
+    // Handle specific error types
     if (error.code === 'permission-denied') {
       return res.status(403).json({
         success: false,

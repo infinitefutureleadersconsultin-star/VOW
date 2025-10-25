@@ -1,0 +1,19 @@
+import json
+
+# Complete English base
+en = {
+  "common": {"loading": "Loading...", "error": "Error", "success": "Success", "retry": "Retry", "cancel": "Cancel", "save": "Save", "delete": "Delete", "edit": "Edit", "back": "Back", "next": "Next", "submit": "Submit", "close": "Close", "confirm": "Confirm", "days": "days", "day": "day"},
+  "nav": {"dashboard": "Dashboard", "create_vow": "Create Vow", "reflect": "Reflect", "learn": "Learn", "progress": "Progress", "settings": "Settings", "profile": "Profile", "logout": "Logout", "login": "Log In", "signup": "Sign Up", "start_journey": "Start Your Journey"},
+  "home": {"title": "VOW - Remember Who You Said You'd Be", "hero_title": "Remember Who You Said You'd Be", "hero_subtitle": "Healing is not warfare. It is the restoration of identity through daily, conscious remembrance of your personal vow.", "cta_signup": "Begin Your First Two Days", "cta_learn": "Learn More", "login": "Log In", "nav_signup": "Start Your Journey"},
+  "dashboard": {"welcome": "Welcome back", "continue": "Continue refining your alignment", "trial_active": "Trial Active", "days_remaining": "days remaining", "day_remaining": "day remaining", "upgrade": "Upgrade", "current_alignment": "Current Alignment", "your_vow": "Your Vow Today", "create_first": "Create your first vow", "no_vow": "No active vow", "light_mode": "Light", "dark_mode": "Dark", "recent_vows": "Recent Vows", "view_all": "View All"},
+  "vow": {"title": "Create Your Daily Vow", "subtitle": "Remember who you are beyond what happened to you", "statement_label": "Your Vow Statement", "statement_placeholder": "I vow to remember...", "category_label": "Category", "duration_label": "Duration", "why_matters_label": "Why This Matters", "submit": "Create Vow", "success": "Vow created successfully!", "categories": {"addiction": "Addiction Recovery", "procrastination": "Procrastination", "self_sabotage": "Self-Sabotage", "emotional": "Emotional Healing", "habit": "Habit Building", "other": "Other"}},
+  "reflection": {"title": "Daily Reflection", "loading": "Loading reflection...", "pacification": "Pacification: Accept", "confrontation": "Confrontation: Understand", "integration": "Integration: Become Whole", "submit": "Save Reflection", "success": "Reflection saved successfully!"},
+  "login": {"title": "Sign In", "welcome": "Welcome back", "email": "Email address", "password": "Password", "submit": "Sign In", "forgot": "Forgot password?", "no_account": "Don't have an account?", "signup_link": "Sign up"},
+  "signup": {"title": "Create Your Account", "subtitle": "Begin your transformation", "full_name": "Full Name", "email": "Email", "password": "Password", "confirm_password": "Confirm Password", "submit": "Start Free Trial", "have_account": "Already have an account?", "login_link": "Log in"},
+  "pricing": {"title": "Choose Your Path", "subtitle": "Select a plan", "select_plan": "Select Plan", "per_month": "/month"}
+}
+
+with open('locales/en.json', 'w') as f:
+    json.dump(en, f, indent=2, ensure_ascii=False)
+
+print("✅ Updated en.json")
