@@ -42,5 +42,11 @@
     "cancel": "取消",
     "loading": "加载中...",
     "logout": "登出"
+  },
+  "home": {
+    "hero_title": "记住你说过的话",
+    "hero_subtitle": "通过每日记忆进行转变。不是战争，而是意识。",
+    "cta_button": "开始你的旅程",
+    "login": "登录"
   }
 }

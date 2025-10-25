@@ -42,5 +42,11 @@
     "cancel": "Cancel",
     "loading": "Loading...",
     "logout": "Logout"
+  },
+  "home": {
+    "hero_title": "Remember Who You Said You'd Be",
+    "hero_subtitle": "Transform through daily remembrance. Not warfare, but awareness.",
+    "cta_button": "Start Your Journey",
+    "login": "Log In"
   }
 }

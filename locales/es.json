@@ -42,5 +42,11 @@
     "cancel": "Cancelar",
     "loading": "Cargando...",
     "logout": "Cerrar Sesión"
+  },
+  "home": {
+    "hero_title": "Recuerda Quién Dijiste Que Serías",
+    "hero_subtitle": "Transforma a través del recuerdo diario. No guerra, sino conciencia.",
+    "cta_button": "Comienza Tu Viaje",
+    "login": "Iniciar Sesión"
   }
 }

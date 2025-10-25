@@ -42,5 +42,11 @@
     "cancel": "Annuler",
     "loading": "Chargement...",
     "logout": "Déconnexion"
+  },
+  "home": {
+    "hero_title": "Rappelez-vous Qui Vous Avez Dit Être",
+    "hero_subtitle": "Transformez-vous par le souvenir quotidien. Pas de guerre, mais de la conscience.",
+    "cta_button": "Commencez Votre Voyage",
+    "login": "Se Connecter"
   }
 }
