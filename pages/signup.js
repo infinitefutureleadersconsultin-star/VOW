@@ -359,7 +359,9 @@ function SignupForm() {
                   <option value="female">Female</option>
                   <option value="non-binary">Non-binary</option>
                   <option value="prefer-not-to-say">Prefer not to say</option>
-                
+                </select>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
                   Preferred Language *
