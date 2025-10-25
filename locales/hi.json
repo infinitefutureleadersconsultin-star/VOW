@@ -1,60 +1,58 @@
 {
   "nav": {
-    "dashboard": "डैशबोर्ड",
-    "createVow": "वाउ बनाएं",
-    "reflect": "चिंतन करें",
-    "learn": "सीखें",
-    "progress": "प्रगति",
-    "settings": "सेटिंग्स"
+    "dashboard": "Dashboard",
+    "createVow": "Create Vow",
+    "reflect": "Reflect",
+    "learn": "Learn",
+    "progress": "Progress",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout"
   },
   "dashboard": {
-    "welcome": "वापसी पर स्वागत है",
-    "yourVow": "आज आपका वाउ",
-    "createFirst": "अपना पहला वाउ बनाएं",
-    "streak": "दिन की लकीर",
-    "reflection": "चिंतन",
-    "triggers": "ट्रिगर्स लॉग किए गए"
+    "welcome": "Welcome back",
+    "continue": "Continue refining your alignment",
+    "trial_active": "Trial Active",
+    "days_remaining": "days remaining",
+    "day_remaining": "day remaining",
+    "upgrade": "Upgrade",
+    "current_alignment": "Current Alignment",
+    "your_vow": "Your Vow Today",
+    "create_first": "Create your first vow",
+    "no_vow": "No active vow",
+    "light_mode": "Light",
+    "dark_mode": "Dark"
   },
   "vow": {
-    "title": "अपना दैनिक वाउ बनाएं",
-    "subtitle": "याद रखें कि आप क्या हुआ उससे परे कौन हैं",
-    "placeholder": "मैं याद रखने की कसम खाता हूं...",
-    "submit": "वाउ बनाएं",
-    "success": "वाउ सफलतापूर्वक बनाया गया!"
+    "title": "Create Your Daily Vow",
+    "subtitle": "Remember who you are beyond what happened to you",
+    "placeholder": "I vow to remember...",
+    "submit": "Create Vow",
+    "success": "Vow created successfully!",
+    "breaking_chains": "Breaking Chains",
+    "breaking_chains_desc": "Release what binds you",
+    "honoring_time": "Honoring Time",
+    "honoring_time_desc": "Reclaim your moments",
+    "ending_sabotage": "Ending Self-Sabotage",
+    "ending_sabotage_desc": "Stop blocking your path",
+    "healing_within": "Healing Within",
+    "healing_within_desc": "Restore inner peace"
   },
   "reflection": {
-    "title": "दैनिक चिंतन",
-    "pacification": "शांति: स्वीकार करें",
-    "confrontation": "सामना: समझें",
-    "integration": "एकीकरण: संपूर्ण बनें",
-    "submit": "चिंतन सहेजें",
-    "success": "चिंतन सफलतापूर्वक सहेजा गया!"
-  },
-  "learn": {
-    "title": "VOW सिद्धांत सीखें",
-    "principles": "तीन सिद्धांत",
-    "dailyLaw": "दैनिक स्मरण का नियम"
-  },
-  "common": {
-    "back": "वापस",
-    "next": "अगला",
-    "save": "सहेजें",
-    "cancel": "रद्द करें",
-    "loading": "लोड हो रहा है...",
-    "logout": "लॉगआउट"
-  },
-  "home": {
-    "hero_title": "याद रखें आपने क्या कहा था",
-    "hero_subtitle": "दैनिक स्मरण के माध्यम से परिवर्तन। युद्ध नहीं, जागरूकता।",
-    "cta_button": "अपनी यात्रा शुरू करें",
-    "login": "लॉग इन करें"
+    "title": "Daily Reflection",
+    "loading": "Loading reflection...",
+    "pacification": "Pacification: Accept",
+    "confrontation": "Confrontation: Understand",
+    "integration": "Integration: Become Whole",
+    "submit": "Save Reflection",
+    "success": "Reflection saved successfully!"
   },
   "login": {
-    "title": "Welcome Back",
-    "subtitle": "Continue your transformation",
-    "email_placeholder": "you@example.com",
-    "password_placeholder": "Enter your password",
-    "submit": "Log In",
+    "title": "Sign In",
+    "welcome": "Welcome back",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Sign In",
     "forgot": "Forgot password?",
     "no_account": "Don't have an account?",
     "signup_link": "Sign up"
@@ -62,22 +60,24 @@
   "signup": {
     "title": "Create Your Account",
     "subtitle": "Begin your transformation",
-    "name_label": "Full Name",
-    "name_placeholder": "John Doe",
-    "email_label": "Email",
-    "email_placeholder": "you@example.com",
-    "password_label": "Password",
-    "password_placeholder": "At least 8 characters",
-    "confirm_password_label": "Confirm Password",
-    "confirm_password_placeholder": "Re-enter password",
-    "gender_label": "Gender",
-    "gender_placeholder": "Select your gender",
-    "behavior_label": "What brings you here?",
-    "behavior_placeholder": "Select what you're working through",
-    "language_label": "Preferred Language",
+    "full_name": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "gender": "Gender",
+    "language": "Preferred Language",
+    "behavior": "What brings you here?",
     "submit": "Start Free Trial",
     "have_account": "Already have an account?",
-    "login_link": "Log in",
-    "step": "Step"
+    "login_link": "Log in"
+  },
+  "common": {
+    "back": "Back",
+    "next": "Next",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "continue": "Continue",
+    "retry": "Retry"
   }
 }

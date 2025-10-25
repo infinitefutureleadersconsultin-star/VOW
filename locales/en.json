@@ -5,61 +5,54 @@
     "reflect": "Reflect",
     "learn": "Learn",
     "progress": "Progress",
-    "settings": "Settings"
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout"
   },
   "dashboard": {
     "welcome": "Welcome back",
-    "yourVow": "Your Vow Today",
-    "createFirst": "Create your first vow",
-    "streak": "Day Streak",
-    "reflection": "Reflections",
-    "triggers": "Triggers Logged"
+    "continue": "Continue refining your alignment",
+    "trial_active": "Trial Active",
+    "days_remaining": "days remaining",
+    "day_remaining": "day remaining",
+    "upgrade": "Upgrade",
+    "current_alignment": "Current Alignment",
+    "your_vow": "Your Vow Today",
+    "create_first": "Create your first vow",
+    "no_vow": "No active vow",
+    "light_mode": "Light",
+    "dark_mode": "Dark"
   },
   "vow": {
     "title": "Create Your Daily Vow",
     "subtitle": "Remember who you are beyond what happened to you",
     "placeholder": "I vow to remember...",
     "submit": "Create Vow",
-    "success": "Vow created successfully!"
+    "success": "Vow created successfully!",
+    "breaking_chains": "Breaking Chains",
+    "breaking_chains_desc": "Release what binds you",
+    "honoring_time": "Honoring Time",
+    "honoring_time_desc": "Reclaim your moments",
+    "ending_sabotage": "Ending Self-Sabotage",
+    "ending_sabotage_desc": "Stop blocking your path",
+    "healing_within": "Healing Within",
+    "healing_within_desc": "Restore inner peace"
   },
   "reflection": {
     "title": "Daily Reflection",
+    "loading": "Loading reflection...",
     "pacification": "Pacification: Accept",
     "confrontation": "Confrontation: Understand",
     "integration": "Integration: Become Whole",
     "submit": "Save Reflection",
     "success": "Reflection saved successfully!"
   },
-  "learn": {
-    "title": "Learn VOW Theory",
-    "principles": "The Three Principles",
-    "dailyLaw": "The Daily Law of Remembrance"
-  },
-  "common": {
-    "back": "Back",
-    "next": "Next",
-    "save": "Save",
-    "cancel": "Cancel",
-    "loading": "Loading...",
-    "logout": "Logout",
-    "continue": "Continue",
-    "email": "Email",
-    "password": "Password",
-    "name": "Full Name"
-  },
-  "home": {
-    "hero_title": "Remember Who You Said You'd Be",
-    "hero_subtitle": "Transform through daily remembrance. Not warfare, but awareness. The Law of Daily Remembrance.",
-    "cta_button": "Start Your Journey",
-    "login": "Log In",
-    "description": "Healing is not warfare. It is the restoration of identity through daily, conscious remembrance of your personal vow."
-  },
   "login": {
-    "title": "Welcome Back",
-    "subtitle": "Continue your transformation",
-    "email_placeholder": "you@example.com",
-    "password_placeholder": "Enter your password",
-    "submit": "Log In",
+    "title": "Sign In",
+    "welcome": "Welcome back",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Sign In",
     "forgot": "Forgot password?",
     "no_account": "Don't have an account?",
     "signup_link": "Sign up"
@@ -67,22 +60,24 @@
   "signup": {
     "title": "Create Your Account",
     "subtitle": "Begin your transformation",
-    "name_label": "Full Name",
-    "name_placeholder": "John Doe",
-    "email_label": "Email",
-    "email_placeholder": "you@example.com",
-    "password_label": "Password",
-    "password_placeholder": "At least 8 characters",
-    "confirm_password_label": "Confirm Password",
-    "confirm_password_placeholder": "Re-enter password",
-    "gender_label": "Gender",
-    "gender_placeholder": "Select your gender",
-    "behavior_label": "What brings you here?",
-    "behavior_placeholder": "Select what you're working through",
-    "language_label": "Preferred Language",
+    "full_name": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "gender": "Gender",
+    "language": "Preferred Language",
+    "behavior": "What brings you here?",
     "submit": "Start Free Trial",
     "have_account": "Already have an account?",
-    "login_link": "Log in",
-    "step": "Step"
+    "login_link": "Log in"
+  },
+  "common": {
+    "back": "Back",
+    "next": "Next",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "continue": "Continue",
+    "retry": "Retry"
   }
 }

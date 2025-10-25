@@ -1,60 +1,58 @@
 {
   "nav": {
-    "dashboard": "仪表板",
-    "createVow": "创建誓言",
-    "reflect": "反思",
-    "learn": "学习",
-    "progress": "进度",
-    "settings": "设置"
+    "dashboard": "Dashboard",
+    "createVow": "Create Vow",
+    "reflect": "Reflect",
+    "learn": "Learn",
+    "progress": "Progress",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout"
   },
   "dashboard": {
-    "welcome": "欢迎回来",
-    "yourVow": "今天的誓言",
-    "createFirst": "创建你的第一个誓言",
-    "streak": "连续天数",
-    "reflection": "反思",
-    "triggers": "已记录触发器"
+    "welcome": "Welcome back",
+    "continue": "Continue refining your alignment",
+    "trial_active": "Trial Active",
+    "days_remaining": "days remaining",
+    "day_remaining": "day remaining",
+    "upgrade": "Upgrade",
+    "current_alignment": "Current Alignment",
+    "your_vow": "Your Vow Today",
+    "create_first": "Create your first vow",
+    "no_vow": "No active vow",
+    "light_mode": "Light",
+    "dark_mode": "Dark"
   },
   "vow": {
-    "title": "创建你的每日誓言",
-    "subtitle": "记住你在发生之前是谁",
-    "placeholder": "我发誓记住...",
-    "submit": "创建誓言",
-    "success": "誓言创建成功！"
+    "title": "Create Your Daily Vow",
+    "subtitle": "Remember who you are beyond what happened to you",
+    "placeholder": "I vow to remember...",
+    "submit": "Create Vow",
+    "success": "Vow created successfully!",
+    "breaking_chains": "Breaking Chains",
+    "breaking_chains_desc": "Release what binds you",
+    "honoring_time": "Honoring Time",
+    "honoring_time_desc": "Reclaim your moments",
+    "ending_sabotage": "Ending Self-Sabotage",
+    "ending_sabotage_desc": "Stop blocking your path",
+    "healing_within": "Healing Within",
+    "healing_within_desc": "Restore inner peace"
   },
   "reflection": {
-    "title": "每日反思",
-    "pacification": "平静：接受",
-    "confrontation": "面对：理解",
-    "integration": "整合：变得完整",
-    "submit": "保存反思",
-    "success": "反思保存成功！"
-  },
-  "learn": {
-    "title": "学习VOW理论",
-    "principles": "三大原则",
-    "dailyLaw": "每日记忆法则"
-  },
-  "common": {
-    "back": "返回",
-    "next": "下一步",
-    "save": "保存",
-    "cancel": "取消",
-    "loading": "加载中...",
-    "logout": "登出"
-  },
-  "home": {
-    "hero_title": "记住你说过的话",
-    "hero_subtitle": "通过每日记忆进行转变。不是战争，而是意识。",
-    "cta_button": "开始你的旅程",
-    "login": "登录"
+    "title": "Daily Reflection",
+    "loading": "Loading reflection...",
+    "pacification": "Pacification: Accept",
+    "confrontation": "Confrontation: Understand",
+    "integration": "Integration: Become Whole",
+    "submit": "Save Reflection",
+    "success": "Reflection saved successfully!"
   },
   "login": {
-    "title": "Welcome Back",
-    "subtitle": "Continue your transformation",
-    "email_placeholder": "you@example.com",
-    "password_placeholder": "Enter your password",
-    "submit": "Log In",
+    "title": "Sign In",
+    "welcome": "Welcome back",
+    "email": "Email address",
+    "password": "Password",
+    "submit": "Sign In",
     "forgot": "Forgot password?",
     "no_account": "Don't have an account?",
     "signup_link": "Sign up"
@@ -62,22 +60,24 @@
   "signup": {
     "title": "Create Your Account",
     "subtitle": "Begin your transformation",
-    "name_label": "Full Name",
-    "name_placeholder": "John Doe",
-    "email_label": "Email",
-    "email_placeholder": "you@example.com",
-    "password_label": "Password",
-    "password_placeholder": "At least 8 characters",
-    "confirm_password_label": "Confirm Password",
-    "confirm_password_placeholder": "Re-enter password",
-    "gender_label": "Gender",
-    "gender_placeholder": "Select your gender",
-    "behavior_label": "What brings you here?",
-    "behavior_placeholder": "Select what you're working through",
-    "language_label": "Preferred Language",
+    "full_name": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "gender": "Gender",
+    "language": "Preferred Language",
+    "behavior": "What brings you here?",
     "submit": "Start Free Trial",
     "have_account": "Already have an account?",
-    "login_link": "Log in",
-    "step": "Step"
+    "login_link": "Log in"
+  },
+  "common": {
+    "back": "Back",
+    "next": "Next",
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading...",
+    "continue": "Continue",
+    "retry": "Retry"
   }
 }
