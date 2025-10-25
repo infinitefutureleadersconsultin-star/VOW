@@ -12,7 +12,6 @@ import { checkUserAccess } from '../utils/accessControl';
 import { api } from '../utils/apiClient';
 import { showToast } from '../utils/notificationUtils';
 import { ScrollText, Sparkles, Activity, User, AlertCircle, Sun, Moon } from 'lucide-react';
-import { useTranslation } from '../lib/translations';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -24,7 +23,6 @@ export default function Dashboard() {
   const [accessInfo, setAccessInfo] = useState(null);
   const [upgradeModal, setUpgradeModal] = useState({ show: false, tier: null });
   const [upgrading, setUpgrading] = useState(false);
-  const { t } = useTranslation();
   const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
@@ -197,7 +195,7 @@ export default function Dashboard() {
             }}
             className="vow-action px-6 py-2 rounded-lg surgical-transition"
           >
-            {t("common.retry")}
+            Retry
           </button>
         </div>
       </div>
@@ -233,12 +231,12 @@ export default function Dashboard() {
                   {theme === 'dark' ? (
                     <>
                       <Sun size={16} />
-                      <span>{t("dashboard.light_mode")}</span>
+                      <span>Light</span>
                     </>
                   ) : (
                     <>
                       <Moon size={16} />
-                      <span>{t("dashboard.dark_mode")}</span>
+                      <span>Dark</span>
                     </>
                   )}
                 </button>
@@ -258,7 +256,7 @@ export default function Dashboard() {
                   <AlertCircle size={20} className="icon-gold" />
                   <div>
                     <p className="awareness-text text-sm font-medium">
-                      {t("dashboard.trial_active")}
+                      Trial Active
                     </p>
                     <p className="observation-text text-xs">
                       {accessInfo.daysLeft} {accessInfo.daysLeft === 1 ? 'day' : 'days'} remaining
@@ -269,7 +267,7 @@ export default function Dashboard() {
                   onClick={() => router.push('/pricing')}
                   className="vow-action text-xs px-4 py-2 rounded-lg surgical-transition"
                 >
-                  {t("dashboard.upgrade")}
+                  Upgrade
                 </button>
               </div>
             </div>
@@ -281,10 +279,10 @@ export default function Dashboard() {
               className="text-2xl awareness-text mb-1"
               style={{ fontFamily: "'SF Pro Display', sans-serif", fontWeight: 500 }}
             >
-              {t("dashboard.welcome")}, {userData?.name?.split(' ')[0] || 'there'}.
+              Welcome back, {userData?.name?.split(' ')[0] || 'there'}.
             </h2>
             <p className="observation-text text-sm">
-              {t("dashboard.continue")}
+              Continue refining your alignment.
             </p>
           </div>
 

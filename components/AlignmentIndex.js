@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useTranslation } from '../lib/translations';
 
 export default function AlignmentIndex({ percentage = 0, activeVows = 0, reflections = 0 }) {
-  const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
@@ -20,7 +18,7 @@ export default function AlignmentIndex({ percentage = 0, activeVows = 0, reflect
       <div className="flex flex-col items-center">
         {/* Label */}
         <p className="text-xs observation-text mb-6 tracking-wide uppercase">
-          {t("dashboard.current_alignment")}
+          Current Alignment
         </p>
 
         {/* Clinical Progress Ring */}

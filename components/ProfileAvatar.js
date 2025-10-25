@@ -7,7 +7,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { removeAuthToken } from '../lib/storage';
 import { getTierBadge, getUserTier } from '../lib/featureAccess';
-import { useTranslation } from '../lib/translations';
 
 export default function ProfileAvatar({ userData, compact = false }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +14,6 @@ export default function ProfileAvatar({ userData, compact = false }) {
   const dropdownRef = useRef(null);
   const router = useRouter();
 
-  const { t } = useTranslation();
   const currentTier = getUserTier(userData);
   const tierBadge = getTierBadge(currentTier);
 
@@ -177,22 +175,22 @@ function Dropdown({ userData, currentTier, tierBadge, theme, onToggleTheme, onLo
       <div className="py-2">
         <MenuItem
           icon="👤"
-          label={t("nav.profile")}
+          label="Profile"
           onClick={() => onNavigate('/profile')}
         />
         <MenuItem
           icon="⚙️"
-          label={t("nav.settings")}
+          label="Settings"
           onClick={() => onNavigate('/settings')}
         />
         <MenuItem
           icon="📊"
-          label={t("nav.progress")}
+          label="Progress"
           onClick={() => onNavigate('/dashboard')}
         />
         <MenuItem
           icon="📚"
-          label={t("nav.learn")}
+          label="Learn"
           onClick={() => onNavigate('/learn')}
         />
         
@@ -230,7 +228,7 @@ function Dropdown({ userData, currentTier, tierBadge, theme, onToggleTheme, onLo
       <div className="border-t border-[#E3C27D]/20 pt-2">
         <MenuItem
           icon="🚪"
-          label={t("nav.logout")}
+          label="Logout"
           onClick={onLogout}
           danger={true}
         />
@@ -276,7 +274,6 @@ function MenuItem({ icon, label, onClick, highlight = false, danger = false }) {
  * Mini Profile Display
  */
 export function MiniProfile({ userData }) {
-  const { t } = useTranslation();
   const currentTier = getUserTier(userData);
   const tierBadge = getTierBadge(currentTier);
 
@@ -300,7 +297,6 @@ export function MiniProfile({ userData }) {
  * Profile Card (for settings page)
  */
 export function ProfileCard({ userData, onEdit }) {
-  const { t } = useTranslation();
   const currentTier = getUserTier(userData);
   const tierBadge = getTierBadge(currentTier);
 
