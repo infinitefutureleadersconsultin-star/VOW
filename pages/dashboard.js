@@ -6,7 +6,7 @@ import { hasSeenWelcomeVideo } from '../lib/welcomeVideos';
 import LoadingSpinner from '../components/LoadingSpinner';
 import AlignmentIndex from '../components/AlignmentIndex';
 import ProfileAvatar from '../components/ProfileAvatar';
-import {t("dashboard.upgrade")}Modal from '../components/{t("dashboard.upgrade")}Modal';
+import UpgradeModal from '../components/UpgradeModal';
 import { hasCelebrated, MILESTONE_KEYS } from '../utils/celebrationUtils';
 import { checkUserAccess } from '../utils/accessControl';
 import { api } from '../utils/apiClient';
