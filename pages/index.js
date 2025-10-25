@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from '../lib/translations';
 import Head from 'next/head';
 import Link from 'next/link';
 
 export default function Home() {
+  const { language, changeLanguage } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
   const [language, setLanguageState] = useState('en');
 
@@ -66,11 +68,11 @@ export default function Home() {
                     </svg>
                   </button>
                   <div className="hidden group-hover:block absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
-                    <button onClick={() => setLanguage('en')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇬🇧 English</button>
-                    <button onClick={() => setLanguage('es')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇪🇸 Español</button>
-                    <button onClick={() => setLanguage('hi')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇮🇳 हिन्दी</button>
-                    <button onClick={() => setLanguage('zh')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇨🇳 中文</button>
-                    <button onClick={() => setLanguage('fr')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇫🇷 Français</button>
+                    <button onClick={() => changeLanguage('en')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇬🇧 English</button>
+                    <button onClick={() => changeLanguage('es')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇪🇸 Español</button>
+                    <button onClick={() => changeLanguage('hi')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇮🇳 हिन्दी</button>
+                    <button onClick={() => changeLanguage('zh')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇨🇳 中文</button>
+                    <button onClick={() => changeLanguage('fr')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇫🇷 Français</button>
                   </div>
                 </div>
 

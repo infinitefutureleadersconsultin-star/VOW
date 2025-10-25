@@ -1,0 +1,46 @@
+{
+  "nav": {
+    "dashboard": "仪表板",
+    "createVow": "创建誓言",
+    "reflect": "反思",
+    "learn": "学习",
+    "progress": "进度",
+    "settings": "设置"
+  },
+  "dashboard": {
+    "welcome": "欢迎回来",
+    "yourVow": "今天的誓言",
+    "createFirst": "创建你的第一个誓言",
+    "streak": "连续天数",
+    "reflection": "反思",
+    "triggers": "已记录触发器"
+  },
+  "vow": {
+    "title": "创建你的每日誓言",
+    "subtitle": "记住你在发生之前是谁",
+    "placeholder": "我发誓记住...",
+    "submit": "创建誓言",
+    "success": "誓言创建成功！"
+  },
+  "reflection": {
+    "title": "每日反思",
+    "pacification": "平静：接受",
+    "confrontation": "面对：理解",
+    "integration": "整合：变得完整",
+    "submit": "保存反思",
+    "success": "反思保存成功！"
+  },
+  "learn": {
+    "title": "学习VOW理论",
+    "principles": "三大原则",
+    "dailyLaw": "每日记忆法则"
+  },
+  "common": {
+    "back": "返回",
+    "next": "下一步",
+    "save": "保存",
+    "cancel": "取消",
+    "loading": "加载中...",
+    "logout": "登出"
+  }
+}
