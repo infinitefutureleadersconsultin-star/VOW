@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { loadStripe } from '@stripe/stripe-js';
@@ -19,6 +19,11 @@ function SignupForm() {
   const [error, setError] = useState(null);
   const [termsAccepted, setTermsAccepted] = useState(false);
   
+  useEffect(() => {
+    const savedLang = localStorage.getItem('vow_language') || 'en';
+    setFormData(prev => ({ ...prev, language: savedLang }));
+  }, []);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',

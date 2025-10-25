@@ -11,10 +11,16 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [language, setLanguageState] = useState('en');
+
+  const setLanguage = (lang) => {
+    localStorage.setItem('vow_language', lang);
+    setLanguageState(lang);
+  };
 
   useEffect(() => {
-    // Don't check for existing auth - let user login fresh
-    // This prevents redirect loops
+    const saved = localStorage.getItem('vow_language') || 'en';
+    setLanguageState(saved);
   }, []);
 
   const handleSubmit = async (e) => {
