@@ -6,6 +6,7 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import { api } from '../utils/apiClient';
 import { showToast } from '../utils/notificationUtils';
 import TermsAgreement from '../components/TermsAgreement';
+import { useTranslation } from '../lib/translations';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
