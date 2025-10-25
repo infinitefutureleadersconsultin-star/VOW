@@ -1,4 +1,7 @@
-{
+const fs = require('fs');
+
+// Complete English master
+const en = {
   "common": {
     "loading": "Loading...",
     "error": "Error",
@@ -153,20 +156,7 @@
     "per_month": "/month",
     "per_day": "/day",
     "popular": "Popular",
-    "tiers": {
-      "seeker": {
-        "name": "Seeker",
-        "description": "Perfect for getting started"
-      },
-      "explorer": {
-        "name": "Explorer",
-        "description": "For dedicated growth"
-      },
-      "master": {
-        "name": "Master",
-        "description": "For transformation leaders"
-      }
-    }
+    "features": "Features"
   },
   "settings": {
     "title": "Settings",
@@ -187,4 +177,24 @@
     "not_found": "Page not found",
     "server_error": "Something went wrong. Please try again."
   }
-}
+};
+
+// Spanish translations
+const es = JSON.parse(JSON.stringify(en));
+Object.assign(es, {
+  "common": {"loading": "Cargando...", "error": "Error", "success": "Éxito", "retry": "Reintentar", "cancel": "Cancelar", "save": "Guardar", "delete": "Eliminar", "edit": "Editar", "back": "Atrás", "next": "Siguiente", "submit": "Enviar", "close": "Cerrar", "confirm": "Confirmar", "days": "días", "day": "día", "continue": "Continuar"},
+  "nav": {"dashboard": "Panel", "create_vow": "Crear Voto", "reflect": "Reflexionar", "learn": "Aprender", "progress": "Progreso", "settings": "Configuración", "profile": "Perfil", "logout": "Cerrar Sesión", "login": "Iniciar Sesión", "signup": "Registrarse", "start_journey": "Comienza Tu Viaje"},
+  "home": {"title": "VOW - Recuerda Quién Dijiste Que Serías", "hero_title": "Recuerda Quién Dijiste Que Serías", "hero_subtitle": "La curación no es guerra. Es la restauración de la identidad a través del recuerdo diario y consciente de tu voto personal.", "cta_signup": "Comienza Tus Primeros Dos Días", "cta_learn": "Aprende Más", "login": "Iniciar Sesión", "nav_signup": "Comienza Tu Viaje", "description": "Transfórmate a través del recuerdo diario. No guerra, sino conciencia."},
+  "dashboard": {"welcome": "Bienvenido de nuevo", "continue": "Continúa refinando tu alineación", "trial_active": "Prueba Activa", "days_remaining": "días restantes", "day_remaining": "día restante", "upgrade": "Actualizar", "current_alignment": "Alineación Actual", "your_vow": "Tu Voto Hoy", "create_first": "Crea tu primer voto", "no_vow": "Sin voto activo", "light_mode": "Claro", "dark_mode": "Oscuro", "recent_vows": "Votos Recientes", "view_all": "Ver Todos", "stats_title": "Tu Progreso", "total_vows": "Total de Votos", "reflections": "Reflexiones", "current_streak": "Racha Actual"},
+  "vow": {"title": "Crea Tu Voto Diario", "subtitle": "Recuerda quién eres más allá de lo que te pasó", "statement_label": "Tu Declaración de Voto", "statement_placeholder": "Voto recordar...", "category_label": "Categoría", "category_placeholder": "Selecciona una categoría", "duration_label": "Duración", "why_matters_label": "Por Qué Importa Esto", "why_matters_placeholder": "¿Qué cambiará cuando cumplas este voto?", "before_identity_label": "Identidad Anterior", "before_identity_placeholder": "Quién eras antes...", "becoming_identity_label": "Identidad En Desarrollo", "becoming_identity_placeholder": "En quién te estás convirtiendo...", "submit": "Crear Voto", "update": "Actualizar Voto", "success": "¡Voto creado exitosamente!", "error": "Error al crear el voto", "categories": {"addiction": "Recuperación de Adicción", "procrastination": "Procrastinación", "self_sabotage": "Auto-Sabotaje", "emotional": "Sanación Emocional", "habit": "Construcción de Hábitos", "other": "Otro"}},
+  "login": {"title": "Iniciar Sesión", "welcome": "Bienvenido de nuevo", "email": "Correo electrónico", "password": "Contraseña", "submit": "Iniciar Sesión", "forgot": "¿Olvidaste tu contraseña?", "no_account": "¿No tienes una cuenta?", "signup_link": "Regístrate", "success": "¡Sesión iniciada exitosamente!", "error": "Correo o contraseña inválidos"},
+  "pricing": {"title": "Elige Tu Camino", "subtitle": "Selecciona un plan que se ajuste a tu viaje", "select_plan": "Seleccionar Plan", "current_plan": "Plan Actual", "per_month": "/mes", "per_day": "/día", "popular": "Popular", "features": "Características"}
+});
+
+// Save all files
+fs.writeFileSync('locales/en.json', JSON.stringify(en, null, 2));
+fs.writeFileSync('locales/es.json', JSON.stringify(es, null, 2));
+
+console.log('✅ Created en.json and es.json');
+console.log('Note: fr.json, hi.json, zh.json, pt.json will use en.json as base for now');
+console.log('Run professional translation service for production');

@@ -1,13 +1,44 @@
 {
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "retry": "Retry",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "close": "Close",
+    "confirm": "Confirm",
+    "days": "days",
+    "day": "day",
+    "continue": "Continue"
+  },
   "nav": {
     "dashboard": "Dashboard",
-    "createVow": "Create Vow",
+    "create_vow": "Create Vow",
     "reflect": "Reflect",
     "learn": "Learn",
     "progress": "Progress",
     "settings": "Settings",
     "profile": "Profile",
-    "logout": "Logout"
+    "logout": "Logout",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "start_journey": "Start Your Journey"
+  },
+  "home": {
+    "title": "VOW - Remember Who You Said You'd Be",
+    "hero_title": "Remember Who You Said You'd Be",
+    "hero_subtitle": "Healing is not warfare. It is the restoration of identity through daily, conscious remembrance of your personal vow.",
+    "cta_signup": "Begin Your First Two Days",
+    "cta_learn": "Learn More",
+    "login": "Log In",
+    "nav_signup": "Start Your Journey",
+    "description": "Transform through daily remembrance. Not warfare, but awareness."
   },
   "dashboard": {
     "welcome": "Welcome back",
@@ -21,14 +52,32 @@
     "create_first": "Create your first vow",
     "no_vow": "No active vow",
     "light_mode": "Light",
-    "dark_mode": "Dark"
+    "dark_mode": "Dark",
+    "recent_vows": "Recent Vows",
+    "view_all": "View All",
+    "stats_title": "Your Progress",
+    "total_vows": "Total Vows",
+    "reflections": "Reflections",
+    "current_streak": "Current Streak"
   },
   "vow": {
     "title": "Create Your Daily Vow",
     "subtitle": "Remember who you are beyond what happened to you",
-    "placeholder": "I vow to remember...",
+    "statement_label": "Your Vow Statement",
+    "statement_placeholder": "I vow to remember...",
+    "category_label": "Category",
+    "category_placeholder": "Select a category",
+    "duration_label": "Duration",
+    "why_matters_label": "Why This Matters",
+    "why_matters_placeholder": "What will change when you keep this vow?",
+    "before_identity_label": "Before Identity",
+    "before_identity_placeholder": "Who you were before...",
+    "becoming_identity_label": "Becoming Identity",
+    "becoming_identity_placeholder": "Who you're becoming...",
     "submit": "Create Vow",
+    "update": "Update Vow",
     "success": "Vow created successfully!",
+    "error": "Failed to create vow",
     "breaking_chains": "Breaking Chains",
     "breaking_chains_desc": "Release what binds you",
     "honoring_time": "Honoring Time",
@@ -36,16 +85,37 @@
     "ending_sabotage": "Ending Self-Sabotage",
     "ending_sabotage_desc": "Stop blocking your path",
     "healing_within": "Healing Within",
-    "healing_within_desc": "Restore inner peace"
+    "healing_within_desc": "Restore inner peace",
+    "categories": {
+      "addiction": "Addiction Recovery",
+      "procrastination": "Procrastination",
+      "self_sabotage": "Self-Sabotage",
+      "emotional": "Emotional Healing",
+      "habit": "Habit Building",
+      "other": "Other"
+    },
+    "validation": {
+      "statement_required": "Vow statement is required",
+      "statement_min": "Vow statement must be at least 10 characters",
+      "statement_max": "Vow statement must be less than 300 characters",
+      "category_required": "Please select a category"
+    }
   },
   "reflection": {
     "title": "Daily Reflection",
+    "subtitle": "Reflect on your journey",
     "loading": "Loading reflection...",
     "pacification": "Pacification: Accept",
+    "pacification_desc": "Observe without judgment",
     "confrontation": "Confrontation: Understand",
+    "confrontation_desc": "Explore the origins",
     "integration": "Integration: Become Whole",
+    "integration_desc": "Merge healed and original self",
+    "content_label": "Your Reflection",
+    "content_placeholder": "What did you notice today?",
     "submit": "Save Reflection",
-    "success": "Reflection saved successfully!"
+    "success": "Reflection saved successfully!",
+    "error": "Failed to save reflection"
   },
   "login": {
     "title": "Sign In",
@@ -55,7 +125,9 @@
     "submit": "Sign In",
     "forgot": "Forgot password?",
     "no_account": "Don't have an account?",
-    "signup_link": "Sign up"
+    "signup_link": "Sign up",
+    "success": "Logged in successfully!",
+    "error": "Invalid email or password"
   },
   "signup": {
     "title": "Create Your Account",
@@ -69,23 +141,50 @@
     "behavior": "What brings you here?",
     "submit": "Start Free Trial",
     "have_account": "Already have an account?",
-    "login_link": "Log in"
+    "login_link": "Log in",
+    "success": "Account created successfully!",
+    "error": "Failed to create account"
   },
-  "common": {
-    "back": "Back",
-    "next": "Next",
-    "save": "Save",
-    "cancel": "Cancel",
-    "loading": "Loading...",
-    "continue": "Continue",
-    "retry": "Retry"
+  "pricing": {
+    "title": "Choose Your Path",
+    "subtitle": "Select a plan that fits your journey",
+    "select_plan": "Select Plan",
+    "current_plan": "Current Plan",
+    "per_month": "/month",
+    "per_day": "/day",
+    "popular": "Popular",
+    "tiers": {
+      "seeker": {
+        "name": "Seeker",
+        "description": "Perfect for getting started"
+      },
+      "explorer": {
+        "name": "Explorer",
+        "description": "For dedicated growth"
+      },
+      "master": {
+        "name": "Master",
+        "description": "For transformation leaders"
+      }
+    }
   },
-  "home": {
-    "hero_title": "Remember Who You Said You'd Be",
-    "hero_subtitle": "Healing is not warfare. It is the restoration of identity through daily, conscious remembrance of your personal vow.",
-    "cta_signup": "Begin Your First Two Days",
-    "cta_learn": "Learn More",
-    "login": "Log In",
-    "nav_signup": "Start Your Journey"
+  "settings": {
+    "title": "Settings",
+    "account": "Account",
+    "preferences": "Preferences",
+    "notifications": "Notifications",
+    "language": "Language",
+    "theme": "Theme",
+    "save_changes": "Save Changes"
+  },
+  "profile": {
+    "title": "Profile",
+    "edit": "Edit Profile",
+    "save": "Save Changes"
+  },
+  "errors": {
+    "unauthorized": "Please log in to continue",
+    "not_found": "Page not found",
+    "server_error": "Something went wrong. Please try again."
   }
 }

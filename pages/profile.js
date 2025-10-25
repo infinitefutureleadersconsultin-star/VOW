@@ -1,14 +1,10 @@
-/**
- * Profile Page
- * User profile with stats, achievements, and history
- */
-
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { ProfileCard } from '../components/ProfileAvatar';
 import StreakMeter, { StreakMilestones } from '../components/charts/StreakMeter';
+import { useTranslation } from '../lib/translations';
 import { loadAuthToken } from '../lib/storage';
 
 export default function ProfilePage() {
@@ -21,6 +17,7 @@ export default function ProfilePage() {
 
 function ProfileContent() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [stats, setStats] = useState(null);
@@ -34,7 +31,6 @@ function ProfileContent() {
     try {
       const token = loadAuthToken();
       
-      // Load user data
       const userResponse = await fetch('/api/userData', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -45,7 +41,6 @@ function ProfileContent() {
         setStats(data.data.stats || {});
       }
 
-      // Load achievements
       const achievementsResponse = await fetch('/api/achievements', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -67,7 +62,7 @@ function ProfileContent() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="text-4xl mb-4">👤</div>
-          <p className="observation-text">Loading profile...</p>
+          <p className="observation-text">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -76,231 +71,59 @@ function ProfileContent() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
       <Head>
-        <title>Profile - VOW</title>
+        <title>{t('profile.title')} - VOW</title>
       </Head>
 
-      {/* Header */}
-      <nav className="corrective-bg border-b border-[#E3C27D]/20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="text-[#8E8A84] hover:text-[#F4F1ED]"
-            >
-              ← Back
-            </button>
-            <h1 className="text-lg font-medium text-[#F4F1ED]">Profile</h1>
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold awareness-text">{t('profile.title')}</h1>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Profile Card */}
+          <div className="separation-card rounded-xl p-6">
+            <ProfileCard user={userData} />
             <button
               onClick={() => router.push('/settings')}
-              className="text-[#8E8A84] hover:text-[#F4F1ED]"
+              className="mt-6 w-full vow-action py-3 rounded-lg surgical-transition"
             >
-              Settings →
+              {t('profile.edit')}
             </button>
           </div>
-        </div>
-      </nav>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Profile Card */}
-            <ProfileCard 
-              userData={userData} 
-              onEdit={() => router.push('/settings')}
-            />
-
-            {/* Streak Display */}
-            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
-              <h3 className="font-bold awareness-text mb-4">Current Streak</h3>
-              <StreakMeter streak={stats?.currentStreak || 0} size="large" />
-            </div>
-
-            {/* Level Display */}
-            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6 text-center">
-              <div className="text-5xl mb-3">⭐</div>
-              <div className="text-3xl font-bold awareness-text mb-1">
-                Level {userData?.level || 1}
+          {/* Stats */}
+          <div className="separation-card rounded-xl p-6">
+            <h2 className="text-xl font-semibold awareness-text mb-4">
+              {t('dashboard.stats_title')}
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center p-4 bg-[#1A1C1F] rounded-lg">
+                <div className="text-3xl icon-gold mb-2">{stats?.totalVows || 0}</div>
+                <div className="observation-text text-sm">{t('dashboard.total_vows')}</div>
               </div>
-              <div className="text-sm observation-text mb-3">
-                Remembrance Master
+              <div className="text-center p-4 bg-[#1A1C1F] rounded-lg">
+                <div className="text-3xl icon-gold mb-2">{stats?.totalReflections || 0}</div>
+                <div className="observation-text text-sm">{t('dashboard.reflections')}</div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="h-full rounded-full"
-                  style={{
-                    width: `${((userData?.xp || 0) % 1000) / 10}%`,
-                    backgroundColor: '#C6A664'
-                  }}
-                />
+              <div className="text-center p-4 bg-[#1A1C1F] rounded-lg">
+                <div className="text-3xl icon-gold mb-2">{stats?.currentStreak || 0}</div>
+                <div className="observation-text text-sm">{t('dashboard.current_streak')}</div>
               </div>
-              <div className="text-xs observation-text mt-2">
-                {(userData?.xp || 0) % 1000} / 1000 XP
+              <div className="text-center p-4 bg-[#1A1C1F] rounded-lg">
+                <div className="text-3xl icon-gold mb-2">{Math.round(stats?.alignmentScore || 0)}</div>
+                <div className="observation-text text-sm">{t('dashboard.current_alignment')}</div>
               </div>
             </div>
           </div>
 
-          {/* Right Column */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Stats Overview */}
-            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
-              <h3 className="text-xl font-bold awareness-text mb-4">Your Journey</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <StatCard
-                  icon="📜"
-                  label="Total Vows"
-                  value={stats?.totalVows || 0}
-                  color="#C6A664"
-                />
-                <StatCard
-                  icon="✅"
-                  label="Completed"
-                  value={stats?.completedVows || 0}
-                  color="#5FD3A5"
-                />
-                <StatCard
-                  icon="💭"
-                  label="Reflections"
-                  value={stats?.totalReflections || 0}
-                  color="#90EE90"
-                />
-                <StatCard
-                  icon="🔥"
-                  label="Longest Streak"
-                  value={`${stats?.longestStreak || 0} days`}
-                  color="#FF6347"
-                />
-              </div>
+          {/* Streak Meter */}
+          {stats?.currentStreak > 0 && (
+            <div className="md:col-span-2 separation-card rounded-xl p-6">
+              <StreakMeter currentStreak={stats.currentStreak} longestStreak={stats.longestStreak || 0} />
             </div>
-
-            {/* Achievements */}
-            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
-              <h3 className="text-xl font-bold awareness-text mb-4">
-                Achievements ({achievements.length})
-              </h3>
-              
-              {achievements.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {achievements.map((achievement) => (
-                    <AchievementBadge
-                      key={achievement.id}
-                      achievement={achievement}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <div className="text-4xl mb-3">🏆</div>
-                  <p className="observation-text">
-                    Keep practicing to unlock achievements!
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Milestones */}
-            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
-              <h3 className="text-xl font-bold awareness-text mb-4">Streak Milestones</h3>
-              <StreakMilestones
-                currentStreak={stats?.currentStreak || 0}
-                longestStreak={stats?.longestStreak || 0}
-              />
-            </div>
-
-            {/* Activity Summary */}
-            <div className="separation-card bg-[#1A1C1F] border border-[#E3C27D]/20 rounded-xl p-6">
-              <h3 className="text-xl font-bold awareness-text mb-4">Recent Activity</h3>
-              
-              <div className="space-y-3">
-                {stats?.recentActivity ? (
-                  stats.recentActivity.map((activity, i) => (
-                    <ActivityItem key={i} activity={activity} />
-                  ))
-                ) : (
-                  <div className="text-center py-4 observation-text">
-                    No recent activity
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
   );
-}
-
-function StatCard({ icon, label, value, color }) {
-  return (
-    <div className="text-center p-4 rounded-lg bg-[#1A1C1F] border border-[#E3C27D]/20">
-      <div className="text-3xl mb-2">{icon}</div>
-      <div className="text-2xl font-bold awareness-text mb-1">{value}</div>
-      <div className="text-xs observation-text">{label}</div>
-    </div>
-  );
-}
-
-function AchievementBadge({ achievement }) {
-  return (
-    <div 
-      className="p-4 rounded-lg text-center transition-all hover:scale-105 cursor-pointer"
-      style={{ 
-        background: achievement.unlocked 
-          ? 'linear-gradient(135deg, #FFD70020 0%, #FFD70040 100%)'
-          : 'linear-gradient(135deg, #E5E7EB20 0%, #E5E7EB40 100%)'
-      }}
-      title={achievement.description}
-    >
-      <div className={`text-4xl mb-2 ${!achievement.unlocked && 'grayscale opacity-50'}`}>
-        {achievement.icon}
-      </div>
-      <div className="text-xs font-medium awareness-text">
-        {achievement.name}
-      </div>
-      {achievement.unlockedAt && (
-        <div className="text-xs observation-text mt-1">
-          {new Date(achievement.unlockedAt).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric'
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ActivityItem({ activity }) {
-  const activityIcons = {
-    vow_created: '📜',
-    vow_completed: '✅',
-    reflection: '💭',
-    streak: '🔥',
-    achievement: '🏆'
-  };
-
-  return (
-    <div className="flex items-center space-x-3 p-3 rounded-lg bg-[#1A1C1F]">
-      <div className="text-2xl">{activityIcons[activity.type] || '📌'}</div>
-      <div className="flex-1">
-        <div className="text-sm font-medium awareness-text">{activity.title}</div>
-        <div className="text-xs observation-text">{activity.description}</div>
-      </div>
-      <div className="text-xs observation-text">
-        {formatTimeAgo(activity.timestamp)}
-      </div>
-    </div>
-  );
-}
-
-function formatTimeAgo(timestamp) {
-  const now = new Date();
-  const past = new Date(timestamp);
-  const diffMs = now - past;
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  return `${diffDays}d ago`;
 }

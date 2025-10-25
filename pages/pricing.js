@@ -1,24 +1,23 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import { useTranslation } from '../lib/translations';
 
 export default function PricingPage() {
   const router = useRouter();
+  const { t, language } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [error, setError] = useState('');
 
-  // ✅ NO AUTH CHECKS - Anyone can view pricing
-  // If they try to subscribe without auth, API will handle it
-
   const tiers = [
     {
       id: 'seeker',
-      name: 'Seeker',
+      name: t('pricing.tiers.seeker.name') || 'Seeker',
       icon: '🔍',
       price: 4.99,
       dailyPrice: '0.16',
-      description: 'Perfect for getting started',
+      description: t('pricing.tiers.seeker.description') || 'Perfect for getting started',
       popular: true,
       features: [
         'Unlimited vows',
@@ -33,11 +32,11 @@ export default function PricingPage() {
     },
     {
       id: 'explorer',
-      name: 'Explorer',
+      name: t('pricing.tiers.explorer.name') || 'Explorer',
       icon: '🌟',
       price: 9.99,
       dailyPrice: '0.33',
-      description: 'For dedicated growth',
+      description: t('pricing.tiers.explorer.description') || 'For dedicated growth',
       features: [
         'Everything in Seeker',
         'Advanced AI coaching',
@@ -51,11 +50,11 @@ export default function PricingPage() {
     },
     {
       id: 'master',
-      name: 'Master',
+      name: t('pricing.tiers.master.name') || 'Master',
       icon: '👑',
       price: 14.99,
       dailyPrice: '0.50',
-      description: 'For transformation leaders',
+      description: t('pricing.tiers.master.description') || 'For transformation leaders',
       features: [
         'Everything in Explorer',
         'Premium AI coaching',
@@ -69,11 +68,9 @@ export default function PricingPage() {
   ];
 
   const handleSelectPlan = async (plan) => {
-    // Check if user is logged in
     const token = localStorage.getItem('vow_auth_token');
     
     if (!token) {
-      // Not logged in - redirect to login with return URL
       router.push(`/login?redirect=/pricing&plan=${plan.id}`);
       return;
     }
@@ -83,7 +80,6 @@ export default function PricingPage() {
     setError('');
 
     try {
-      // ✅ Go DIRECTLY to Stripe checkout
       const response = await fetch('/api/subscribe', {
         method: 'POST',
         headers: {
@@ -93,121 +89,121 @@ export default function PricingPage() {
         body: JSON.stringify({
           tier: plan.id,
           price: plan.price,
-          cycle: 'monthly'
+          cycle: 'monthly',
+          language: language
         })
       });
 
       const data = await response.json();
 
       if (data.success && data.checkoutUrl) {
-        console.log('[PRICING] Redirecting to Stripe:', data.checkoutUrl);
         window.location.href = data.checkoutUrl;
       } else {
-        throw new Error(data.message || 'Failed to start checkout');
+        setError(data.message || t('errors.server_error'));
+        setLoading(false);
+        setSelectedPlan(null);
       }
     } catch (error) {
-      console.error('[PRICING] Checkout error:', error);
-      setError(error.message || 'An error occurred. Please try again.');
+      console.error('[PRICING] Subscribe error:', error);
+      setError(t('errors.server_error'));
       setLoading(false);
       setSelectedPlan(null);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F]">
+    <div className="min-h-screen bg-gradient-to-b from-white to-amber-50">
       <Head>
-        <title>Upgrade - VOW Theory</title>
+        <title>{t('pricing.title')} - VOW</title>
       </Head>
 
-      <nav className="corrective-bg border-b border-[#E3C27D]/20">
+      <nav className="border-b border-amber-100 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="w-16"></div>
-            <h1 className="text-lg font-medium text-[#F4F1ED]">Upgrade Your Access</h1>
-            <div className="w-16"></div>
+            <img src="/logo.svg" alt="VOW" className="h-10" />
+            <button
+              onClick={() => router.push('/dashboard')}
+              className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium"
+            >
+              {t('common.back')}
+            </button>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold awareness-text mb-4">
-            Continue Your Journey
-          </h2>
-          <p className="text-xl observation-text mb-2">
-            Your free trial has ended. Choose a plan to keep transforming.
-          </p>
-          <p className="text-sm text-[#8E8A84]">
-            Select a plan below to restore full access
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            {t('pricing.title')}
+          </h1>
+          <p className="text-xl text-gray-600">
+            {t('pricing.subtitle')}
           </p>
         </div>
 
         {error && (
-          <div className="max-w-md mx-auto mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20">
-            <p className="text-red-400 text-center text-sm">{error}</p>
+          <div className="max-w-2xl mx-auto mb-8 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+            {error}
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {tiers.map((tier) => (
             <div
               key={tier.id}
-              className={`separation-card rounded-xl p-6 transition-all hover:shadow-xl ${
-                tier.popular ? 'ring-2 ring-amber-400 relative' : ''
-              }`}
+              className={`relative bg-white rounded-2xl shadow-xl border-2 ${
+                tier.popular ? 'border-amber-500' : 'border-gray-200'
+              } p-8 flex flex-col`}
             >
               {tier.popular && (
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                  <span className="px-4 py-1 rounded-full bg-amber-400 text-white text-xs font-bold">
-                    MOST POPULAR
-                  </span>
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                  {t('pricing.popular')}
                 </div>
               )}
 
               <div className="text-center mb-6">
-                <div className="text-5xl mb-3">{tier.icon}</div>
-                <h3 className="text-2xl font-bold awareness-text mb-2">{tier.name}</h3>
-                <p className="text-sm observation-text mb-4">{tier.description}</p>
-                <div className="mb-2">
-                  <span className="text-4xl font-bold awareness-text">${tier.dailyPrice}</span>
-                  <span className="text-sm observation-text ml-2">per day</span>
+                <div className="text-4xl mb-2">{tier.icon}</div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  {tier.name}
+                </h3>
+                <p className="text-gray-600 text-sm">{tier.description}</p>
+              </div>
+
+              <div className="text-center mb-6">
+                <div className="text-4xl font-bold text-gray-900">
+                  ${tier.price}
                 </div>
-                <div className="text-sm text-[#8E8A84]">
-                  Billed ${tier.price}/month
+                <div className="text-gray-600">
+                  {t('pricing.per_month')} · ${tier.dailyPrice}{t('pricing.per_day')}
                 </div>
               </div>
 
-              <div className="space-y-3 mb-6">
+              <ul className="space-y-3 mb-8 flex-grow">
                 {tier.features.map((feature, i) => (
-                  <div key={i} className="flex items-start space-x-2">
-                    <span className="text-green-600 mt-1">✓</span>
-                    <span className="text-sm observation-text">{feature}</span>
-                  </div>
+                  <li key={i} className="flex items-start">
+                    <svg className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span className="text-gray-700 text-sm">{feature}</span>
+                  </li>
                 ))}
-              </div>
+              </ul>
 
               <button
                 onClick={() => handleSelectPlan(tier)}
                 disabled={loading && selectedPlan === tier.id}
                 className={`w-full py-3 rounded-lg font-medium transition-all ${
                   tier.popular
-                    ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:from-amber-600 hover:to-amber-700'
-                    : 'corrective-bg border-2 border-[#E3C27D]/30 hover:border-amber-400 text-[#F4F1ED]'
+                    ? 'bg-amber-600 hover:bg-amber-700 text-white'
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-900'
                 } disabled:opacity-50 disabled:cursor-not-allowed`}
               >
-                {loading && selectedPlan === tier.id ? 'Processing...' : 'Select Plan'}
+                {loading && selectedPlan === tier.id
+                  ? t('common.loading')
+                  : t('pricing.select_plan')}
               </button>
             </div>
           ))}
-        </div>
-
-        <div className="text-center p-6 rounded-xl bg-[#1A1C1F]/50">
-          <p className="text-sm text-[#8E8A84] mb-2">
-            🔒 Secure payment powered by Stripe
-          </p>
-          <p className="text-xs text-[#8E8A84]">
-            Cancel anytime. No hidden fees.
-          </p>
         </div>
       </div>
     </div>
