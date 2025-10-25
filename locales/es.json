@@ -79,5 +79,13 @@
     "loading": "Loading...",
     "continue": "Continue",
     "retry": "Reintentar"
+  },
+  "home": {
+    "hero_title": "Recuerda Quién Dijiste Que Serías",
+    "hero_subtitle": "La curación no es guerra. Es la restauración de la identidad a través del recuerdo diario y consciente de tu voto personal.",
+    "cta_signup": "Comienza Tus Primeros Dos Días",
+    "cta_learn": "Aprende Más",
+    "login": "Iniciar Sesión",
+    "nav_signup": "Comienza Tu Viaje"
   }
 }

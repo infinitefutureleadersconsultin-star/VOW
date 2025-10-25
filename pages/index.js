@@ -93,7 +93,7 @@ export default function Home() {
             />
             
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 mb-8 tracking-tight">
-              Remember Who You<br />Said You'd Be
+              {t("home.hero_title")}
             </h1>
             <p className="text-xl sm:text-2xl text-gray-600 mb-12 font-light leading-relaxed">
               Healing is not warfare. It is the restoration of identity through<br />

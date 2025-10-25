@@ -79,5 +79,13 @@
     "loading": "Loading...",
     "continue": "Continue",
     "retry": "Retry"
+  },
+  "home": {
+    "hero_title": "Remember Who You Said You'd Be",
+    "hero_subtitle": "Healing is not warfare. It is the restoration of identity through daily, conscious remembrance of your personal vow.",
+    "cta_signup": "Begin Your First Two Days",
+    "cta_learn": "Learn More",
+    "login": "Log In",
+    "nav_signup": "Start Your Journey"
   }
 }
