@@ -354,6 +354,24 @@ function SignupForm() {
                   <option value="female">Female</option>
                   <option value="non-binary">Non-binary</option>
                   <option value="prefer-not-to-say">Prefer not to say</option>
+                
+              <div>
+                <label className="block text-sm font-medium text-[#C8C4BE] mb-2">
+                  Preferred Language *
+                </label>
+                <select
+                  name="language"
+                  value={formData.language}
+                  onChange={handleInputChange}
+                  className="input-glass w-full px-4 py-3 rounded-xl"
+                  disabled={loading}
+                  required
+                >
+                  <option value="en">🇬🇧 English</option>
+                  <option value="es">🇪🇸 Español (Spanish)</option>
+                  <option value="hi">🇮🇳 हिन्दी (Hindi)</option>
+                  <option value="zh">🇨🇳 中文 (Chinese)</option>
+                  <option value="fr">🇫🇷 Français (French)</option>
                 </select>
               </div>
 
