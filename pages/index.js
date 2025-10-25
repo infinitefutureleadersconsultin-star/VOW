@@ -16,7 +16,7 @@ export default function Home() {
     <>
       <Head>
         <title>VOW - Remember Who You Said You'd Be</title>
-        <meta name="description" content="{t("home.hero_subtitle")}" />
+        <meta name="description" content={t("home.hero_subtitle")} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
         {/* Updated favicon references to use SVG */}
