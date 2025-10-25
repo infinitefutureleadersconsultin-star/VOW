@@ -41,12 +41,48 @@
     "save": "Guardar",
     "cancel": "Cancelar",
     "loading": "Cargando...",
-    "logout": "Cerrar Sesión"
+    "logout": "Cerrar Sesión",
+    "continue": "Continuar",
+    "email": "Correo",
+    "password": "Contraseña",
+    "name": "Nombre Completo"
   },
   "home": {
     "hero_title": "Recuerda Quién Dijiste Que Serías",
     "hero_subtitle": "Transforma a través del recuerdo diario. No guerra, sino conciencia.",
     "cta_button": "Comienza Tu Viaje",
-    "login": "Iniciar Sesión"
+    "login": "Iniciar Sesión",
+    "description": "La curación no es guerra. Es la restauración de la identidad a través del recuerdo diario y consciente de tu voto personal."
+  },
+  "login": {
+    "title": "Bienvenido de Nuevo",
+    "subtitle": "Continúa tu transformación",
+    "email_placeholder": "tu@ejemplo.com",
+    "password_placeholder": "Ingresa tu contraseña",
+    "submit": "Iniciar Sesión",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "no_account": "¿No tienes cuenta?",
+    "signup_link": "Regístrate"
+  },
+  "signup": {
+    "title": "Crea Tu Cuenta",
+    "subtitle": "Comienza tu transformación",
+    "name_label": "Nombre Completo",
+    "name_placeholder": "Juan Pérez",
+    "email_label": "Correo",
+    "email_placeholder": "tu@ejemplo.com",
+    "password_label": "Contraseña",
+    "password_placeholder": "Mínimo 8 caracteres",
+    "confirm_password_label": "Confirmar Contraseña",
+    "confirm_password_placeholder": "Vuelve a ingresar la contraseña",
+    "gender_label": "Género",
+    "gender_placeholder": "Selecciona tu género",
+    "behavior_label": "¿Qué te trae aquí?",
+    "behavior_placeholder": "Selecciona lo que estás trabajando",
+    "language_label": "Idioma Preferido",
+    "submit": "Comenzar Prueba Gratuita",
+    "have_account": "¿Ya tienes cuenta?",
+    "login_link": "Iniciar sesión",
+    "step": "Paso"
   }
 }

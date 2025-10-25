@@ -17,6 +17,7 @@ function SignupForm() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { t } = useTranslation();
   const [termsAccepted, setTermsAccepted] = useState(false);
   
   useEffect(() => {

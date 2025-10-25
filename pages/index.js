@@ -4,7 +4,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 
 export default function Home() {
-  const { language, changeLanguage } = useTranslation();
+  const { language, changeLanguage, t } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
   const [langDropdown, setLangDropdown] = useState(false);
 
@@ -16,7 +16,7 @@ export default function Home() {
     <>
       <Head>
         <title>VOW - Remember Who You Said You'd Be</title>
-        <meta name="description" content=Transform through daily remembrance. Not warfare, but awareness. The Law of Daily Remembrance. />
+        <meta name="description" content={t("home.hero_subtitle")} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         
         {/* Updated favicon references to use SVG */}
@@ -93,7 +93,7 @@ export default function Home() {
             />
             
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-light text-gray-900 mb-8 tracking-tight">
-              Remember Who You<br />Said You'd Be
+              {t("home.hero_title")}
             </h1>
             <p className="text-xl sm:text-2xl text-gray-600 mb-12 font-light leading-relaxed">
               Healing is not warfare. It is the restoration of identity through<br />

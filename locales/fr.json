@@ -48,5 +48,36 @@
     "hero_subtitle": "Transformez-vous par le souvenir quotidien. Pas de guerre, mais de la conscience.",
     "cta_button": "Commencez Votre Voyage",
     "login": "Se Connecter"
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subtitle": "Continue your transformation",
+    "email_placeholder": "you@example.com",
+    "password_placeholder": "Enter your password",
+    "submit": "Log In",
+    "forgot": "Forgot password?",
+    "no_account": "Don't have an account?",
+    "signup_link": "Sign up"
+  },
+  "signup": {
+    "title": "Create Your Account",
+    "subtitle": "Begin your transformation",
+    "name_label": "Full Name",
+    "name_placeholder": "John Doe",
+    "email_label": "Email",
+    "email_placeholder": "you@example.com",
+    "password_label": "Password",
+    "password_placeholder": "At least 8 characters",
+    "confirm_password_label": "Confirm Password",
+    "confirm_password_placeholder": "Re-enter password",
+    "gender_label": "Gender",
+    "gender_placeholder": "Select your gender",
+    "behavior_label": "What brings you here?",
+    "behavior_placeholder": "Select what you're working through",
+    "language_label": "Preferred Language",
+    "submit": "Start Free Trial",
+    "have_account": "Already have an account?",
+    "login_link": "Log in",
+    "step": "Step"
   }
 }
