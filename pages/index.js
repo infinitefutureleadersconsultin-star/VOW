@@ -6,17 +6,6 @@ import Link from 'next/link';
 export default function Home() {
   const { language, changeLanguage } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [language, setLanguageState] = useState('en');
-
-  const setLanguage = (lang) => {
-    localStorage.setItem('vow_language', lang);
-    setLanguageState(lang);
-  };
-
-  useEffect(() => {
-    const saved = localStorage.getItem('vow_language') || 'en';
-    setLanguageState(saved);
-  }, []);
 
   useEffect(() => {
     setIsLoaded(true);
