@@ -12,6 +12,7 @@ import { checkUserAccess } from '../utils/accessControl';
 import { api } from '../utils/apiClient';
 import { showToast } from '../utils/notificationUtils';
 import { ScrollText, Sparkles, Activity, User, AlertCircle, Sun, Moon } from 'lucide-react';
+import { useTranslation } from '../lib/translations';
 
 export default function Dashboard() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function Dashboard() {
   const [accessInfo, setAccessInfo] = useState(null);
   const [upgradeModal, setUpgradeModal] = useState({ show: false, tier: null });
   const [upgrading, setUpgrading] = useState(false);
+  const { t } = useTranslation();
   const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
