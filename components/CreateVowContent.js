@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { showToast } from '../utils/notificationUtils';
 import { celebrateMilestone, MILESTONE_KEYS } from '../utils/celebrationUtils';
 import { Link2, Clock, ShieldOff, Heart, Sprout, Sparkles } from 'lucide-react';
+import { useTranslation } from '../lib/translations';
 
 export default function CreateVowContent() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function CreateVowContent() {
   const [submitting, setSubmitting] = useState(false);
   const [step, setStep] = useState(1);
   
+  const { t } = useTranslation();
   const [vow, setVow] = useState({
     category: '',
     identityType: '',
@@ -21,17 +23,17 @@ export default function CreateVowContent() {
 
   const categories = [
     {
-      name: 'Breaking Chains',
+      name: t('vow.breaking_chains'),
       value: 'addiction',
       icon: Link2,
-      desc: 'Release what binds you',
+      desc: t('vow.breaking_chains_desc'),
       color: 'category-addiction'
     },
     {
-      name: 'Honoring Time',
+      name: t('vow.honoring_time'),
       value: 'procrastination',
       icon: Clock,
-      desc: 'Reclaim your moments',
+      desc: t('vow.honoring_time_desc'),
       color: 'category-procrastination'
     },
     {

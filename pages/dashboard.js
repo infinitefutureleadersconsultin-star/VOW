@@ -6,7 +6,7 @@ import { hasSeenWelcomeVideo } from '../lib/welcomeVideos';
 import LoadingSpinner from '../components/LoadingSpinner';
 import AlignmentIndex from '../components/AlignmentIndex';
 import ProfileAvatar from '../components/ProfileAvatar';
-import UpgradeModal from '../components/UpgradeModal';
+import {t("dashboard.upgrade")}Modal from '../components/{t("dashboard.upgrade")}Modal';
 import { hasCelebrated, MILESTONE_KEYS } from '../utils/celebrationUtils';
 import { checkUserAccess } from '../utils/accessControl';
 import { api } from '../utils/apiClient';
@@ -22,7 +22,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [vows, setVows] = useState([]);  const [error, setError] = useState(null);
   const [accessInfo, setAccessInfo] = useState(null);
-  const [upgradeModal, setUpgradeModal] = useState({ show: false, tier: null });
+  const [upgradeModal, set{t("dashboard.upgrade")}Modal] = useState({ show: false, tier: null });
   const [upgrading, setUpgrading] = useState(false);
   const { t } = useTranslation();
   const [theme, setTheme] = useState('dark');
@@ -91,7 +91,7 @@ export default function Dashboard() {
       const access = checkUserAccess(result.data);
       setAccessInfo(access);
 
-      checkUpgradeMilestones(result.data);
+      check{t("dashboard.upgrade")}Milestones(result.data);
 
       if (!access.hasAccess) {
         router.push('/profile');
@@ -105,7 +105,7 @@ export default function Dashboard() {
     }
   };
 
-  const checkUpgradeMilestones = (user) => {
+  const check{t("dashboard.upgrade")}Milestones = (user) => {
     if (!user.createdAt) return;
 
     const createdDate = new Date(user.createdAt);
@@ -123,7 +123,7 @@ export default function Dashboard() {
       user.subscriptionTier !== 'liberation'
     ) {
       setTimeout(() => {
-        setUpgradeModal({ show: true, tier: 'reflection' });
+        set{t("dashboard.upgrade")}Modal({ show: true, tier: 'reflection' });
       }, 2000);
     }
 
@@ -134,12 +134,12 @@ export default function Dashboard() {
       user.subscriptionTier === 'reflection'
     ) {
       setTimeout(() => {
-        setUpgradeModal({ show: true, tier: 'liberation' });
+        set{t("dashboard.upgrade")}Modal({ show: true, tier: 'liberation' });
       }, 2000);
     }
   };
 
-  const handleUpgrade = async (tierData) => {
+  const handle{t("dashboard.upgrade")} = async (tierData) => {
     setUpgrading(true);
 
     try {
@@ -160,16 +160,16 @@ export default function Dashboard() {
         throw new Error(response?.data?.error || 'Failed to create checkout session');
       }
     } catch (err) {
-      console.error('Upgrade error:', err);
+      console.error('{t("dashboard.upgrade")} error:', err);
       showToast('Failed to process upgrade. Please try again.', 'error');
     } finally {
       setUpgrading(false);
     }
   };
 
-  const closeUpgradeModal = () => {
+  const close{t("dashboard.upgrade")}Modal = () => {
     localStorage.setItem(`upgrade_${upgradeModal.tier}_seen`, 'true');
-    setUpgradeModal({ show: false, tier: null });
+    set{t("dashboard.upgrade")}Modal({ show: false, tier: null });
   };
 
   const handleLogout = () => {
@@ -197,7 +197,7 @@ export default function Dashboard() {
             }}
             className="vow-action px-6 py-2 rounded-lg surgical-transition"
           >
-            Retry
+            {t("common.retry")}
           </button>
         </div>
       </div>
@@ -233,12 +233,12 @@ export default function Dashboard() {
                   {theme === 'dark' ? (
                     <>
                       <Sun size={16} />
-                      <span>Light</span>
+                      <span>{t("dashboard.light_mode")}</span>
                     </>
                   ) : (
                     <>
                       <Moon size={16} />
-                      <span>Dark</span>
+                      <span>{t("dashboard.dark_mode")}</span>
                     </>
                   )}
                 </button>
@@ -258,7 +258,7 @@ export default function Dashboard() {
                   <AlertCircle size={20} className="icon-gold" />
                   <div>
                     <p className="awareness-text text-sm font-medium">
-                      Trial Active
+                      {t("dashboard.trial_active")}
                     </p>
                     <p className="observation-text text-xs">
                       {accessInfo.daysLeft} {accessInfo.daysLeft === 1 ? 'day' : 'days'} remaining
@@ -269,7 +269,7 @@ export default function Dashboard() {
                   onClick={() => router.push('/pricing')}
                   className="vow-action text-xs px-4 py-2 rounded-lg surgical-transition"
                 >
-                  Upgrade
+                  {t("dashboard.upgrade")}
                 </button>
               </div>
             </div>
@@ -281,10 +281,10 @@ export default function Dashboard() {
               className="text-2xl awareness-text mb-1"
               style={{ fontFamily: "'SF Pro Display', sans-serif", fontWeight: 500 }}
             >
-              Welcome back, {userData?.name?.split(' ')[0] || 'there'}.
+              {t("dashboard.welcome")}, {userData?.name?.split(' ')[0] || 'there'}.
             </h2>
             <p className="observation-text text-sm">
-              Continue refining your alignment.
+              {t("dashboard.continue")}
             </p>
           </div>
 
@@ -427,12 +427,12 @@ export default function Dashboard() {
           )}
         </main>
 
-        {/* Upgrade Modal */}
+        {/* {t("dashboard.upgrade")} Modal */}
         {upgradeModal.show && (
-          <UpgradeModal
+          <{t("dashboard.upgrade")}Modal
             tier={upgradeModal.tier}
-            onClose={closeUpgradeModal}
-            onUpgrade={handleUpgrade}
+            onClose={close{t("dashboard.upgrade")}Modal}
+            on{t("dashboard.upgrade")}={handle{t("dashboard.upgrade")}}
             loading={upgrading}
           />
         )}

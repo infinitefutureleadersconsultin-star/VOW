@@ -5,12 +5,14 @@ import { api } from '../utils/apiClient';
 import { canUseAI, trackAIUsage } from '../lib/aiUsageTracker';
 import { showToast } from '../utils/notificationUtils';
 import { generateEmbodimentReminder } from '../utils/identityUtils';
+import { useTranslation } from '../lib/translations';
 
 export default function Reflection() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [userData, setUserData] = useState(null);
+  const { t } = useTranslation();
   const [step, setStep] = useState(1);
   const [reflection, setReflection] = useState({
     vowAlignment: '',
@@ -162,7 +164,7 @@ export default function Reflection() {
       <div className="min-h-screen bg-gradient-to-b from-[#0C1117] to-[#1A1C1F] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto mb-4"></div>
-          <p className="text-[#8E8A84]">Loading reflection...</p>
+          <p className="text-[#8E8A84]">{t("reflection.loading")}</p>
         </div>
       </div>
     );
@@ -188,7 +190,7 @@ export default function Reflection() {
               >
                 ← Back
               </button>
-              <h1 className="text-lg font-medium text-[#F4F1ED]">Daily Reflection</h1>
+              <h1 className="text-lg font-medium text-[#F4F1ED]">{t("reflection.title")}</h1>
               <div className="w-16"></div>
             </div>
           </div>

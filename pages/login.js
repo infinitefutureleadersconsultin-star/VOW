@@ -101,7 +101,7 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>Sign In - VOW</title>
+        <title>{t("login.title")} - VOW</title>
       </Head>
 
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
