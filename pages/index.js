@@ -6,6 +6,7 @@ import Link from 'next/link';
 export default function Home() {
   const { language, changeLanguage } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [langDropdown, setLangDropdown] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -49,20 +50,25 @@ export default function Home() {
                 />
               </div>
               <div className="flex items-center space-x-4">
-                <div className="relative group">
-                  <button className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors">
-                    <span id="current-lang">🇬🇧 EN</span>
+                <div className="relative">
+                  <button 
+                    onClick={() => setLangDropdown(!langDropdown)}
+                    className="flex items-center space-x-1 text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors border border-gray-300 rounded-lg"
+                  >
+                    <span>{language === 'en' ? '🇬🇧 EN' : language === 'es' ? '🇪🇸 ES' : language === 'hi' ? '🇮🇳 HI' : language === 'zh' ? '🇨🇳 ZH' : '🇫🇷 FR'}</span>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
-                  <div className="hidden group-hover:block absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
-                    <button onClick={() => changeLanguage('en')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇬🇧 English</button>
-                    <button onClick={() => changeLanguage('es')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇪🇸 Español</button>
-                    <button onClick={() => changeLanguage('hi')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇮🇳 हिन्दी</button>
-                    <button onClick={() => changeLanguage('zh')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇨🇳 中文</button>
-                    <button onClick={() => changeLanguage('fr')} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50">🇫🇷 Français</button>
-                  </div>
+                  {langDropdown && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-2xl border border-gray-300 py-2 z-50">
+                      <button onClick={() => { changeLanguage('en'); setLangDropdown(false); }} className="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-amber-50">🇬🇧 English</button>
+                      <button onClick={() => { changeLanguage('es'); setLangDropdown(false); }} className="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-amber-50">🇪🇸 Español</button>
+                      <button onClick={() => { changeLanguage('hi'); setLangDropdown(false); }} className="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-amber-50">🇮🇳 हिन्दी</button>
+                      <button onClick={() => { changeLanguage('zh'); setLangDropdown(false); }} className="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-amber-50">🇨🇳 中文</button>
+                      <button onClick={() => { changeLanguage('fr'); setLangDropdown(false); }} className="w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-amber-50">🇫🇷 Français</button>
+                    </div>
+                  )}
                 </div>
 
                 <Link href="/login" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors">
