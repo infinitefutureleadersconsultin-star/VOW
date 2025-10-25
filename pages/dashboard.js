@@ -22,7 +22,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null);
   const [vows, setVows] = useState([]);  const [error, setError] = useState(null);
   const [accessInfo, setAccessInfo] = useState(null);
-  const [upgradeModal, set{t("dashboard.upgrade")}Modal] = useState({ show: false, tier: null });
+  const [upgradeModal, setUpgradeModal] = useState({ show: false, tier: null });
   const [upgrading, setUpgrading] = useState(false);
   const { t } = useTranslation();
   const [theme, setTheme] = useState('dark');
@@ -91,7 +91,7 @@ export default function Dashboard() {
       const access = checkUserAccess(result.data);
       setAccessInfo(access);
 
-      check{t("dashboard.upgrade")}Milestones(result.data);
+      checkUpgradeMilestones(result.data);
 
       if (!access.hasAccess) {
         router.push('/profile');
@@ -105,7 +105,7 @@ export default function Dashboard() {
     }
   };
 
-  const check{t("dashboard.upgrade")}Milestones = (user) => {
+  const checkUpgradeMilestones = (user) => {
     if (!user.createdAt) return;
 
     const createdDate = new Date(user.createdAt);
@@ -123,7 +123,7 @@ export default function Dashboard() {
       user.subscriptionTier !== 'liberation'
     ) {
       setTimeout(() => {
-        set{t("dashboard.upgrade")}Modal({ show: true, tier: 'reflection' });
+        setUpgradeModal({ show: true, tier: 'reflection' });
       }, 2000);
     }
 
@@ -134,12 +134,12 @@ export default function Dashboard() {
       user.subscriptionTier === 'reflection'
     ) {
       setTimeout(() => {
-        set{t("dashboard.upgrade")}Modal({ show: true, tier: 'liberation' });
+        setUpgradeModal({ show: true, tier: 'liberation' });
       }, 2000);
     }
   };
 
-  const handle{t("dashboard.upgrade")} = async (tierData) => {
+  const handleUpgrade = async (tierData) => {
     setUpgrading(true);
 
     try {
@@ -160,16 +160,16 @@ export default function Dashboard() {
         throw new Error(response?.data?.error || 'Failed to create checkout session');
       }
     } catch (err) {
-      console.error('{t("dashboard.upgrade")} error:', err);
+      console.error('Upgrade error:', err);
       showToast('Failed to process upgrade. Please try again.', 'error');
     } finally {
       setUpgrading(false);
     }
   };
 
-  const close{t("dashboard.upgrade")}Modal = () => {
+  const closeUpgradeModal = () => {
     localStorage.setItem(`upgrade_${upgradeModal.tier}_seen`, 'true');
-    set{t("dashboard.upgrade")}Modal({ show: false, tier: null });
+    setUpgradeModal({ show: false, tier: null });
   };
 
   const handleLogout = () => {
@@ -427,12 +427,12 @@ export default function Dashboard() {
           )}
         </main>
 
-        {/* {t("dashboard.upgrade")} Modal */}
+        {/* Upgrade Modal */}
         {upgradeModal.show && (
-          <{t("dashboard.upgrade")}Modal
+          <UpgradeModal
             tier={upgradeModal.tier}
-            onClose={close{t("dashboard.upgrade")}Modal}
-            on{t("dashboard.upgrade")}={handle{t("dashboard.upgrade")}}
+            onClose={closeUpgradeModal}
+            onUpgrade={handleUpgrade}
             loading={upgrading}
           />
         )}
